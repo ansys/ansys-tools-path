@@ -1,7 +1,8 @@
 import os
 
-from ansys.tools.path import _version_from_path
+import pytest
 from ansys.tools.path import find_ansys
+from ansys.tools.path.path import _version_from_path
 
 # change_default_ansys_path, save_ansys_path, get_ansys_path, get_available_ansys_installations, check_valid_ansys
 

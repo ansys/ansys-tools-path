@@ -12,6 +12,21 @@ LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 
 CONFIG_FILE_NAME = "config.txt"
 
+SUPPORTED_ANSYS_VERSIONS = {
+    231: "2023R1",
+    222: "2022R2",
+    221: "2022R1",
+    212: "2021R2",
+    211: "2021R1",
+    202: "2020R2",
+    201: "2020R1",
+    195: "19.5",
+    194: "19.4",
+    193: "19.3",
+    192: "19.2",
+    191: "19.1",
+}
+
 # settings directory
 SETTINGS_DIR = appdirs.user_data_dir("ansys_tools_path")
 if not os.path.isdir(SETTINGS_DIR):
@@ -63,7 +78,7 @@ def check_valid_ansys():
     return False
 
 
-def _get_available_base_ansys(supported_versions):
+def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Return a dictionary of available Ansys versions with their base paths.
 
     Returns
@@ -155,7 +170,7 @@ def _get_available_base_ansys(supported_versions):
     return ansys_paths
 
 
-def get_available_ansys_installations(supported_versions):
+def get_available_ansys_installations(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Return a dictionary of available Ansys versions with their base paths.
 
     Returns
@@ -190,7 +205,7 @@ def get_available_ansys_installations(supported_versions):
     return _get_available_base_ansys(supported_versions)
 
 
-def find_ansys(supported_versions, version=None):
+def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Searches for ansys path within the standard install location
     and returns the path of the latest version.
 

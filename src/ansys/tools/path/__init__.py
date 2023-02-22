@@ -12,7 +12,8 @@ except ModuleNotFoundError:
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 
-from ansys.tools.path import (
+from ansys.tools.path.path import (
+    SUPPORTED_ANSYS_VERSIONS,
     find_ansys,
     change_default_ansys_path,
     save_ansys_path,
