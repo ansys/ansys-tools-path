@@ -68,16 +68,6 @@ def _version_from_path(path):
         raise RuntimeError(f"Unable to extract Ansys version from {path}")
     return int(matches[-1])
 
-
-def check_valid_ansys():
-    """Checks if a valid version of ANSYS is installed and preconfigured"""
-    ansys_bin = get_ansys_path(allow_input=False)
-    if ansys_bin is not None:
-        version = _version_from_path(ansys_bin)
-        return not (version < 170 and os.name != "posix")
-    return False
-
-
 def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Return a dictionary of available Ansys versions with their base paths.
 
@@ -266,21 +256,21 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     return ansys_bin, version / 10
 
 
-def is_valid_executable_path(exe_loc):  # pragma: no cover
-    return os.path.isfile(exe_loc) and re.search("ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
+def is_valid_executable_path(exe_loc):
+    return os.path.isfile(exe_loc) and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
 
 
-def is_common_executable_path(exe_loc):  # pragma: no cover
+def is_common_executable_path(exe_loc):
     path = os.path.normpath(exe_loc)
     path = path.split(os.sep)
-    if re.search("v(\d\d\d)", exe_loc) is not None and re.search("ansys(\d\d\d)", exe_loc) is not None:
-        equal_version = re.search("v(\d\d\d)", exe_loc)[1] == re.search("ansys(\d\d\d)", exe_loc)[1]
+    if re.search(r"v(\d\d\d)", exe_loc) is not None and re.search(r"ansys(\d\d\d)", exe_loc) is not None:
+        equal_version = re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
     else:
         equal_version = False
 
     return (
         is_valid_executable_path(exe_loc)
-        and re.search("v\d\d\d", exe_loc)
+        and re.search(r"v\d\d\d", exe_loc)
         and "ansys" in path
         and "bin" in path
         and equal_version
@@ -308,8 +298,6 @@ def change_default_ansys_path(exe_loc):
 
     >>> ans_pth = 'C:/Program Files/ANSYS Inc/v193/ansys/bin/winx64/ANSYS193.exe'
     >>> launcher.change_default_ansys_path(ans_pth)
-    >>> launcher.check_valid_ansys()
-    True
 
     """
     if os.path.isfile(exe_loc):
@@ -319,7 +307,7 @@ def change_default_ansys_path(exe_loc):
         raise FileNotFoundError("File %s is invalid or does not exist" % exe_loc)
 
 
-def save_ansys_path(exe_loc=None):  # pragma: no cover
+def save_ansys_path(exe_loc=None, allow_prompt=True):  # pragma: no cover
     """Find MAPDL's path or query user.
 
     If no ``exe_loc`` argument is supplied, this function attempt
@@ -366,7 +354,7 @@ def save_ansys_path(exe_loc=None):  # pragma: no cover
     if exe_loc is None:
         exe_loc, _ = find_ansys()
 
-    if is_valid_executable_path(exe_loc):  # pragma: not cover
+    if is_valid_executable_path(exe_loc):
         if not is_common_executable_path(exe_loc):
             warn_uncommon_executable_path(exe_loc)
 
@@ -375,9 +363,12 @@ def save_ansys_path(exe_loc=None):  # pragma: no cover
 
     if exe_loc is not None:
         if is_valid_executable_path(exe_loc):
-            return exe_loc  # pragma: no cover
+            return exe_loc
+    if allow_prompt:
+        exe_loc = _prompt_ansys_path()
+    return exe_loc
 
-    # otherwise, query user for the location
+def _prompt_ansys_path():  # pragma: no cover
     print("Cached ANSYS executable not found")
     print(
         "You are about to enter manually the path of the ANSYS MAPDL executable(ansysXXX,where XXX is the version\n"
@@ -398,9 +389,7 @@ def save_ansys_path(exe_loc=None):  # pragma: no cover
             need_path = False
         else:
             print("The supplied path is either: not a valid file path, or does not match 'ansysXXX' name.")
-
     return exe_loc
-
 
 def warn_uncommon_executable_path(exe_loc):  # pragma: no cover
     warnings.warn(

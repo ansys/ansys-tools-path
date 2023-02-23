@@ -19,5 +19,4 @@ from ansys.tools.path.path import (
     save_ansys_path,
     get_ansys_path,
     get_available_ansys_installations,
-    check_valid_ansys,
 )
