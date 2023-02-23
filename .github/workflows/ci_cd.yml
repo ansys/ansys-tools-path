@@ -38,36 +38,36 @@ jobs:
       image: ghcr.io/pyansys/mapdl:v22.2-ubuntu
       options: "-u=0:0 --entrypoint /bin/bash"
       credentials:
-        username: germa89
+        username: ${{ secrets.GH_USERNAME }}
         password: ${{ secrets.MY_TOKEN }}
     env:
       ON_LOCAL: true
       ON_UBUNTU: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
       - name: Create wheel
         run: |
-          pip install build
+          ptyhon pip install build
           python -m build --wheel
 
       - name: Validate wheel
         run: |
-          pip install twine
+          python pip install twine
           twine check dist/*
 
       - name: Install library, with test extra
-        run: pip install $(echo dist/*)[test]
+        run: python pip install $(echo dist/*)[test]
 
       - name: Unit testing
         run: |
           cd tests  # so we're testing the install, not local
-          pytest -vx --cov=ansys.tools.path --cov-report=html
+          python pytest -vx --cov=ansys.tools.path --cov-report=html
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
