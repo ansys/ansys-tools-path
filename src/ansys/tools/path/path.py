@@ -68,6 +68,7 @@ def _version_from_path(path):
         raise RuntimeError(f"Unable to extract Ansys version from {path}")
     return int(matches[-1])
 
+
 def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Return a dictionary of available Ansys versions with their base paths.
 
@@ -257,7 +258,9 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
 
 
 def is_valid_executable_path(exe_loc):
-    return os.path.isfile(exe_loc) and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
+    return (
+        os.path.isfile(exe_loc) and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
+    )
 
 
 def is_common_executable_path(exe_loc):
@@ -367,6 +370,7 @@ def save_ansys_path(exe_loc=None, allow_prompt=True):
     if allow_prompt:
         exe_loc = _prompt_ansys_path()
     return exe_loc
+
 
 def _prompt_ansys_path():  # pragma: no cover
     print("Cached ANSYS executable not found")

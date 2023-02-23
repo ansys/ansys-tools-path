@@ -1,10 +1,17 @@
 import os
+
 import pytest
-
 from ansys.tools.path import find_ansys
-from ansys.tools.path.path import CONFIG_FILE, _version_from_path, get_available_ansys_installations, is_valid_executable_path, change_default_ansys_path, warn_uncommon_executable_path, get_ansys_path, save_ansys_path
+from ansys.tools.path.path import _version_from_path
+from ansys.tools.path.path import change_default_ansys_path
+from ansys.tools.path.path import CONFIG_FILE
+from ansys.tools.path.path import get_ansys_path
+from ansys.tools.path.path import get_available_ansys_installations
+from ansys.tools.path.path import is_valid_executable_path
+from ansys.tools.path.path import save_ansys_path
+from ansys.tools.path.path import warn_uncommon_executable_path
 
-#, save_ansys_path, get_ansys_path, get_available_ansys_installations, check_valid_ansys
+# , save_ansys_path, get_ansys_path, get_available_ansys_installations, check_valid_ansys
 
 
 """
@@ -28,7 +35,6 @@ def test_version_from_path(path_data):
     assert _version_from_path(exec_file) == version
 
 
-
 def test_find_ansys_linux():
     # assuming ansys is installed, should be able to find it on linux
     # without env var
@@ -36,31 +42,34 @@ def test_find_ansys_linux():
     assert os.path.isfile(bin_file)
     assert isinstance(ver, float)
 
+
 def test_get_available_base_ansys():
     assert get_available_ansys_installations()
+
 
 def test_is_valid_executable_path():
     path = get_available_ansys_installations().values()
     path = list(path)[0]
     assert not is_valid_executable_path(path)
 
+
 def test_is_common_executable_path():
     path = get_available_ansys_installations().values()
     path = list(path)[0]
     assert not is_valid_executable_path(path)
 
-def test_change_default_ansys_path():
 
+def test_change_default_ansys_path():
     if os.path.isfile(CONFIG_FILE):
-        with open(CONFIG_FILE, 'r') as fid:
+        with open(CONFIG_FILE, "r") as fid:
             assert "/bin/bash" not in fid.read()
 
-    new_path = "/bin/bash"  #Just to check something
+    new_path = "/bin/bash"  # Just to check something
     change_default_ansys_path(new_path)
 
-    with open(CONFIG_FILE, 'r') as fid:
+    with open(CONFIG_FILE, "r") as fid:
         assert "/bin/bash" in fid.read()
-    
+
     os.remove(CONFIG_FILE)
 
     with pytest.raises(FileNotFoundError):
@@ -70,7 +79,7 @@ def test_change_default_ansys_path():
 def test_save_ansys_path():
     if os.path.isfile(CONFIG_FILE):
         os.remove(CONFIG_FILE)
-    
+
     path = get_available_ansys_installations().values()
     path = list(path)[0]
 
@@ -79,7 +88,6 @@ def test_save_ansys_path():
 
 
 def test_warn_uncommon_executable_path():
-
     with pytest.warns(UserWarning):
         warn_uncommon_executable_path("qwer")
 
