@@ -45,3 +45,4 @@ test-output.xml
 
 .venv
 .DS_Store
+doc/_build/*/*
