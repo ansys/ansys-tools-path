@@ -1,6 +1,6 @@
 import pytest
-from ansys.tools.path.misc import is_float
 
+from ansys.tools.path.misc import is_float
 
 values = [
     (11, True),

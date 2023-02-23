@@ -1,10 +1,11 @@
+from glob import glob
 import logging as LOG  # Temporal hack
 import os
 import re
 import warnings
-from glob import glob
 
 import appdirs
+
 from ansys.tools.path.misc import is_float
 
 LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"]]
@@ -394,6 +395,7 @@ def _prompt_ansys_path():  # pragma: no cover
         else:
             print("The supplied path is either: not a valid file path, or does not match 'ansysXXX' name.")
     return exe_loc
+
 
 def warn_uncommon_executable_path(exe_loc):
     warnings.warn(

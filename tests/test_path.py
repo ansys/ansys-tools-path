@@ -1,15 +1,18 @@
 import os
 
 import pytest
+
 from ansys.tools.path import find_ansys
-from ansys.tools.path.path import _version_from_path
-from ansys.tools.path.path import change_default_ansys_path
-from ansys.tools.path.path import CONFIG_FILE
-from ansys.tools.path.path import get_ansys_path
-from ansys.tools.path.path import get_available_ansys_installations
-from ansys.tools.path.path import is_valid_executable_path
-from ansys.tools.path.path import save_ansys_path
-from ansys.tools.path.path import warn_uncommon_executable_path
+from ansys.tools.path.path import (
+    CONFIG_FILE,
+    _version_from_path,
+    change_default_ansys_path,
+    get_ansys_path,
+    get_available_ansys_installations,
+    is_valid_executable_path,
+    save_ansys_path,
+    warn_uncommon_executable_path,
+)
 
 # , save_ansys_path, get_ansys_path, get_available_ansys_installations, check_valid_ansys
 
