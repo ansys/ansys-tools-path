@@ -29,7 +29,7 @@ SUPPORTED_ANSYS_VERSIONS = {
 
 # settings directory
 SETTINGS_DIR = appdirs.user_data_dir("ansys_tools_path")
-if not os.path.isdir(SETTINGS_DIR):
+if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
     try:
         LOG.debug(f"Created settings directory: {SETTINGS_DIR}")
         os.makedirs(SETTINGS_DIR)
@@ -307,7 +307,7 @@ def change_default_ansys_path(exe_loc):
         raise FileNotFoundError("File %s is invalid or does not exist" % exe_loc)
 
 
-def save_ansys_path(exe_loc=None, allow_prompt=True):  # pragma: no cover
+def save_ansys_path(exe_loc=None, allow_prompt=True):
     """Find MAPDL's path or query user.
 
     If no ``exe_loc`` argument is supplied, this function attempt
@@ -391,7 +391,7 @@ def _prompt_ansys_path():  # pragma: no cover
             print("The supplied path is either: not a valid file path, or does not match 'ansysXXX' name.")
     return exe_loc
 
-def warn_uncommon_executable_path(exe_loc):  # pragma: no cover
+def warn_uncommon_executable_path(exe_loc):
     warnings.warn(
         f"The supplied path ('{exe_loc}') does not match the usual ansys executable path style"
         "('directory/vXXX/ansys/bin/ansysXXX'). "

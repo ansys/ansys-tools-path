@@ -63,6 +63,9 @@ def test_change_default_ansys_path():
     
     os.remove(CONFIG_FILE)
 
+    with pytest.raises(FileNotFoundError):
+        change_default_ansys_path("asdf")
+
 
 def test_save_ansys_path():
     if os.path.isfile(CONFIG_FILE):
