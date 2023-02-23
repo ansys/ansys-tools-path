@@ -84,7 +84,7 @@ jobs:
       - name: Install library, with docs extra
         run: |
           pip install poetry
-          poetry install -E docs
+          poetry install .[doc]
 
       - name: Build HTML
         run: |
