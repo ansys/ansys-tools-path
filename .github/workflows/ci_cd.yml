@@ -33,6 +33,16 @@ jobs:
   main:
     name: Build and Testing
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: ghcr.io/pyansys/mapdl:v22.2-ubuntu
+      options: "-u=0:0 --entrypoint /bin/bash"
+      credentials:
+        username: ${{ secrets.BOT_APPLICATION_ID }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      ON_LOCAL: true
+      ON_UBUNTU: true
 
     steps:
       - uses: actions/checkout@v2
@@ -88,11 +98,11 @@ jobs:
         run: |
           make -C doc html SPHINXOPTS="-W"
 
-      - name: Build PDF Documentation
-        run: |
-          sudo apt update
-          sudo apt-get install -y texlive-latex-extra latexmk
-          make -C doc latexpdf
+      # - name: Build PDF Documentation
+      #   run: |
+      #     sudo apt update
+      #     sudo apt-get install -y texlive-latex-extra latexmk
+      #     make -C doc latexpdf
 
       # - name: Upload HTML Documentation
       #   uses: actions/upload-artifact@v2
