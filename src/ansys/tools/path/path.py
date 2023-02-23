@@ -89,7 +89,7 @@ def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     Examples
     --------
 
-    >>> from ansys.mapdl.core import _get_available_base_ansys
+    >>> from ansys.tools.path.path import _get_available_base_ansys
     >>> _get_available_base_ansys()
     {222: 'C:\\Program Files\\ANSYS Inc\\v222',
      212: 'C:\\Program Files\\ANSYS Inc\\v212',
@@ -181,7 +181,7 @@ def get_available_ansys_installations(supported_versions=SUPPORTED_ANSYS_VERSION
     Examples
     --------
 
-    >>> from ansys.mapdl.core import get_available_ansys_installations
+    >>> from ansys.tools.path import get_available_ansys_installations
     >>> get_available_ansys_installations()
     {222: 'C:\\Program Files\\ANSYS Inc\\v222',
      212: 'C:\\Program Files\\ANSYS Inc\\v212',
@@ -225,7 +225,7 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     --------
     Within Windows
 
-    >>> from ansys.mapdl.core.launcher import find_ansys
+    >>> from ansys.tools.path import find_ansys
     >>> find_ansys()
     'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1
 
@@ -293,15 +293,15 @@ def change_default_ansys_path(exe_loc):
     --------
     Change default Ansys location on Linux
 
-    >>> from ansys.mapdl.core import launcher
-    >>> launcher.change_default_ansys_path('/ansys_inc/v201/ansys/bin/ansys201')
-    >>> launcher.get_ansys_path()
+    >>> from ansys.tools.path import change_default_ansys_path, get_ansys_path
+    >>> change_default_ansys_path('/ansys_inc/v201/ansys/bin/ansys201')
+    >>> get_ansys_path()
     '/ansys_inc/v201/ansys/bin/ansys201'
 
     Change default Ansys location on Windows
 
     >>> ans_pth = 'C:/Program Files/ANSYS Inc/v193/ansys/bin/winx64/ANSYS193.exe'
-    >>> launcher.change_default_ansys_path(ans_pth)
+    >>> change_default_ansys_path(ans_pth)
 
     """
     if os.path.isfile(exe_loc):
@@ -351,7 +351,7 @@ def save_ansys_path(exe_loc=None, allow_prompt=True):
     You can change the default ``exe_loc`` either by modifying the mentioned
     ``config.txt`` file or by executing:
 
-    >>> from ansys.mapdl.core import save_ansys_path
+    >>> from ansys.tools.path import save_ansys_path
     >>> save_ansys_path('/new/path/to/executable')
 
     """
@@ -379,7 +379,7 @@ def _prompt_ansys_path():  # pragma: no cover
         "You are about to enter manually the path of the ANSYS MAPDL executable(ansysXXX,where XXX is the version\n"
         "This file is very likely to contained in path ending in 'vXXX/ansys/bin/ansysXXX', but it is not required.\n"
         "\nIf you experience problems with the input path you can overwrite the configuration file by typing:\n"
-        ">>> from ansys.mapdl.core.launcher import save_ansys_path\n"
+        ">>> from ansys.tools.path import save_ansys_path\n"
         ">>> save_ansys_path('/new/path/to/executable/')\n"
     )
     need_path = True
