@@ -38,7 +38,7 @@ jobs:
       image: ghcr.io/pyansys/mapdl:v22.2-ubuntu
       options: "-u=0:0 --entrypoint /bin/bash"
       credentials:
-        username: ${{ secrets.BOT_APPLICATION_ID }}
+        username: ${{ secrets.GH_USERNAME }}
         password: ${{ secrets.GITHUB_TOKEN }}
     env:
       ON_LOCAL: true
