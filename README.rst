@@ -90,10 +90,9 @@ need to follow these steps:
 
    .. code:: bash
 
-      python -m pip install -U pip flit tox
-      python -m pip install -r requirements/requirements_build.txt
-      python -m pip install -r requirements/requirements_doc.txt
-      python -m pip install -r requirements/requirements_tests.txt
+      python -m pip install .[test]
+      python -m pip install .[doc]
+      python -m pip install .[build]
 
 
 #. Install the project in editable mode:
@@ -101,36 +100,11 @@ need to follow these steps:
     .. code:: bash
     
       python -m pip install --editable ansys-tools-path
-    
-    #. Finally, verify your development installation by running:
 
-   .. code:: bash
-        
-      tox
 
 
 How to testing
 --------------
-
-This project takes advantage of `tox`_. This tool allows to automate common
-development tasks (similar to Makefile) but it is oriented towards Python
-development. 
-
-Using tox
-^^^^^^^^^
-
-As Makefile has rules, `tox`_ has environments. In fact, the tool creates its
-own virtual environment so anything being tested is isolated from the project in
-order to guarantee project's integrity. The following environments commands are provided:
-
-- **tox -e style**: will check for coding style quality.
-- **tox -e py**: checks for unit tests.
-- **tox -e py-coverage**: checks for unit testing and code coverage.
-- **tox -e doc**: checs for documentation building process.
-
-
-Raw testing
-^^^^^^^^^^^
 
 If required, you can always call the style commands (`black`_, `isort`_,
 `flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
@@ -159,12 +133,6 @@ For building documentation, you can either run the usual rules provided in the
 
     make -C doc/ html && your_browser_name doc/html/index.html
 
-However, the recommended way of checking documentation integrity is using:
-
-.. code:: bash
-
-    tox -e doc && your_browser_name .tox/doc_out/index.html
-
 
 Distributing
 ------------
@@ -174,7 +142,7 @@ the building requirements and then executing the build module:
 
 .. code:: bash
 
-    python -m pip install -r requirements/requirements_build.txt
+    python -m pip install .[build]
     python -m build
     python -m twine check dist/*
 
