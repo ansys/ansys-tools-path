@@ -24,12 +24,11 @@ jobs:
 
       - name: Install pre-commit requirements
         run: |
-          pip install poetry
-          poetry install -E pre-commit
+          pip install pre-commit
 
       - name: Run pre-commit
         run: |
-          poetry run pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
+          pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
 
   main:
     name: Build and Testing
@@ -83,32 +82,31 @@ jobs:
 
       - name: Install library, with docs extra
         run: |
-          pip install poetry
-          poetry install .[doc]
+          pip install .[doc]
 
       - name: Build HTML
         run: |
-          poetry run make -C doc html SPHINXOPTS="-W"
+          make -C doc html SPHINXOPTS="-W"
 
       - name: Build PDF Documentation
         run: |
           sudo apt update
           sudo apt-get install -y texlive-latex-extra latexmk
-          poetry run make -C doc latexpdf
+          make -C doc latexpdf
 
-      - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: Documentation-html
-          path: doc/build/html
-          retention-days: 7
+      # - name: Upload HTML Documentation
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Documentation-html
+      #     path: doc/build/html
+      #     retention-days: 7
 
-      - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: Documentation-pdf
-          path: doc/build/latex/*.pdf
-          retention-days: 7
+      # - name: Upload PDF Documentation
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Documentation-pdf
+      #     path: doc/build/latex/*.pdf
+      #     retention-days: 7
 
   Release:
     if: contains(github.ref, 'refs/tags')
