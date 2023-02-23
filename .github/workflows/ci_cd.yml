@@ -73,7 +73,7 @@ jobs:
         uses: codecov/codecov-action@v3
 
       - name: Upload wheel
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ansys-product-library-wheel
           path: dist/
@@ -105,14 +105,14 @@ jobs:
       #     make -C doc latexpdf
 
       - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Documentation-html
-          path: doc/build/html
+          path: doc/_build/html
           retention-days: 7
 
       # - name: Upload PDF Documentation
-      #   uses: actions/upload-artifact@v2
+      #   uses: actions/upload-artifact@v3
       #   with:
       #     name: Documentation-pdf
       #     path: doc/build/latex/*.pdf
