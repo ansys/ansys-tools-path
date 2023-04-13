@@ -1,6 +1,8 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
+import os
 
+from ansys_sphinx_theme import get_version_match
 from ansys_sphinx_theme import pyansys_logo_black as logo
 
 from ansys.tools.path import __version__
@@ -17,10 +19,24 @@ html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-path"
 
 # specify the location of your github repo
+cname = os.getenv("DOCUMENTATION_CNAME", default="nocname.com")
+switcher_version = get_version_match(__version__)
+html_context = {
+    "github_user": "pyansys",
+    "github_repo": "ansys-tools-path",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
 html_theme_options = {
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": switcher_version,
+    },
     "github_url": "https://github.com/pyansys/ansys-tools-path",
     "show_prev_next": False,
     "show_breadcrumbs": True,
+    "collapse_navigation": True,
+    "use_edit_page_button": True,
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
