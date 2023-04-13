@@ -48,7 +48,7 @@ doc = [
 
 build = [
     "build==0.8.0",
-    "twine==4.0.1",
+    "twine==4.0.2",
 ]
 
 [tool.flit.module]
