@@ -8,13 +8,13 @@
    :hidden:
    :maxdepth: 3
 
-   API
+   api
    contribute
 
 
-=================================================
-ansys-tools-path: A tool to locate ansys products
-=================================================
+=====================================================
+``ansys-tools-path``: A tool to locate Ansys products
+=====================================================
 
 How to install
 ==============
