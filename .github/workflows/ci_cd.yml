@@ -15,6 +15,11 @@ env:
   PACKAGE_NAMESPACE: 'ansys.tools.path'
   DOCUMENTATION_CNAME: 'path.tools.docs.pyansys.com'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   smoke-tests:
     name: "Build and smoke tests"
