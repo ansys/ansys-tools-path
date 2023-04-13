@@ -68,6 +68,22 @@ numpydoc_validation_checks = {
 }
 
 
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "links.rst",
+]
+
+# make rst_epilog a variable, so you can add other epilog parts to it
+rst_epilog = ""
+# Read link all targets from file
+with open("links.rst") as f:
+    rst_epilog += f.read()
+
 # static path
 html_static_path = ["_static"]
 
