@@ -1,8 +1,7 @@
-# check spelling, codestyle
 name: GitHub CI
 
-# run only on main branch.  This avoids duplicated actions on PRs
 on:
+  workflow_dispatch:
   pull_request:
   push:
     tags:
@@ -18,27 +17,18 @@ env:
 
 jobs:
   style:
-    name: Pre-commit Check
+    name: Code style
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: PyAnsys code style checks
+        uses: pyansys/actions/code-style@v4
         with:
-          python-version: 3.8
-
-      - name: Install pre-commit requirements
-        run: |
-          pip install pre-commit
-
-      - name: Run pre-commit
-        run: |
-          pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   smoke-tests:
     name: "Build and smoke tests"
     runs-on: ${{ matrix.os }}
+    needs: [style]
     if: github.ref != 'refs/heads/main'
     timeout-minutes: 20
     strategy:
@@ -83,18 +73,8 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      - name: Create wheel
-        run: |
-          python -m pip install build
-          python -m build --wheel
-
-      - name: Validate wheel
-        run: |
-          python -m pip install twine
-          python -m twine check dist/*
-
       - name: Install library, with test extra
-        run: python -m pip install $(echo dist/*)[test]
+        run: python -m pip install .[test]
 
       - name: Unit testing
         run: |
