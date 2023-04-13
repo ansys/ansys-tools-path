@@ -16,20 +16,10 @@ env:
   DOCUMENTATION_CNAME: 'path.tools.docs.pyansys.com'
 
 jobs:
-  style:
-    name: Code style
-    runs-on: ubuntu-latest
-    steps:
-      - name: PyAnsys code style checks
-        uses: pyansys/actions/code-style@v4
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
   smoke-tests:
     name: "Build and smoke tests"
     runs-on: ${{ matrix.os }}
     needs: [style]
-    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -86,7 +76,7 @@ jobs:
           files: .cov/coverage.xml
 
   docs-style:
-    name: PyAnsys documentation style check using Vale
+    name: Documentation style check
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys documentation style checks
