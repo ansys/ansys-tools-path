@@ -21,6 +21,12 @@ html_short_title = html_title = "ansys-tools-path"
 # specify the location of your github repo
 cname = os.getenv("DOCUMENTATION_CNAME", default="nocname.com")
 switcher_version = get_version_match(__version__)
+html_context = {
+    "github_user": "pyansys",
+    "github_repo": "ansys-tools-path",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
 html_theme_options = {
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
