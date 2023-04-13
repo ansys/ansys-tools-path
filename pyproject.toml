@@ -6,15 +6,15 @@ build-backend = "flit_core.buildapi"
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "ansys-tools-path"
 version = "0.1.dev0"
-description = "Library to locate ansys products in a local machine."
+description = "Library to locate Ansys products in a local machine."
 readme = "README.rst"
 requires-python = ">=3.7"
 license = {file = "LICENSE"}
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -58,6 +58,7 @@ name = "ansys.tools.path"
 Source = "https://github.com/pyansys/ansys-tools-path"
 Tracker = "https://github.com/pyansys/ansys-tools-path/issues"
 Homepage = "https://github.com/pyansys/ansys-tools-path"
+Documentation = "https://path.tools.docs.pyansys.com"
 
 
 [tool.black]
