@@ -1,7 +1,7 @@
 .. _ref_api:
 
 API
-========
+===
 
 .. currentmodule:: ansys.tools.path
 

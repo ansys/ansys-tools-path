@@ -3,11 +3,13 @@ from datetime import datetime
 
 from ansys_sphinx_theme import pyansys_logo_black as logo
 
+from ansys.tools.path import __version__
+
 # Project information
 project = "ansys-tools-path"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = "0.1.dev0"
+release = version = __version__
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo

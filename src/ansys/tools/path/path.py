@@ -35,7 +35,10 @@ if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
         LOG.debug(f"Created settings directory: {SETTINGS_DIR}")
         os.makedirs(SETTINGS_DIR)
     except:
-        warnings.warn("Unable to create settings directory.\n" "Will be unable to cache MAPDL executable location")
+        warnings.warn(
+            "Unable to create settings directory.\n"
+            "Will be unable to cache MAPDL executable location"
+        )
 
 CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
 
@@ -129,10 +132,14 @@ def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
             LOG.debug(f"Found the following installed Ansys versions: {installed_versions}")
             return installed_versions
         else:  # pragma: no cover
-            LOG.debug("No installed ANSYS found using 'AWP_ROOT' environments. Let's suppose a base path.")
+            LOG.debug(
+                "No installed ANSYS found using 'AWP_ROOT' environments. Let's suppose a base path."
+            )
             base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS INC")
             if not os.path.exists(base_path):
-                LOG.debug(f"The supposed 'base_path'{base_path} does not exist. No available ansys found.")
+                LOG.debug(
+                    f"The supposed 'base_path'{base_path} does not exist. No available ansys found."
+                )
                 return {}
     elif os.name == "posix":
         for path in LINUX_DEFAULT_DIRS:
@@ -248,7 +255,9 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     try:
         ans_path = versions[version]
     except KeyError as e:
-        raise ValueError(f"Version {version} not found. Available versions are {list(versions.keys())}") from e
+        raise ValueError(
+            f"Version {version} not found. Available versions are {list(versions.keys())}"
+        ) from e
 
     version = abs(version)
     if os.name == "nt":
@@ -260,15 +269,21 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
 
 def is_valid_executable_path(exe_loc):
     return (
-        os.path.isfile(exe_loc) and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
+        os.path.isfile(exe_loc)
+        and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
     )
 
 
 def is_common_executable_path(exe_loc):
     path = os.path.normpath(exe_loc)
     path = path.split(os.sep)
-    if re.search(r"v(\d\d\d)", exe_loc) is not None and re.search(r"ansys(\d\d\d)", exe_loc) is not None:
-        equal_version = re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
+    if (
+        re.search(r"v(\d\d\d)", exe_loc) is not None
+        and re.search(r"ansys(\d\d\d)", exe_loc) is not None
+    ):
+        equal_version = (
+            re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
+        )
     else:
         equal_version = False
 
@@ -393,7 +408,9 @@ def _prompt_ansys_path():  # pragma: no cover
                 f.write(exe_loc)
             need_path = False
         else:
-            print("The supplied path is either: not a valid file path, or does not match 'ansysXXX' name.")
+            print(
+                "The supplied path is either: not a valid file path, or does not match 'ansysXXX' name."
+            )
     return exe_loc
 
 

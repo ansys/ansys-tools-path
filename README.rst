@@ -104,7 +104,7 @@ You need to follow these steps:
 #. Install the project in editable mode:
 
    .. code:: bash
-    
+
       python -m pip install --editable ansys-tools-path
 
 
