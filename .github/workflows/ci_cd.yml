@@ -19,7 +19,6 @@ jobs:
   smoke-tests:
     name: "Build and smoke tests"
     runs-on: ${{ matrix.os }}
-    needs: [style]
     strategy:
       fail-fast: false
       matrix:
