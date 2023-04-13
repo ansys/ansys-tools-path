@@ -29,7 +29,6 @@ jobs:
     name: "Build and smoke tests"
     runs-on: ${{ matrix.os }}
     needs: [style]
-    if: github.ref != 'refs/heads/main'
     timeout-minutes: 20
     strategy:
       fail-fast: false
