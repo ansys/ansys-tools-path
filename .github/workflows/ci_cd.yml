@@ -26,7 +26,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         # Only perform wheelhouse builds for macOS when releasing
-        should-release: 
+        should-release:
           - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
         exclude:
           - should-release: false
@@ -39,7 +39,7 @@ jobs:
           library-namespace: ${{ env.PACKAGE_NAMESPACE }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
-          
+
   build-tests:
     name: Build and Testing
     runs-on: ubuntu-latest
