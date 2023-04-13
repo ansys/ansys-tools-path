@@ -10,6 +10,12 @@ on:
     branches:
       - main
 
+env:
+  MAIN_PYTHON_VERSION: '3.10'
+  PACKAGE_NAME: 'ansys-tools-path'
+  PACKAGE_NAMESPACE: 'ansys.tools.path'
+  DOCUMENTATION_CNAME: 'path.tools.docs.pyansys.com'
+
 jobs:
   style:
     name: Pre-commit Check
@@ -170,3 +176,15 @@ jobs:
             ./**/*.whl
             ./**/*.zip
             ./**/*.pdf
+
+  upload-dev-docs:
+    name: Upload dev documentation
+    if: github.ref == 'refs/heads/main' && !contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    needs: [docs]
+    steps:
+      - name: Deploy the latest documentation
+        uses: pyansys/actions/doc-deploy-dev@v4
+        with:
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
