@@ -9,11 +9,19 @@
    :maxdepth: 3
 
    API
+   contribute
 
+
+=================================================
+ansys-tools-path: A tool to locate ansys products
+=================================================
+
+How to install
+==============
 
 .. include:: ../../README.rst
-   :end-before: .. howtouse
-
+   :start-after: .. howtoinstallusers_start
+   :end-before: .. howtoinstallusers_end
 
 
 How to use
@@ -31,6 +39,3 @@ to locate the path of the latest ANSYS installation available:
    >>> find_ansys()
    'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1
 
-
-.. include:: ../../README.rst
-   :start-after: .. howtouse
