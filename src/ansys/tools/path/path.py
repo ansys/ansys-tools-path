@@ -1,12 +1,14 @@
 from glob import glob
+import json
 import logging as LOG  # Temporal hack
 import os
 import re
 import warnings
+import typing
 
 import appdirs
 
-from ansys.tools.path.misc import is_float
+from ansys.tools.path.misc import is_float, is_linux, is_windows
 
 LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"]]
 LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
@@ -29,6 +31,24 @@ SUPPORTED_ANSYS_VERSIONS = {
     191: "19.1",
 }
 
+PRODUCT_EXE_INFO = {
+    "mapdl": {
+        "name": "Ansys MAPDL",
+        "pattern": "ansysxxx",
+        "patternpath": "vXXX/ansys/bin/ansysXXX",
+    },
+    "mechanical": {
+        "name": "Ansys Mechanical",
+    },
+}
+
+if is_windows():
+    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
+    PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
+else:
+    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/.workbench"
+    PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
+
 # settings directory
 SETTINGS_DIR = appdirs.user_data_dir("ansys_tools_path")
 if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
@@ -38,117 +58,65 @@ if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
     except:
         warnings.warn(
             "Unable to create settings directory.\n"
-            "Will be unable to cache MAPDL executable location"
+            "Will be unable to cache product executable locations"
         )
 
 CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
 
 
-def _version_from_path(path):
-    """Extract ansys version from a path.  Generally, the version of
-    ANSYS is contained in the path:
+def _get_installed_windows_versions(supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    """Get the AWP_ROOT environment variable values for supported versions."""
 
-    C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe
+    # The student version overwrites the AWP_ROOT env var
+    # (if it is installed later)
+    # However the priority should be given to the non-student version.
+    awp_roots = []
+    awp_roots_student = []
 
-    /usr/ansys_inc/v211/ansys/bin/mapdl
+    for ver in supported_versions:
+        path_ = os.environ.get(f"AWP_ROOT{ver}", "")
+        path_non_student = path_.replace("\\ANSYS Student", "")
 
-    Note that if the MAPDL executable, you have to rely on the version
-    in the path.
+        if "student" in path_.lower() and os.path.exists(path_non_student):
+            # Check if also exist a non-student version
+            awp_roots.append([ver, path_non_student])
+            awp_roots_student.insert(0, [-1 * ver, path_])
 
-    Parameters
-    ----------
-    path : str
-        Path to the MAPDL executable
+        else:
+            awp_roots.append([ver, path_])
 
-    Returns
-    -------
-    int
-        Integer version number (e.g. 211).
-
-    """
-    # expect v<ver>/ansys
-    # replace \\ with / to account for possible windows path
-    matches = re.findall(r"v(\d\d\d).ansys", path.replace("\\", "/"), re.IGNORECASE)
-    if not matches:
-        raise RuntimeError(f"Unable to extract Ansys version from {path}")
-    return int(matches[-1])
+    awp_roots.extend(awp_roots_student)
+    installed_versions = {ver: path for ver, path in awp_roots if path and os.path.isdir(path)}
+    if installed_versions:
+        LOG.debug(f"Found the following unified Ansys installation versions: {installed_versions}")
+    else:
+        LOG.debug(
+            "No unified Ansys installations found using 'AWP_ROOT' environments. Let's suppose a base path."
+        )
+    return installed_versions
 
 
-def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
-    """Return a dictionary of available Ansys versions with their base paths.
+def _get_default_linux_base_path():
+    """Get the default base path of the Ansys unified install on linux."""
 
-    Returns
-    -------
-    dict[int: str]
-        Return all installed Ansys paths in Windows.
+    for path in LINUX_DEFAULT_DIRS:
+        if os.path.isdir(path):
+            return path
+    return None
 
-    Notes
-    -----
 
-    On Windows, It uses the environment variable ``AWP_ROOTXXX``.
+def _get_default_windows_base_path():
+    """Get the default base path of the Ansys unified install on windows."""
 
-    The student versions are returned at the end of the dict and with
-    negative value for the version.
+    base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS INC")
+    if not os.path.exists(base_path):
+        LOG.debug(f"The supposed 'base_path'{base_path} does not exist. No available ansys found.")
+        return None
+    return base_path
 
-    Examples
-    --------
 
-    >>> from ansys.tools.path.path import _get_available_base_ansys
-    >>> _get_available_base_ansys()
-    {222: 'C:\\Program Files\\ANSYS Inc\\v222',
-     212: 'C:\\Program Files\\ANSYS Inc\\v212',
-     -222: 'C:\\Program Files\\ANSYS Inc\\ANSYS Student\\v222'}
-
-    Return all installed Ansys paths in Linux.
-
-    >>> _get_available_base_ansys()
-    {194: '/usr/ansys_inc/v194',
-     202: '/usr/ansys_inc/v202',
-     211: '/usr/ansys_inc/v211'}
-    """
-    base_path = None
-    if os.name == "nt":  # pragma: no cover
-        # The student version overwrites the AWP_ROOT env var
-        # (if it is installed later)
-        # However the priority should be given to the non-student version.
-        awp_roots = []
-        awp_roots_student = []
-
-        for ver in supported_versions:
-            path_ = os.environ.get(f"AWP_ROOT{ver}", "")
-            path_non_student = path_.replace("\\ANSYS Student", "")
-
-            if "student" in path_.lower() and os.path.exists(path_non_student):
-                # Check if also exist a non-student version
-                awp_roots.append([ver, path_non_student])
-                awp_roots_student.insert(0, [-1 * ver, path_])
-
-            else:
-                awp_roots.append([ver, path_])
-
-        awp_roots.extend(awp_roots_student)
-        installed_versions = {ver: path for ver, path in awp_roots if path and os.path.isdir(path)}
-
-        if installed_versions:
-            LOG.debug(f"Found the following installed Ansys versions: {installed_versions}")
-            return installed_versions
-        else:  # pragma: no cover
-            LOG.debug(
-                "No installed ANSYS found using 'AWP_ROOT' environments. Let's suppose a base path."
-            )
-            base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS INC")
-            if not os.path.exists(base_path):
-                LOG.debug(
-                    f"The supposed 'base_path'{base_path} does not exist. No available ansys found."
-                )
-                return {}
-    elif os.name == "posix":
-        for path in LINUX_DEFAULT_DIRS:
-            if os.path.isdir(path):
-                base_path = path
-    else:  # pragma: no cover
-        raise OSError(f"Unsupported OS {os.name}")
-
+def _expand_base_path(base_path: str) -> dict:
+    """Expand the base path to all possible ansys Unified installations contained within."""
     if base_path is None:
         return {}
 
@@ -170,13 +138,48 @@ def _get_available_base_ansys(supported_versions=SUPPORTED_ANSYS_VERSIONS):
     return ansys_paths
 
 
+def _get_available_base_unified(supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    r"""Get a dictionary of available Ansys Unified Installation versions with
+    their base paths.
+
+    Returns
+    -------
+        Paths for Unified Installation versions installed.
+
+    Examples
+    --------
+    On Windows:
+
+    >>> _get_available_base_unified()
+    >>> {231: 'C:\\Program Files\\ANSYS Inc\\v231'}
+
+    On Linux:
+
+    >>> _get_available_base_unified()
+    >>> {231: '/usr/ansys_inc/v231'}
+    """
+    base_path = None
+    if is_windows():  # pragma: no cover
+        installed_versions = _get_installed_windows_versions(supported_versions)
+        if installed_versions:
+            return installed_versions
+        else:  # pragma: no cover
+            base_path = _get_default_windows_base_path()
+    elif is_linux():
+        base_path = _get_default_linux_base_path()
+    else:  # pragma: no cover
+        raise OSError(f"Unsupported OS {os.name}")
+
+    return _expand_base_path(base_path)
+
+
 def get_available_ansys_installations(supported_versions=SUPPORTED_ANSYS_VERSIONS):
-    """Return a dictionary of available Ansys versions with their base paths.
+    """Return a dictionary of available Ansys unified installation versions with their base paths.
 
     Returns
     -------
     dict[int: str]
-        Return all installed Ansys paths in Windows.
+        Return all Ansys unified installations paths in Windows.
 
     Notes
     -----
@@ -202,17 +205,81 @@ def get_available_ansys_installations(supported_versions=SUPPORTED_ANSYS_VERSION
      202: '/usr/ansys_inc/v202',
      211: '/usr/ansys_inc/v211'}
     """
-    return _get_available_base_ansys(supported_versions)
+    return _get_available_base_unified(supported_versions)
 
 
-def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
-    """Searches for ansys path within the standard install location
+def _get_unified_install_base_for_version(
+    version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS
+) -> typing.Tuple[str, str]:
+    """Search for the unified install of a given version from the supported versions.
+
+    Returns
+    -------
+    Tuple[str, str]
+        The base unified install path and version
+    """
+    versions = _get_available_base_unified(supported_versions)
+    if not versions:
+        return "", ""
+
+    if not version:
+        version = max(versions.keys())
+
+    elif isinstance(version, float):
+        # Using floats, converting to int.
+        version = int(version * 10)
+
+    try:
+        ans_path = versions[version]
+    except KeyError as e:
+        raise ValueError(
+            f"Version {version} not found. Available versions are {list(versions.keys())}"
+        ) from e
+
+    version = abs(version)
+    return ans_path, version
+
+
+def find_mechanical(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    """
+    Search for the Mechanical path in the standard installation location.
+
+    Returns
+    -------
+    mechanical_path : str
+        Full path to the executable file for the latest Mechanical version.
+    version : float
+        Version in the float format. For example, ``23.1`` for 2023 R1.
+
+    Examples
+    --------
+    On Windows:
+
+    >>> from ansys.mechanical.core.mechanical import find_mechanical
+    >>> find_mechanical()
+    'C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1
+
+    On Linux:
+
+    >>> find_mechanical()
+    (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
+    """
+    ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    if is_windows():
+        mechanical_bin = os.path.join(ans_path, "aisol", "bin", "winx64", f"AnsysWBU.exe")
+    else:
+        mechanical_bin = os.path.join(ans_path, "aisol", ".workbench")
+    return mechanical_bin, version / 10
+
+
+def find_mapdl(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    """Searches for Ansys MAPDL path within the standard install location
     and returns the path of the latest version.
 
     Parameters
     ----------
     version : int, float, optional
-        Version of ANSYS to search for.
+        Version of Ansys MAPDL to search for.
         If using ``int``, it should follow the convention ``XXY``, where
         ``XX`` is the major version,
         and ``Y`` is the minor.
@@ -233,105 +300,242 @@ def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     --------
     Within Windows
 
-    >>> from ansys.tools.path import find_ansys
-    >>> find_ansys()
+    >>> from ansys.tools.path import find_mapdl
+    >>> find_mapdl()
     'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1
 
     Within Linux
 
-    >>> find_ansys()
+    >>> find_mapdl()
     (/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)
     """
-    versions = _get_available_base_ansys(supported_versions)
-    if not versions:
-        return "", ""
-
-    if not version:
-        version = max(versions.keys())
-
-    elif isinstance(version, float):
-        # Using floats, converting to int.
-        version = int(version * 10)
-
-    try:
-        ans_path = versions[version]
-    except KeyError as e:
-        raise ValueError(
-            f"Version {version} not found. Available versions are {list(versions.keys())}"
-        ) from e
-
-    version = abs(version)
-    if os.name == "nt":
+    ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    if is_windows():
         ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"ansys{version}.exe")
     else:
         ansys_bin = os.path.join(ans_path, "ansys", "bin", f"ansys{version}")
     return ansys_bin, version / 10
 
 
-def is_valid_executable_path(exe_loc):
-    return (
-        os.path.isfile(exe_loc)
-        and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
-    )
+def _find_installation(product: str, version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    if product == "mapdl":
+        return find_mapdl(version, supported_versions)
+    raise Exception("unexpected product")
 
 
-def is_common_executable_path(exe_loc):
-    path = os.path.normpath(exe_loc)
-    path = path.split(os.sep)
-    if (
-        re.search(r"v(\d\d\d)", exe_loc) is not None
-        and re.search(r"ansys(\d\d\d)", exe_loc) is not None
-    ):
-        equal_version = (
-            re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
+def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
+    """Obsolete method, use find_mapdl."""
+    return _find_installation("mapdl", version, supported_versions)
+
+
+def is_valid_executable_path(product: str, exe_loc: str):
+    if product == "mapdl":
+        return (
+            os.path.isfile(exe_loc)
+            and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
         )
-    else:
-        equal_version = False
+    elif product == "mapdl":
+        if is_windows():
+            return (
+                os.path.isfile(exe_loc)
+                and re.search("AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)))
+                is not None
+            )
+        return (
+            os.path.isfile(exe_loc)
+            and re.search(".workbench", os.path.basename(os.path.normpath(exe_loc))) is not None
+        )
+    raise Exception("unexpected application")
 
-    return (
-        is_valid_executable_path(exe_loc)
-        and re.search(r"v\d\d\d", exe_loc)
-        and "ansys" in path
-        and "bin" in path
-        and equal_version
-    )
+
+def _is_common_executable_path(product: str, exe_loc: str) -> bool:
+    if product == "mapdl":
+        path = os.path.normpath(exe_loc)
+        path = path.split(os.sep)
+        if (
+            re.search(r"v(\d\d\d)", exe_loc) is not None
+            and re.search(r"ansys(\d\d\d)", exe_loc) is not None
+        ):
+            equal_version = (
+                re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
+            )
+        else:
+            equal_version = False
+
+        return (
+            is_valid_executable_path("mapdl", exe_loc)
+            and re.search(r"v\d\d\d", exe_loc)
+            and "ansys" in path
+            and "bin" in path
+            and equal_version
+        )
+    elif product == "mechanical":
+        path = os.path.normpath(exe_loc)
+        path = path.split(os.sep)
+
+        is_valid_path = is_valid_executable_path(exe_loc)
+
+        if is_windows():
+            return (
+                is_valid_path
+                and re.search(r"v\d\d\d", exe_loc)
+                and "aisol" in path
+                and "bin" in path
+                and "winx64" in path
+                and "AnsysWBU.exe" in path
+            )
+
+        return (
+            is_valid_path
+            and re.search(r"v\d\d\d", exe_loc)
+            and "aisol" in path
+            and ".workbench" in path
+        )
+    raise Exception("unexpected application")
 
 
-def change_default_ansys_path(exe_loc):
-    """Change your default ansys path.
-
-    Parameters
-    ----------
-    exe_loc : str
-        Ansys executable path.  Must be a full path.
-
-    Examples
-    --------
-    Change default Ansys location on Linux
-
-    >>> from ansys.tools.path import change_default_ansys_path, get_ansys_path
-    >>> change_default_ansys_path('/ansys_inc/v201/ansys/bin/ansys201')
-    >>> get_ansys_path()
-    '/ansys_inc/v201/ansys/bin/ansys201'
-
-    Change default Ansys location on Windows
-
-    >>> ans_pth = 'C:/Program Files/ANSYS Inc/v193/ansys/bin/winx64/ANSYS193.exe'
-    >>> change_default_ansys_path(ans_pth)
-
-    """
+def _change_default_path(product: str, exe_loc: str):
     if os.path.isfile(exe_loc):
-        with open(CONFIG_FILE, "w") as f:
-            f.write(exe_loc)
+        config_data = _read_config_file(product)
+        config_data[product] = exe_loc
+        _write_config_file(config_data)
     else:
         raise FileNotFoundError("File %s is invalid or does not exist" % exe_loc)
 
 
-def save_ansys_path(exe_loc=None, allow_prompt=True):
-    """Find MAPDL's path or query user.
+def change_default_mapdl_path(exe_loc) -> None:
+    """Change your default Ansys MAPDL path.
+
+    Parameters
+    ----------
+    exe_loc : str
+        Ansys <APDL executable path.  Must be a full path.
+
+    Examples
+    --------
+    Change default Ansys MAPDL location on Linux
+
+    >>> from ansys.tools.path import change_default_mapdl_path, get_mapdl_path
+    >>> change_default_mapdl_path('/ansys_inc/v201/ansys/bin/ansys201')
+    >>> get_mapdl_path()
+    '/ansys_inc/v201/ansys/bin/ansys201'
+
+    Change default Ansys location on Windows
+
+    >>> mapdl_path = 'C:/Program Files/ANSYS Inc/v193/ansys/bin/winx64/ANSYS193.exe'
+    >>> change_default_mapdl_path(mapdl_path)
+
+    """
+    _change_default_path("mapdl", exe_loc)
+
+
+def change_default_mechanical_path(exe_loc) -> None:
+    """Change your default Mechanical path.
+
+    Parameters
+    ----------
+    exe_loc : str
+        Full path for the Mechanical executable file to use.
+
+    Examples
+    --------
+    On Windows:
+
+    >>> from ansys.mechanical.core import mechanical
+    >>> from ansys.tools.path import change_default_mechanical_path
+    >>> mechanical_path = 'C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/AnsysWBU.exe'
+    >>> change_default_mechanical_path(mechanical_pth)
+    >>> mechanical.check_valid_mechanical()
+    True
+
+    On Linux:
+
+    >>> from ansys.mechanical.core import mechanical
+    >>> from ansys.tools.path import change_default_mechanical_path, get_mechanical_path
+    >>> change_default_mechanical_path('/ansys_inc/v231/aisol/.workbench')
+    >>> get_mechanical_path()
+    '/ansys_inc/v231/aisol/.workbench'
+
+    """
+    _change_default_path("mechanical", exe_loc)
+
+
+def change_default_ansys_path(exe_loc) -> None:
+    """Deprecated, use `change_default_mapdl_path` instead"""
+    _change_default_path("mapdl", exe_loc)
+
+
+def _save_path(product: str, exe_loc: str = None, allow_prompt=True) -> str:
+    if exe_loc is None:
+        exe_loc, _ = _find_installation(product)
+
+    if is_valid_executable_path(product, exe_loc):
+        _check_uncommon_executable_path(product, exe_loc)
+
+        _change_default_path(product, exe_loc)
+        return exe_loc
+
+    if exe_loc is not None:
+        if is_valid_executable_path(product, exe_loc):
+            return exe_loc
+    if allow_prompt:
+        exe_loc = _prompt_path(product)
+    return exe_loc
+
+
+def save_mechanical_path(exe_loc=None, allow_prompt=True):  # pragma: no cover
+    """Find the Mechanical path or query user.
+
+    Parameters
+    ----------
+    exe_loc : string, optional
+        Path for the Mechanical executable file (``AnsysWBU.exe``).
+        The default is ``None``, in which case an attempt is made to
+        obtain the path from the following sources in this order:
+
+        - The default Mechanical paths (for example,
+          ``C:/Program Files/Ansys Inc/vXXX/aiso/bin/AnsysWBU.exe``)
+        - The configuration file
+        - User input
+
+        If a path is supplied, this method performs some checks. If the
+        checks are aresuccessful, it writes this path to the configuration
+        file.
+
+    Returns
+    -------
+    str
+        Path for the Mechanical executable file.
+
+    Notes
+    -----
+    The location of the configuration file (``config.txt``) can be found in
+    ``appdirs.user_data_dir("ansys_tools_path")``. For example:
+
+    .. code:: pycon
+
+        >>> import appdirs
+        >>> import os
+        >>> print(os.path.join(appdirs.user_data_dir("ansys_tools_path"), "config.txt"))
+        C:/Users/[username]]/AppData/Local/ansys_tools_path/ansys_tools_path/config.txt
+
+    You can change the default for the ``exe_loc`` parameter either by modifying the
+    ``config.txt`` file or by running this code:
+
+    .. code:: pycon
+
+       >>> from ansys.tools.path import save_mechanical_path
+       >>> save_mechanical_path("/new/path/to/executable")
+
+    """
+    return _save_path("mechanical", exe_loc, allow_prompt)
+
+
+def save_mapdl_path(exe_loc=None, allow_prompt=True) -> str:
+    """Find Ansys MAPDL's path or query user.
 
     If no ``exe_loc`` argument is supplied, this function attempt
-    to obtain the MAPDL executable from (and in order):
+    to obtain the Ansys MAPDL executable from (and in order):
 
     - The default ansys paths (i.e. ``'C:/Program Files/Ansys Inc/vXXX/ansys/bin/ansysXXX'``)
     - The configuration file
@@ -353,102 +557,219 @@ def save_ansys_path(exe_loc=None, allow_prompt=True):
     Notes
     -----
     The configuration file location (``config.txt``) can be found in
-    ``appdirs.user_data_dir("ansys_mapdl_core")``. For example:
+    ``appdirs.user_data_dir("ansys_tools_path")``. For example:
 
     .. code:: pycon
 
         >>> import appdirs
         >>> import os
-        >>> print(os.path.join(appdirs.user_data_dir("ansys_mapdl_core"), "config.txt"))
-        C:/Users/user/AppData/Local/ansys_mapdl_core/ansys_mapdl_core/config.txt
+        >>> print(os.path.join(appdirs.user_data_dir("ansys_tools_path"), "config.txt"))
+        C:/Users/user/AppData/Local/ansys_tools_path/ansys_tools_path/config.txt
 
     Examples
     --------
     You can change the default ``exe_loc`` either by modifying the mentioned
     ``config.txt`` file or by executing:
 
-    >>> from ansys.tools.path import save_ansys_path
-    >>> save_ansys_path('/new/path/to/executable')
+    >>> from ansys.tools.path import save_mapdl_path
+    >>> save_mapdl_path('/new/path/to/executable')
 
     """
-    if exe_loc is None:
-        exe_loc, _ = find_ansys()
-
-    if is_valid_executable_path(exe_loc):
-        if not is_common_executable_path(exe_loc):
-            warn_uncommon_executable_path(exe_loc)
-
-        change_default_ansys_path(exe_loc)
-        return exe_loc
-
-    if exe_loc is not None:
-        if is_valid_executable_path(exe_loc):
-            return exe_loc
-    if allow_prompt:
-        exe_loc = _prompt_ansys_path()
-    return exe_loc
+    return _save_path("mapdl", exe_loc, allow_prompt)
 
 
-def _prompt_ansys_path():  # pragma: no cover
-    print("Cached ANSYS executable not found")
+def save_ansys_path(exe_loc=None, allow_prompt=True) -> str:
+    """Deprecated, use `save_mapdl_path` instead"""
+    return _save_path("mapdl", exe_loc, allow_prompt)
+
+
+def _check_uncommon_executable_path(product: str, exe_loc: str):
+    product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
+    product_name = PRODUCT_EXE_INFO[product]["name"]
+    if not _is_common_executable_path(product, exe_loc):
+        warnings.warn(
+            f"The supplied path ('{exe_loc}') does not match the usual {product_name} executable path style"
+            f"('directory/{product_pattern_path}'). "
+            "You might have problems at later use."
+        )
+
+
+def _prompt_path(product: str) -> str:  # pragma: no cover
+    product_name = PRODUCT_EXE_INFO[product]["name"]
+    product_pattern = PRODUCT_EXE_INFO[product]["pattern"]
+    product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
+    print(f"Cached {product} executable not found")
     print(
-        "You are about to enter manually the path of the ANSYS MAPDL executable(ansysXXX,where XXX is the version\n"
-        "This file is very likely to contained in path ending in 'vXXX/ansys/bin/ansysXXX', but it is not required.\n"
+        f"You are about to enter manually the path of the {product_name} executable({product_pattern}, where XXX is the version\n"
+        f"This file is very likely to contained in path ending in '{product_pattern_path}'.\n"
         "\nIf you experience problems with the input path you can overwrite the configuration file by typing:\n"
-        ">>> from ansys.tools.path import save_ansys_path\n"
-        ">>> save_ansys_path('/new/path/to/executable/')\n"
+        f">>> from ansys.tools.path import save_{product}_path\n"
+        f">>> save_{product}_path('/new/path/to/executable/')\n"
     )
-    need_path = True
-    while need_path:  # pragma: no cover
-        exe_loc = input("Enter the location of an ANSYS executable (ansysXXX):")
+    while True:  # pragma: no cover
+        exe_loc = input(f"Enter the location of an {product_name} ({product_pattern}):")
 
-        if is_valid_executable_path(exe_loc):
-            if not is_common_executable_path(exe_loc):
-                warn_uncommon_executable_path(exe_loc)
-            with open(CONFIG_FILE, "w") as f:
-                f.write(exe_loc)
-            need_path = False
+        if is_valid_executable_path(product, exe_loc):
+            _check_uncommon_executable_path(product, exe_loc)
+            config_data = _read_config_file(product)
+            config_data[product] = exe_loc
+            _write_config_file(config_data)
+            break
         else:
             print(
-                "The supplied path is either: not a valid file path, or does not match 'ansysXXX' name."
+                "The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
             )
     return exe_loc
 
 
-def warn_uncommon_executable_path(exe_loc):
-    warnings.warn(
-        f"The supplied path ('{exe_loc}') does not match the usual ansys executable path style"
-        "('directory/vXXX/ansys/bin/ansysXXX'). "
-        "You might have problems at later use."
-    )
+def _read_config_file(product_name: str) -> dict:
+    """Read config file for a given product, migrating if needed"""
+    _migrate_config_file(product_name)
+    if os.path.isfile(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return {}
 
 
-def get_ansys_path(allow_input=True, version=None):
-    """Acquires ANSYS Path from a cached file or user input
+def _write_config_file(config_data: dict):
+    """Warning - this isn't threadsafe"""
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config_data, f)
 
-    Parameters
-    ----------
-    allow_input : bool, optional
-        Allow user input to find ANSYS path.  The default is ``True``.
 
-    version : float, optional
-        Version of ANSYS to search for. For example ``version=22.2``.
-        If ``None``, use latest.
+def _migrate_config_file(product_name: str) -> None:
+    """Migrate configuration if needed"""
+    if product_name != "mechanical" and product_name != "mapdl":
+        return
 
-    """
-    exe_loc = None
-    if not version and os.path.isfile(CONFIG_FILE):
-        with open(CONFIG_FILE) as f:
+    old_config_file_name = "config.txt"
+    old_settings_dir = appdirs.user_data_dir(f"ansys_{product_name}_core")
+    old_config_file = os.path.join(old_settings_dir, old_config_file_name)
+    if os.path.isfile(old_config_file):
+        with open(old_config_file) as f:
             exe_loc = f.read()
-        # verify
-        if not os.path.isfile(exe_loc) and allow_input:
-            exe_loc = save_ansys_path()
-    elif not version and allow_input:  # create configuration file
-        exe_loc = save_ansys_path()
+
+        if os.path.isfile(CONFIG_FILE):
+            new_config_data = _read_config_file()
+        else:
+            new_config_data = {}
+        new_config_data[product_name] = exe_loc
+        _write_config_file(new_config_data)
+        os.remove(old_config_file)
+
+
+def _read_executable_path_from_config_file(product_name: str):
+    """Read the executable path for the product given by `product_name` from config file"""
+    config_data = _read_config_file(product_name)
+    return config_data.get(product_name, None)
+
+
+def _get_application_path(product: str, allow_input=True, version=None):
+    exe_loc = None
+    if not version:
+        exe_loc = _read_executable_path_from_config_file(product)
+        if exe_loc != None:  # verify
+            if not os.path.isfile(exe_loc) and allow_input:
+                exe_loc = _save_path(product)
+        elif allow_input:  # create configuration file
+            exe_loc = _save_path(product)
 
     if exe_loc is None:
-        exe_loc = find_ansys(version=version)[0]
+        exe_loc = _find_installation(product, version=version)[0]
         if not exe_loc:
             exe_loc = None
 
     return exe_loc
+
+
+def get_mapdl_path(allow_input=True, version=None) -> str:
+    """Acquires Ansys MAPDL Path from a cached file or user input
+
+    Parameters
+    ----------
+    allow_input : bool, optional
+        Allow user input to find Ansys MAPDL path.  The default is ``True``.
+
+    version : float, optional
+        Version of Ansys MAPDL to search for. For example ``version=22.2``.
+        If ``None``, use latest.
+
+    """
+    return _get_application_path("mapdl", allow_input, version)
+
+
+def get_ansys_path(allow_input: bool = True, version=None) -> str:
+    """Deprecated, use `get_mapdl_path` instead"""
+    return _get_application_path("mapdl", allow_input, version)
+
+
+def get_mechanical_path(allow_input=True, version=None) -> str:
+    """Acquires Ansys Mechanical Path from a cached file or user input
+
+    Parameters
+    ----------
+    allow_input : bool, optional
+        Allow user input to find Ansys Mechanical path.  The default is ``True``.
+
+    version : float, optional
+        Version of Ansys Mechanical to search for. For example ``version=22.2``.
+        If ``None``, use latest.
+
+    """
+    return _get_application_path("mechanical", allow_input, version)
+
+
+def _mechanical_version_from_path(path):
+    """Extract the Ansys Mechanical version from a path.
+
+    Generally, the version of Mechanical is contained in the path:
+
+    - On Windows, for example: ``C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe``
+    - On Linux, for example: ``/usr/ansys_inc/v231/aisol/.workbench``
+
+    Parameters
+    ----------
+    path : str
+        Path to the Mechanical executable file.
+
+    Returns
+    -------
+    int
+        Integer version number (for example, 231).
+
+    """
+    # expect v<ver>/ansys
+    # replace \\ with / to account for possible windows path
+    matches = re.findall(r"v(\d\d\d)", path.replace("\\", "/"), re.IGNORECASE)
+    if not matches:
+        raise RuntimeError(f"Unable to extract Mechanical version from {path}.")
+    return int(matches[-1])
+
+
+def version_from_path(product, path):
+    """Extract the product version from a path.
+
+    Parameters
+    ----------
+    path : str
+        Path to the executable file.
+
+    Returns
+    -------
+    int
+        Integer version number (for example, 231).
+
+    """
+    if product == "mechanical":
+        return _mechanical_version_from_path(path)
+    raise Exception("Unexpected product")
+
+
+def check_valid_mechanical():
+    """Check if a valid version of Mechanical is installed and preconfigured."""
+    mechanical_bin = _get_application_path("mechanical", False)
+    if mechanical_bin is not None:
+        version = version_from_path(mechanical_bin)
+        return not (version < 231 and os.name != "posix")
+    return False
