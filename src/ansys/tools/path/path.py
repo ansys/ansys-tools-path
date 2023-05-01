@@ -3,8 +3,8 @@ import json
 import logging as LOG  # Temporal hack
 import os
 import re
-import warnings
 import typing
+import warnings
 
 import appdirs
 
