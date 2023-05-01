@@ -5,7 +5,7 @@ import pytest
 from ansys.tools.path import find_ansys
 from ansys.tools.path.path import (
     CONFIG_FILE,
-    _version_from_path,
+    version_from_path,
     change_default_ansys_path,
     get_ansys_path,
     get_available_ansys_installations,
@@ -35,7 +35,7 @@ paths = [
 @pytest.mark.parametrize("path_data", paths)
 def test_version_from_path(path_data):
     exec_file, version = path_data
-    assert _version_from_path(exec_file) == version
+    assert version_from_path(exec_file) == version
 
 
 def test_find_ansys_linux():
