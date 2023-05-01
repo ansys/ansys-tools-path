@@ -5,12 +5,12 @@ import pytest
 from ansys.tools.path import find_ansys
 from ansys.tools.path.path import (
     CONFIG_FILE,
-    version_from_path,
     change_default_ansys_path,
     get_ansys_path,
     get_available_ansys_installations,
     is_valid_executable_path,
     save_ansys_path,
+    version_from_path,
     warn_uncommon_executable_path,
 )
 
