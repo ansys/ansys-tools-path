@@ -90,9 +90,7 @@ def _get_installed_windows_versions(supported_versions=SUPPORTED_ANSYS_VERSIONS)
     if installed_versions:
         LOG.debug(f"Found the following unified Ansys installation versions: {installed_versions}")
     else:
-        LOG.debug(
-            "No unified Ansys installations found using 'AWP_ROOT' environments."
-        )
+        LOG.debug("No unified Ansys installations found using 'AWP_ROOT' environments.")
     return installed_versions
 
 
@@ -326,7 +324,11 @@ def _find_installation(product: str, version=None, supported_versions=SUPPORTED_
 def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Obsolete method, use find_mapdl."""
     import warnings
-    warnings.warn("This method is going to be deprecated in future versions. Please use 'find_mapdl'.", category=DeprecationWarning) 
+
+    warnings.warn(
+        "This method is going to be deprecated in future versions. Please use 'find_mapdl'.",
+        category=DeprecationWarning,
+    )
     return _find_installation("mapdl", version, supported_versions)
 
 
@@ -465,9 +467,13 @@ def change_default_mechanical_path(exe_loc) -> None:
 
 def change_default_ansys_path(exe_loc) -> None:
     """Deprecated, use `change_default_mapdl_path` instead"""
-    
+
     import warnings
-    warnings.warn("This method is going to be deprecated in future versions. Please use 'change_default_mapdl_path'.", category=DeprecationWarning) 
+
+    warnings.warn(
+        "This method is going to be deprecated in future versions. Please use 'change_default_mapdl_path'.",
+        category=DeprecationWarning,
+    )
 
     _change_default_path("mapdl", exe_loc)
 
