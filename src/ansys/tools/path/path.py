@@ -263,6 +263,8 @@ def find_mechanical(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    if not ans_path or not version:
+        return "", ""
     if is_windows():
         mechanical_bin = os.path.join(ans_path, "aisol", "bin", "winx64", f"AnsysWBU.exe")
     else:
