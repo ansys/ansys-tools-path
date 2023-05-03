@@ -100,7 +100,7 @@ def _get_default_linux_base_path():
     for path in LINUX_DEFAULT_DIRS:
         if os.path.isdir(path):
             return path
-    return None
+    return None  # pragma: no cover
 
 
 def _get_default_windows_base_path():
