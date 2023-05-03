@@ -95,4 +95,4 @@ def test_warn_uncommon_executable_path():
 
 def test_get_mapdl_path():
     assert get_mapdl_path()
-    assert get_mapdl_path(version=231)
+    assert get_mapdl_path(version=222)
