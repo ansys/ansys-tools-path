@@ -42,7 +42,7 @@ PRODUCT_EXE_INFO = {
     },
 }
 
-if is_windows():
+if is_windows():  # pragma: no cover
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
 else:
