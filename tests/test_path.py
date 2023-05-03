@@ -5,14 +5,14 @@ import pytest
 
 from ansys.tools.path import find_mapdl
 from ansys.tools.path.path import (
+    _check_uncommon_executable_path,
     _clear_config_file,
-    version_from_path,
     change_default_mapdl_path,
-    get_mapdl_path,
     get_available_ansys_installations,
+    get_mapdl_path,
     is_valid_executable_path,
     save_mapdl_path,
-    _check_uncommon_executable_path,
+    version_from_path,
 )
 
 paths = [
