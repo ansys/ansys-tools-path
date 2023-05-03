@@ -323,12 +323,11 @@ def _find_installation(product: str, version=None, supported_versions=SUPPORTED_
 
 def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Obsolete method, use find_mapdl."""
-    import warnings
-
     warnings.warn(
         "This method is going to be deprecated in future versions. Please use 'find_mapdl'.",
         category=DeprecationWarning,
     )
+
     return _find_installation("mapdl", version, supported_versions)
 
 
@@ -468,8 +467,6 @@ def change_default_mechanical_path(exe_loc) -> None:
 def change_default_ansys_path(exe_loc) -> None:
     """Deprecated, use `change_default_mapdl_path` instead"""
 
-    import warnings
-
     warnings.warn(
         "This method is going to be deprecated in future versions. Please use 'change_default_mapdl_path'.",
         category=DeprecationWarning,
@@ -593,6 +590,11 @@ def save_mapdl_path(exe_loc=None, allow_prompt=True) -> str:
 
 def save_ansys_path(exe_loc=None, allow_prompt=True) -> str:
     """Deprecated, use `save_mapdl_path` instead"""
+
+    warnings.warn(
+        "This method is going to be deprecated in future versions. Please use 'save_ansys_path'.",
+        category=DeprecationWarning,
+    )
     return _save_path("mapdl", exe_loc, allow_prompt)
 
 
@@ -633,6 +635,12 @@ def _prompt_path(product: str) -> str:  # pragma: no cover
                 "The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
             )
     return exe_loc
+
+
+def _clear_config_file() -> None:
+    """Used by tests. We can consider supporting it on the library"""
+    if os.path.isfile(CONFIG_FILE):
+        os.remove(CONFIG_FILE)
 
 
 def _read_config_file(product_name: str) -> dict:
@@ -714,6 +722,11 @@ def get_mapdl_path(allow_input=True, version=None) -> str:
 
 def get_ansys_path(allow_input: bool = True, version=None) -> str:
     """Deprecated, use `get_mapdl_path` instead"""
+
+    warnings.warn(
+        "This method is going to be deprecated in future versions. Please use 'get_ansys_path'.",
+        category=DeprecationWarning,
+    )
     return _get_application_path("mapdl", allow_input, version)
 
 
@@ -760,6 +773,32 @@ def _mechanical_version_from_path(path):
     return int(matches[-1])
 
 
+def _mapdl_version_from_path(path):
+    """Extract ansys version from a path.  Generally, the version of
+    Ansys MAPDL is contained in the path:
+    C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe
+    /usr/ansys_inc/v211/ansys/bin/mapdl
+    Note that if the Ansys MAPDL executable, you have to rely on the version
+    in the path.
+    Parameters
+    ----------
+    path : str
+        Path to the Ansys MAPDL executable
+
+    Returns
+    -------
+    int
+        Integer version number (e.g. 211).
+
+    """
+    # expect v<ver>/ansys
+    # replace \\ with / to account for possible windows path
+    matches = re.findall(r"v(\d\d\d).ansys", path.replace("\\", "/"), re.IGNORECASE)
+    if not matches:
+        raise RuntimeError(f"Unable to extract Ansys version from {path}")
+    return int(matches[-1])
+
+
 def version_from_path(product, path):
     """Extract the product version from a path.
 
@@ -776,6 +815,8 @@ def version_from_path(product, path):
     """
     if product == "mechanical":
         return _mechanical_version_from_path(path)
+    elif product == "mapdl":
+        return _mapdl_version_from_path(path)
     raise Exception("Unexpected product")
 
 
