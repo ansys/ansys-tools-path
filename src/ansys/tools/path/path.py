@@ -91,7 +91,7 @@ def _get_installed_windows_versions(supported_versions=SUPPORTED_ANSYS_VERSIONS)
         LOG.debug(f"Found the following unified Ansys installation versions: {installed_versions}")
     else:
         LOG.debug(
-            "No unified Ansys installations found using 'AWP_ROOT' environments. Let's suppose a base path."
+            "No unified Ansys installations found using 'AWP_ROOT' environments."
         )
     return installed_versions
 
@@ -325,6 +325,8 @@ def _find_installation(product: str, version=None, supported_versions=SUPPORTED_
 
 def find_ansys(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     """Obsolete method, use find_mapdl."""
+    import warnings
+    warnings.warn("This method is going to be deprecated in future versions. Please use 'find_mapdl'.", category=DeprecationWarning) 
     return _find_installation("mapdl", version, supported_versions)
 
 
@@ -334,7 +336,7 @@ def is_valid_executable_path(product: str, exe_loc: str):
             os.path.isfile(exe_loc)
             and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
         )
-    elif product == "mapdl":
+    elif product == "mechanical":
         if is_windows():
             return (
                 os.path.isfile(exe_loc)
@@ -391,7 +393,8 @@ def _is_common_executable_path(product: str, exe_loc: str) -> bool:
             and "aisol" in path
             and ".workbench" in path
         )
-    raise Exception("unexpected application")
+    else:
+        raise Exception("unexpected application")
 
 
 def _change_default_path(product: str, exe_loc: str):
@@ -409,7 +412,7 @@ def change_default_mapdl_path(exe_loc) -> None:
     Parameters
     ----------
     exe_loc : str
-        Ansys <APDL executable path.  Must be a full path.
+        Ansys MAPDL executable path.  Must be a full path.
 
     Examples
     --------
@@ -462,6 +465,10 @@ def change_default_mechanical_path(exe_loc) -> None:
 
 def change_default_ansys_path(exe_loc) -> None:
     """Deprecated, use `change_default_mapdl_path` instead"""
+    
+    import warnings
+    warnings.warn("This method is going to be deprecated in future versions. Please use 'change_default_mapdl_path'.", category=DeprecationWarning) 
+
     _change_default_path("mapdl", exe_loc)
 
 
@@ -640,7 +647,7 @@ def _write_config_file(config_data: dict):
 
 def _migrate_config_file(product_name: str) -> None:
     """Migrate configuration if needed"""
-    if product_name != "mechanical" and product_name != "mapdl":
+    if product_name not in ["mechanical", "mapdl"]:
         return
 
     old_config_file_name = "config.txt"
