@@ -1,5 +1,6 @@
 import os
 
+import appdirs
 import pytest
 
 from ansys.tools.path import find_mapdl
@@ -39,6 +40,15 @@ def test_find_mapdl_linux():
 def test_migration():
     """If the user configuration the mapdl path using pymapdl before
     ansys-tools-path, ansys-tools-path should respect it."""
+    _clear_config_file()
+
+    old_config_file = os.path.join(appdirs.user_data_dir(f"ansys_mapdl_core"), "config.txt")
+    shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
+    with open(old_config_file, "w") as f:
+        f.write(shell)
+
+    assert shell == get_mapdl_path()
+    assert not os.path.isfile(old_config_file)
 
 
 def test_get_available_base_mapdl():
@@ -56,8 +66,7 @@ def test_change_default_mapdl_path():
 
     shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
 
-    new_path = shell
-    change_default_mapdl_path(new_path)
+    change_default_mapdl_path(shell)
 
     assert shell == get_mapdl_path()
 

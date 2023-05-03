@@ -16,7 +16,6 @@ from ansys.tools.path.path import (
     SUPPORTED_ANSYS_VERSIONS,
     change_default_mapdl_path,
     change_default_mechanical_path,
-    check_valid_mechanical,
     find_mapdl,
     find_mechanical,
     get_available_ansys_installations,
