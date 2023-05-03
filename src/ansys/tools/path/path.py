@@ -267,7 +267,7 @@ def find_mechanical(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
         mechanical_bin = os.path.join(ans_path, "aisol", "bin", "winx64", f"AnsysWBU.exe")
     else:
         mechanical_bin = os.path.join(ans_path, "aisol", ".workbench")
-    return mechanical_bin, version / 10
+    return mechanical_bin, int(version) / 10
 
 
 def find_mapdl(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
