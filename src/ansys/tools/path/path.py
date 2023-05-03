@@ -217,7 +217,7 @@ def _get_unified_install_base_for_version(
         The base unified install path and version
     """
     versions = _get_available_base_unified(supported_versions)
-    if not versions:
+    if not versions:  # pragma: no cover
         return "", ""
 
     if not version:
