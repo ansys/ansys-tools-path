@@ -308,11 +308,14 @@ def find_mapdl(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     (/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    if not ans_path or not version:
+        return "", ""
+
     if is_windows():
         ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"ansys{version}.exe")
     else:
         ansys_bin = os.path.join(ans_path, "ansys", "bin", f"ansys{version}")
-    return ansys_bin, version / 10
+    return ansys_bin, int(version) / 10
 
 
 def _find_installation(product: str, version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
@@ -612,9 +615,11 @@ def _prompt_path(product: str) -> str:  # pragma: no cover
     product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
     print(f"Cached {product} executable not found")
     print(
-        f"You are about to enter manually the path of the {product_name} executable({product_pattern}, where XXX is the version\n"
+        f"You are about to enter manually the path of the {product_name} executable\n"
+        f"({product_pattern}, where XXX is the version\n"
         f"This file is very likely to contained in path ending in '{product_pattern_path}'.\n"
-        "\nIf you experience problems with the input path you can overwrite the configuration file by typing:\n"
+        "\nIf you experience problems with the input path you can overwrite the configuration\n"
+        "file by typing:\n"
         f">>> from ansys.tools.path import save_{product}_path\n"
         f">>> save_{product}_path('/new/path/to/executable/')\n"
     )
