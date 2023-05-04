@@ -55,7 +55,7 @@ jobs:
         username: ${{ secrets.GH_USERNAME }}
         password: ${{ secrets.GITHUB_TOKEN }}
     env:
-      ON_LOCAL: true
+      ANSYS_LOCAL: true
       ON_UBUNTU: true
 
     steps:
