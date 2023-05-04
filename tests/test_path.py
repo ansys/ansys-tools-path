@@ -23,12 +23,18 @@ paths = [
 ]
 
 
+skip_if_ansys_not_local = pytest.mark.skipif(
+    os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
+)
+
+
 @pytest.mark.parametrize("path_data", paths)
 def test_mapdl_version_from_path(path_data):
     exec_file, version = path_data
     assert version_from_path("mapdl", exec_file) == version
 
 
+@skip_if_ansys_not_local
 def test_find_mapdl_linux():
     # assuming Ansys MAPDL is installed, should be able to find it on linux
     # without env var
@@ -37,6 +43,7 @@ def test_find_mapdl_linux():
     assert isinstance(ver, float)
 
 
+@skip_if_ansys_not_local
 def test_migration():
     """If the user configuration the mapdl path using pymapdl before
     ansys-tools-path, ansys-tools-path should respect it."""
@@ -53,10 +60,12 @@ def test_migration():
     assert not os.path.isfile(old_config_file)
 
 
+@skip_if_ansys_not_local
 def test_get_available_base_mapdl():
     assert get_available_ansys_installations()
 
 
+@skip_if_ansys_not_local
 def test_is_valid_mapdl_executable_path():
     path = get_available_ansys_installations().values()
     path = list(path)[0]
@@ -78,6 +87,7 @@ def test_change_default_mapdl_path():
         change_default_mapdl_path("asdf")
 
 
+@skip_if_ansys_not_local
 def test_save_mapdl_path():
     _clear_config_file()
 
@@ -93,6 +103,7 @@ def test_warn_uncommon_executable_path():
         _check_uncommon_executable_path("mapdl", "qwer")
 
 
+@skip_if_ansys_not_local
 def test_get_mapdl_path():
     assert get_mapdl_path()
     assert get_mapdl_path(version=222)
