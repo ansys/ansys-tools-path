@@ -676,7 +676,7 @@ def _migrate_config_file(product_name: str) -> None:
             exe_loc = f.read()
 
         if os.path.isfile(CONFIG_FILE):
-            new_config_data = _read_config_file()
+            new_config_data = _read_config_file(product_name)
         else:
             new_config_data = {}
         new_config_data[product_name] = exe_loc
