@@ -10,7 +10,7 @@ import appdirs
 
 from ansys.tools.path.misc import is_float, is_linux, is_windows
 
-LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"]]
+LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
 LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 
 CONFIG_FILE_NAME = "config.txt"
@@ -323,6 +323,8 @@ def find_mapdl(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
 def _find_installation(product: str, version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     if product == "mapdl":
         return find_mapdl(version, supported_versions)
+    elif product == "mechanical":
+        return find_mechanical(version, supported_versions)
     raise Exception("unexpected product")
 
 
