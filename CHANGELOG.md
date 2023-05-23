@@ -12,6 +12,6 @@ questions or submissions to this repository.
 
 For contributing to this project, please refer to the [PyAnsys Developer's Guide].
 Further information about contributing to ansys-tools-path can be found in
-[ansys-tools-path github page](https://github.com/pyansys/ansys-tools-path).
+[ansys-tools-path github page](https://github.com/ansys/ansys-tools-path).
 
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/
