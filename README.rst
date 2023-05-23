@@ -15,12 +15,12 @@ ansys-tools-path
    :target: https://pypi.org/project/ansys-tools-path
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-tools-path/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/ansys-tools-path
+.. |codecov| image:: https://codecov.io/gh/ansys/ansys-tools-path/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/ansys-tools-path
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/ansys-tools-path/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/ansys-tools-path/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/ansys-tools-path/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/ansys-tools-path/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -74,7 +74,7 @@ You need to follow these steps:
 
    .. code:: bash
 
-      git clone https://github.com/pyansys/ansys-tools-path
+      git clone https://github.com/ansys/ansys-tools-path
 
 #. Create a fresh-clean Python environment and activate it:
 

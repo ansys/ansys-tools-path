@@ -55,9 +55,9 @@ build = [
 name = "ansys.tools.path"
 
 [project.urls]
-Source = "https://github.com/pyansys/ansys-tools-path"
-Tracker = "https://github.com/pyansys/ansys-tools-path/issues"
-Homepage = "https://github.com/pyansys/ansys-tools-path"
+Source = "https://github.com/ansys/ansys-tools-path"
+Tracker = "https://github.com/ansys/ansys-tools-path/issues"
+Homepage = "https://github.com/ansys/ansys-tools-path"
 Documentation = "https://path.tools.docs.pyansys.com"
 
 
