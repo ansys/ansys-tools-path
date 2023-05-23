@@ -10,7 +10,7 @@ import appdirs
 
 from ansys.tools.path.misc import is_float, is_linux, is_windows
 
-LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
+LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"]]
 LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 
 CONFIG_FILE_NAME = "config.txt"
@@ -323,8 +323,6 @@ def find_mapdl(version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
 def _find_installation(product: str, version=None, supported_versions=SUPPORTED_ANSYS_VERSIONS):
     if product == "mapdl":
         return find_mapdl(version, supported_versions)
-    elif product == "mechanical":
-        return find_mechanical(version, supported_versions)
     raise Exception("unexpected product")
 
 
@@ -651,7 +649,9 @@ def _clear_config_file() -> None:
 
 def _read_config_file(product_name: str) -> dict:
     """Read config file for a given product, migrating if needed"""
-    _migrate_config_file(product_name)
+
+    if not os.path.isfile(CONFIG_FILE):
+        _migrate_config_file(product_name)
     if os.path.isfile(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             return json.load(f)
