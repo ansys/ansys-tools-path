@@ -50,7 +50,7 @@ else:
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
 
 # settings directory
-SETTINGS_DIR = appdirs.user_data_dir("ansys_tools_path")
+SETTINGS_DIR = appdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
 if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
     try:
         LOG.debug(f"Created settings directory: {SETTINGS_DIR}")
@@ -513,7 +513,7 @@ def save_mechanical_path(exe_loc=None, allow_prompt=True):  # pragma: no cover
         - User input
 
         If a path is supplied, this method performs some checks. If the
-        checks are aresuccessful, it writes this path to the configuration
+        checks are successful, it writes this path to the configuration
         file.
 
     Returns
@@ -523,15 +523,15 @@ def save_mechanical_path(exe_loc=None, allow_prompt=True):  # pragma: no cover
 
     Notes
     -----
-    The location of the configuration file (``config.txt``) can be found in
-    ``appdirs.user_data_dir("ansys_tools_path")``. For example:
+    The location of the configuration file ``config.txt`` can be found in
+    ``ansys.tools.path.SETTINGS_DIR``. For example:
 
     .. code:: pycon
 
-        >>> import appdirs
+        >>> from ansys.tools.path import SETTINGS_DIR
         >>> import os
-        >>> print(os.path.join(appdirs.user_data_dir("ansys_tools_path"), "config.txt"))
-        C:/Users/[username]]/AppData/Local/ansys_tools_path/ansys_tools_path/config.txt
+        >>> print(os.path.join(SETTINGS_DIR, "config.txt"))
+        C:/Users/[username]]/AppData/Local/Ansys/ansys_tools_path/config.txt
 
     You can change the default for the ``exe_loc`` parameter either by modifying the
     ``config.txt`` file or by running this code:
@@ -570,15 +570,15 @@ def save_mapdl_path(exe_loc=None, allow_prompt=True) -> str:
 
     Notes
     -----
-    The configuration file location (``config.txt``) can be found in
-    ``appdirs.user_data_dir("ansys_tools_path")``. For example:
+    The location of the configuration file ``config.txt`` can be found in
+    ``ansys.tools.path.SETTINGS_DIR``. For example:
 
     .. code:: pycon
 
-        >>> import appdirs
+        >>> from ansys.tools.path import SETTINGS_DIR
         >>> import os
-        >>> print(os.path.join(appdirs.user_data_dir("ansys_tools_path"), "config.txt"))
-        C:/Users/user/AppData/Local/ansys_tools_path/ansys_tools_path/config.txt
+        >>> print(os.path.join(SETTINGS_DIR, "config.txt"))
+        C:/Users/[username]]/AppData/Local/Ansys/ansys_tools_path/config.txt
 
     Examples
     --------
