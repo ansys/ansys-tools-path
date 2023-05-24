@@ -39,6 +39,9 @@ _autosummary
 *,cover
 test-output.xml
 
+# VS Code
+.vscode/
+
 \#*
 .\#*
 /.ipynb_checkpoints
@@ -46,3 +49,4 @@ test-output.xml
 .venv
 .DS_Store
 doc/_build/*/*
+
