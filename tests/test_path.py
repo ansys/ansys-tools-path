@@ -50,7 +50,7 @@ def test_migration():
     _clear_config_file()
 
     old_settings_dir = appdirs.user_data_dir(f"ansys_mapdl_core")
-    os.makedirs(old_settings_dir)
+    os.makedirs(old_settings_dir, exist_ok=True)
     old_config_file = os.path.join(old_settings_dir, "config.txt")
     shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
     with open(old_config_file, "w") as f:
