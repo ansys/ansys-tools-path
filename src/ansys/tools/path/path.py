@@ -651,7 +651,9 @@ def _clear_config_file() -> None:
 
 def _read_config_file(product_name: str) -> dict:
     """Read config file for a given product, migrating if needed"""
-    _migrate_config_file(product_name)
+
+    if not os.path.isfile(CONFIG_FILE):
+        _migrate_config_file(product_name)
     if os.path.isfile(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             return json.load(f)
