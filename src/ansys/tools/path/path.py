@@ -578,7 +578,7 @@ def save_mapdl_path(exe_loc=None, allow_prompt=True) -> str:
         >>> from ansys.tools.path import SETTINGS_DIR
         >>> import os
         >>> print(os.path.join(SETTINGS_DIR, "config.txt"))
-        C:/Users/[username]]/AppData/Local/Ansys/ansys_tools_path/config.txt
+        C:/Users/[username]/AppData/Local/Ansys/ansys_tools_path/config.txt
 
     Examples
     --------
