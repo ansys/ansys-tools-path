@@ -22,7 +22,7 @@ html_short_title = html_title = "ansys-tools-path"
 cname = os.getenv("DOCUMENTATION_CNAME", default="nocname.com")
 switcher_version = get_version_match(__version__)
 html_context = {
-    "github_user": "pyansys",
+    "github_user": "ansys",
     "github_repo": "ansys-tools-path",
     "github_version": "main",
     "doc_path": "doc/source",
@@ -32,7 +32,7 @@ html_theme_options = {
         "json_url": f"https://{cname}/versions.json",
         "version_match": switcher_version,
     },
-    "github_url": "https://github.com/pyansys/ansys-tools-path",
+    "github_url": "https://github.com/ansys/ansys-tools-path",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "collapse_navigation": True,
