@@ -13,6 +13,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 
 from ansys.tools.path.path import (
+    SETTINGS_DIR,
     SUPPORTED_ANSYS_VERSIONS,
     change_default_mapdl_path,
     change_default_mechanical_path,
