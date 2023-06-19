@@ -388,9 +388,14 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         path = path.split(os.sep)
         v_version = re.search(r"v(\d\d\d)", exe_loc)
         ansys_version = re.search(r"ansys(\d\d\d)", exe_loc)
-        if v_version is not None and ansys_version is not None:
-            return is_valid_executable_path("mapdl", exe_loc) and "ansys" in path and "bin" in path
-        return False
+        return (
+            v_version is not None
+            and ansys_version is not None
+            and v_version[1] == ansys_version[1]
+            and is_valid_executable_path("mapdl", exe_loc)
+            and "ansys" in path
+            and "bin" in path
+        )
 
     elif product == "mechanical":
         path = os.path.normpath(exe_loc)
