@@ -511,9 +511,8 @@ def _save_path(
         _change_default_path(product, exe_loc)
         return exe_loc
 
-    if exe_loc is not None:
-        if is_valid_executable_path(product, exe_loc):
-            return exe_loc
+    if is_valid_executable_path(product, exe_loc):
+        return exe_loc
     if allow_prompt:
         exe_loc = _prompt_path(product)
     return exe_loc
