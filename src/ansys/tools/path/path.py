@@ -383,7 +383,7 @@ def _is_common_executable_path(product: str, exe_loc: str) -> bool:
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
 
-        is_valid_path = is_valid_executable_path(exe_loc)
+        is_valid_path = is_valid_executable_path("mechanical", exe_loc)
 
         if is_windows():
             return (
