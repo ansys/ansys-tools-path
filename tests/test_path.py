@@ -123,7 +123,7 @@ def test_get_mapdl_path():
 
 
 @pytest.fixture
-def mock_is_valid_executable_path(monkeypatch):
+def mock_is_valid_executable_path(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("ansys.tools.path.path.is_valid_executable_path", lambda _1, _2: True)
 
 
