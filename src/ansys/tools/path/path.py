@@ -386,23 +386,12 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
     if product == "mapdl":
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
-        if (
-            re.search(r"v(\d\d\d)", exe_loc) is not None
-            and re.search(r"ansys(\d\d\d)", exe_loc) is not None
-        ):
-            equal_version = (
-                re.search(r"v(\d\d\d)", exe_loc)[1] == re.search(r"ansys(\d\d\d)", exe_loc)[1]
-            )
-        else:
-            equal_version = False
+        v_version = re.search(r"v(\d\d\d)", exe_loc)
+        ansys_version = re.search(r"ansys(\d\d\d)", exe_loc)
+        if v_version is not None and ansys_version is not None:
+            return is_valid_executable_path("mapdl", exe_loc) and "ansys" in path and "bin" in path
+        return False
 
-        return (
-            is_valid_executable_path("mapdl", exe_loc)
-            and re.search(r"v\d\d\d", exe_loc)
-            and "ansys" in path
-            and "bin" in path
-            and equal_version
-        )
     elif product == "mechanical":
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
@@ -412,7 +401,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         if is_windows():
             return (
                 is_valid_path
-                and re.search(r"v\d\d\d", exe_loc)
+                and re.search(r"v\d\d\d", exe_loc) is not None
                 and "aisol" in path
                 and "bin" in path
                 and "winx64" in path
@@ -421,7 +410,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
 
         return (
             is_valid_path
-            and re.search(r"v\d\d\d", exe_loc)
+            and re.search(r"v\d\d\d", exe_loc) is not None
             and "aisol" in path
             and ".workbench" in path
         )
