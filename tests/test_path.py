@@ -7,6 +7,7 @@ from ansys.tools.path import find_mapdl
 from ansys.tools.path.path import (
     _check_uncommon_executable_path,
     _clear_config_file,
+    _is_common_executable_path,
     change_default_mapdl_path,
     get_available_ansys_installations,
     get_mapdl_path,
@@ -18,10 +19,22 @@ from ansys.tools.path.path import (
 paths = [
     ("/usr/dir_v2019.1/slv/ansys_inc/v211/ansys/bin/ansys211", 211),
     ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", 202),
+    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", 202),
     ("/usr/ansys_inc/v211/ansys/bin/mapdl", 211),
     pytest.param(("/usr/ansys_inc/ansys/bin/mapdl", 211), marks=pytest.mark.xfail),
 ]
 
+mapdl_executable_paths = [
+    ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", True),
+    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", True),
+    ("/usr/dir_v2019.1/slv/ansys_inc/v211/ansys/bin/ansys211", True),
+    ("/usr/ansys_inc/v211/ansys/bin/mapdl", False),
+]
+
+mechanical_executable_paths = [
+    ("C:\\Program Files\\ANSYS Inc\\v221\\aisol\\Bin\\winx64\\ANSYSWBU.exe", True),
+    ("C:/Program Files/ANSYS Inc/v221/aisol/Bin/winx64/ANSYSWBU.exe", True),
+]
 
 skip_if_ansys_not_local = pytest.mark.skipif(
     os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
@@ -107,3 +120,18 @@ def test_warn_uncommon_executable_path():
 def test_get_mapdl_path():
     assert get_mapdl_path()
     assert get_mapdl_path(version=222)
+
+
+@pytest.fixture
+def mock_is_valid_executable_path(monkeypatch):
+    monkeypatch.setattr("ansys.tools.path.path.is_valid_executable_path", lambda _1, _2: True)
+
+
+@pytest.mark.parametrize("path,expected", mapdl_executable_paths)
+def test_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
+    assert _is_common_executable_path("mapdl", path) == expected
+
+
+@pytest.mark.parametrize("path,expected", mechanical_executable_paths)
+def test_is_common_executable_path_mechanical(mock_is_valid_executable_path, path, expected):
+    assert _is_common_executable_path("mechanical", path) == expected

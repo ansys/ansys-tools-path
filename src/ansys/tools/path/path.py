@@ -386,12 +386,14 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
     if product == "mapdl":
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
-        v_version = re.search(r"v(\d\d\d)", exe_loc)
-        ansys_version = re.search(r"ansys(\d\d\d)", exe_loc)
+        # Look for all v(\d\d\d) to catch the last one
+        # in case the user has placed the installation folder inside a folder called for example (/ansys/v211)
+        v_version = re.findall(r"v(\d\d\d)", exe_loc)
+        ansys_version = re.findall(r"ansys(\d\d\d)", exe_loc, re.IGNORECASE)
         return (
-            v_version is not None
-            and ansys_version is not None
-            and v_version[1] == ansys_version[1]
+            len(v_version) != 0
+            and len(ansys_version) != 0
+            and v_version[-1] == ansys_version[-1]
             and is_valid_executable_path("mapdl", exe_loc)
             and "ansys" in path
             and "bin" in path
@@ -408,9 +410,9 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
                 is_valid_path
                 and re.search(r"v\d\d\d", exe_loc) is not None
                 and "aisol" in path
-                and "bin" in path
+                and ("bin" in path or "Bin" in path)
                 and "winx64" in path
-                and "AnsysWBU.exe" in path
+                and ("AnsysWBU.exe" in path or "ANSYSWBU.exe" in path)
             )
 
         return (
