@@ -390,10 +390,6 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         # in case the user has placed the installation folder inside a folder called for example (/ansys/v211)
         v_version = re.findall(r"v(\d\d\d)", exe_loc)
         ansys_version = re.findall(r"ansys(\d\d\d)", exe_loc, re.IGNORECASE)
-        import logging
-
-        logging.debug(v_version)
-        logging.debug(ansys_version)
         return (
             len(v_version) != 0
             and len(ansys_version) != 0

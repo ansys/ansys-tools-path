@@ -1,4 +1,5 @@
 import os
+import sys
 
 import appdirs
 import pytest
@@ -24,17 +25,24 @@ paths = [
     pytest.param(("/usr/ansys_inc/ansys/bin/mapdl", 211), marks=pytest.mark.xfail),
 ]
 
-mapdl_executable_paths = [
-    ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", True),
-    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", True),
+linux_mapdl_executable_paths = [
     ("/usr/dir_v2019.1/slv/ansys_inc/v211/ansys/bin/ansys211", True),
     ("/usr/ansys_inc/v211/ansys/bin/mapdl", False),
 ]
 
-mechanical_executable_paths = [
+windows_mapdl_executable_paths = [
+    ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", True),
+    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", True),
+]
+
+windows_mechanical_executable_paths = [
     ("C:\\Program Files\\ANSYS Inc\\v221\\aisol\\Bin\\winx64\\ANSYSWBU.exe", True),
     ("C:/Program Files/ANSYS Inc/v221/aisol/Bin/winx64/ANSYSWBU.exe", True),
 ]
+
+# TODO: to fill with examples
+linux_mechanical_executable_paths = []
+
 
 skip_if_ansys_not_local = pytest.mark.skipif(
     os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
@@ -127,11 +135,27 @@ def mock_is_valid_executable_path(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("ansys.tools.path.path.is_valid_executable_path", lambda _1, _2: True)
 
 
-@pytest.mark.parametrize("path,expected", mapdl_executable_paths)
-def test_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
+@pytest.mark.skipif(sys.platform != "win32", reason="Test only available on windows")
+@pytest.mark.parametrize("path,expected", windows_mapdl_executable_paths)
+def test_windows_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
     assert _is_common_executable_path("mapdl", path) == expected
 
 
-@pytest.mark.parametrize("path,expected", mechanical_executable_paths)
-def test_is_common_executable_path_mechanical(mock_is_valid_executable_path, path, expected):
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
+@pytest.mark.parametrize("path,expected", linux_mapdl_executable_paths)
+def test_linux_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
+    assert _is_common_executable_path("mapdl", path) == expected
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Test only available on windows")
+@pytest.mark.parametrize("path,expected", windows_mechanical_executable_paths)
+def test_windows_is_common_executable_path_mechanical(
+    mock_is_valid_executable_path, path, expected
+):
+    assert _is_common_executable_path("mechanical", path) == expected
+
+
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
+@pytest.mark.parametrize("path,expected", linux_mechanical_executable_paths)
+def test_linux_is_common_executable_path_mechanical(mock_is_valid_executable_path, path, expected):
     assert _is_common_executable_path("mechanical", path) == expected
