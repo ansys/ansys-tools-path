@@ -3,7 +3,7 @@
 import os
 
 
-def is_float(input_string):
+def is_float(input_string: str) -> bool:
     """Returns true when a string can be converted to a float"""
     try:
         float(input_string)
@@ -12,7 +12,7 @@ def is_float(input_string):
         return False
 
 
-def is_windows():
+def is_windows() -> bool:
     """Check if the host machine is on Windows.
 
     Returns
@@ -22,7 +22,7 @@ def is_windows():
     return os.name == "nt"
 
 
-def is_linux():
+def is_linux() -> bool:
     """Check if the host machine is Linux.
 
     Returns
