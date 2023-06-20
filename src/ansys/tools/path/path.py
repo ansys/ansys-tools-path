@@ -69,7 +69,7 @@ CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
 
 def _get_installed_windows_versions(
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):
+):  # pragma: no cover
     """Get the AWP_ROOT environment variable values for supported versions."""
 
     # The student version overwrites the AWP_ROOT env var
@@ -108,7 +108,7 @@ def _get_default_linux_base_path():
     return None  # pragma: no cover
 
 
-def _get_default_windows_base_path():
+def _get_default_windows_base_path():  # pragma: no cover
     """Get the default base path of the Ansys unified install on windows."""
 
     base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS INC")
@@ -279,7 +279,7 @@ def find_mechanical(
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
         return "", ""
-    if is_windows():
+    if is_windows():  # pragma: no cover
         mechanical_bin = os.path.join(ans_path, "aisol", "bin", "winx64", f"AnsysWBU.exe")
     else:
         mechanical_bin = os.path.join(ans_path, "aisol", ".workbench")
@@ -369,7 +369,7 @@ def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str):
             and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
         )
     elif product == "mechanical":
-        if is_windows():
+        if is_windows():  # pragma: no cover
             return (
                 os.path.isfile(exe_loc)
                 and re.search("AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)))
@@ -405,7 +405,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
 
         is_valid_path = is_valid_executable_path("mechanical", exe_loc)
 
-        if is_windows():
+        if is_windows():  # pragma: no cover
             return (
                 is_valid_path
                 and re.search(r"v\d\d\d", exe_loc) is not None
