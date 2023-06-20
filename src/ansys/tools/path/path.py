@@ -6,7 +6,7 @@ import re
 from typing import Dict, Literal, Optional, Tuple
 import warnings
 
-import appdirs
+import platformdirs
 
 from ansys.tools.path.misc import is_float, is_linux, is_windows
 
@@ -53,7 +53,7 @@ else:
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
 
 # settings directory
-SETTINGS_DIR = appdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
+SETTINGS_DIR = platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
 if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
     try:
         LOG.debug(f"Created settings directory: {SETTINGS_DIR}")
@@ -696,7 +696,7 @@ def _migrate_config_file(product_name: str) -> None:
         return
 
     old_config_file_name = "config.txt"
-    old_settings_dir = appdirs.user_data_dir(f"ansys_{product_name}_core")
+    old_settings_dir = platformdirs.user_data_dir(f"ansys_{product_name}_core")
     old_config_file = os.path.join(old_settings_dir, old_config_file_name)
     if os.path.isfile(old_config_file):
         with open(old_config_file) as f:

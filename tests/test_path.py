@@ -1,7 +1,7 @@
 import os
 import sys
 
-import appdirs
+import platformdirs
 import pytest
 
 from ansys.tools.path import find_mapdl
@@ -83,7 +83,7 @@ def test_migration():
     ansys-tools-path, ansys-tools-path should respect it."""
     _clear_config_file()
 
-    old_settings_dir = appdirs.user_data_dir(f"ansys_mapdl_core")
+    old_settings_dir = platformdirs.user_data_dir(f"ansys_mapdl_core")
     os.makedirs(old_settings_dir, exist_ok=True)
     old_config_file = os.path.join(old_settings_dir, "config.txt")
     shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
