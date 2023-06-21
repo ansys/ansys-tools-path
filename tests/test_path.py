@@ -12,6 +12,7 @@ from ansys.tools.path.path import (
     change_default_mapdl_path,
     find_mechanical,
     get_available_ansys_installations,
+    get_latest_ansys_installation,
     get_mapdl_path,
     is_valid_executable_path,
     save_mapdl_path,
@@ -177,7 +178,10 @@ def test_linux_is_common_executable_path_mechanical(mock_is_valid_executable_pat
 @pytest.fixture
 def mock_default_linux_base_path(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr("os.path.isdir", lambda x: (x == "/usr/ansys_inc"))
-    monkeypatch.setattr("ansys.tools.path.path.glob", lambda _: ["/usr/ansys_inc/v221"])
+    monkeypatch.setattr(
+        "ansys.tools.path.path.glob",
+        lambda _: ["/usr/ansys_inc/v221", "/usr/ansys_inc/v222", "/usr/ansys_inc/v231"],
+    )
 
 
 @pytest.fixture
@@ -187,7 +191,11 @@ def mock_empty_linux_base_path(monkeypatch: pytest.MonkeyPatch):
 
 
 def test_get_available_ansys_installation(mock_default_linux_base_path):
-    assert get_available_ansys_installations() == {221: "/usr/ansys_inc/v221"}
+    assert get_available_ansys_installations() == {
+        221: "/usr/ansys_inc/v221",
+        222: "/usr/ansys_inc/v222",
+        231: "/usr/ansys_inc/v231",
+    }
 
 
 def test_empty_ansys_inttallation(mock_empty_linux_base_path):
@@ -195,4 +203,8 @@ def test_empty_ansys_inttallation(mock_empty_linux_base_path):
 
 
 def test_find_mechanical(mock_default_linux_base_path):
-    assert find_mechanical() == ("/usr/ansys_inc/v221/aisol/.workbench", 22.1)
+    assert find_mechanical(22.1) == ("/usr/ansys_inc/v221/aisol/.workbench", 22.1)
+
+
+def test_get_latest_ansys_installation(mock_default_linux_base_path):
+    assert get_latest_ansys_installation() == (231, "/usr/ansys_inc/v231")
