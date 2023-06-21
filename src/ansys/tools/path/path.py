@@ -65,7 +65,7 @@ CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
 
 
 def _get_installed_windows_versions(
-    supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
+    supported_versions=SUPPORTED_ANSYS_VERSIONS,
 ):  # pragma: no cover
     """Get the AWP_ROOT environment variable values for supported versions."""
 
