@@ -39,7 +39,7 @@ PRODUCT_EXE_INFO = {
     "mapdl": {
         "name": "Ansys MAPDL",
         "pattern": "ansysxxx",
-        "patternpath": "vXXX/ansys/bin/ansysXXX",
+        "patternpath": os.path.join("vXXX", "ansys", "bin", "ansysXXX")
     },
     "mechanical": {
         "name": "Ansys Mechanical",
@@ -47,10 +47,10 @@ PRODUCT_EXE_INFO = {
 }
 
 if is_windows():  # pragma: no cover
-    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
+    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = os.path.join("vXXX", "aisol", "bin", "winx64", "AnsysWBU.exe")
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
 else:
-    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/.workbench"
+    PRODUCT_EXE_INFO["mechanical"]["patternpath"] = os.path.join("vXXX", "aisol", ".workbench")
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
 
 # settings directory
