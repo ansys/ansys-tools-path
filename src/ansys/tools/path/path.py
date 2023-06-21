@@ -16,6 +16,7 @@ LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 CONFIG_FILE_NAME = "config.txt"
 
 SUPPORTED_ANSYS_VERSIONS = {
+    241: "2024R1",
     232: "2023R2",
     231: "2023R1",
     222: "2022R2",
