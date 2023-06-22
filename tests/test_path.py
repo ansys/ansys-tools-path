@@ -2,197 +2,119 @@ import os
 import sys
 
 import platformdirs
+import pyfakefs  # noqa
 import pytest
 
-from ansys.tools.path import find_mapdl
-from ansys.tools.path.path import (
-    _check_uncommon_executable_path,
-    _clear_config_file,
-    _is_common_executable_path,
+from ansys.tools.path import (
+    change_default_ansys_path,
     change_default_mapdl_path,
-    find_mechanical,
+    change_default_mechanical_path,
+    find_ansys,
+    find_mapdl,
     get_available_ansys_installations,
-    get_mapdl_path,
-    is_valid_executable_path,
-    save_mapdl_path,
-    version_from_path,
 )
 
-paths = [
-    ("/usr/dir_v2019.1/slv/ansys_inc/v211/ansys/bin/ansys211", 211),
-    ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", 202),
-    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", 202),
-    ("/usr/ansys_inc/v211/ansys/bin/mapdl", 211),
-    pytest.param(("/usr/ansys_inc/ansys/bin/mapdl", 211), marks=pytest.mark.xfail),
-]
+VERSIONS = [202, 211, 231]
 
-mechanical_paths = [
-    ("/usr/install/ansys_inc/v211/ansys/aisol/.workbench", 211),
-    ("C:\\Program Files\\ANSYS Inc\\v202\\aisol\\Bin\\winx64\\ANSYSWBU.exe", 202),
-    ("C:/Program Files/ANSYS Inc/v202/aisol/Bin/winx64/ANSYSWBU.exe", 202),
-]
+if sys.platform == "win32":
+    ANSYS_BASE_PATH = "C:\\Program Files\\ANSYS Inc"
+    ANSYS_INSTALLATION_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}") for version in VERSIONS
+    ]
+    MAPDL_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", "winx64", f"ansys{version}.exe"
+        )
+        for version in VERSIONS
+    ]
+    # MAPDL_INSTALL_PATHS = ["C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\winx64\\ansys202.exe",
+    #                       "C:\\Program Files\\ANSYS Inc\\v211\\ansys\\bin\\winx64\\ansys211.exe",
+    #                       "C:\\Program Files\\ANSYS Inc\\v231\\ansys\\bin\\winx64\\ansys231.exe"]
+else:
+    ANSYS_BASE_PATH = "/ansys_inc"
+    ANSYS_INSTALLATION_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}") for version in VERSIONS
+    ]
+    MAPDL_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", f"ansys{version}")
+        for version in VERSIONS
+    ]
 
-linux_mapdl_executable_paths = [
-    ("/usr/dir_v2019.1/slv/ansys_inc/v211/ansys/bin/ansys211", True),
-    ("/usr/ansys_inc/v211/ansys/bin/mapdl", False),
-]
-
-windows_mapdl_executable_paths = [
-    ("C:/Program Files/ANSYS Inc/v202/ansys/bin/win64/ANSYS202.exe", True),
-    ("C:\\Program Files\\ANSYS Inc\\v202\\ansys\\bin\\win64\\ANSYS202.exe", True),
-]
-
-windows_mechanical_executable_paths = [
-    ("C:\\Program Files\\ANSYS Inc\\v221\\aisol\\Bin\\winx64\\ANSYSWBU.exe", True),
-    ("C:/Program Files/ANSYS Inc/v221/aisol/Bin/winx64/ANSYSWBU.exe", True),
-]
-
-linux_mechanical_executable_paths = [
-    ("/usr/install/ansys_inc/v211/ansys/aisol/.workbench", True),
-]
+LATEST_MAPDL_INSTALL_PATH = MAPDL_INSTALL_PATHS[-1]
 
 
-skip_if_ansys_not_local = pytest.mark.skipif(
-    os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
-)
+@pytest.fixture
+def mock_filesystem(fs):
+    for install_path in MAPDL_INSTALL_PATHS:
+        fs.create_file(install_path)
+    fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
+    return fs
 
 
-@pytest.mark.parametrize("path_data", paths)
-def test_mapdl_version_from_path(path_data):
-    exec_file, version = path_data
-    assert version_from_path("mapdl", exec_file) == version
+@pytest.fixture
+def mock_filesystem_without_executable(fs):
+    if sys.platform == "win32":
+        fs.create_dir("C:\\Program Files\\ANSYS Inc\\")
+    else:
+        fs.create_dir("/ansys_inc/")
 
 
-@pytest.mark.parametrize("exec_file,version", mechanical_paths)
-def test_mechanical_version_from_path(exec_file, version):
-    assert version_from_path("mechanical", exec_file) == version
+@pytest.fixture
+def mock_empty_filesystem(fs):
+    return fs
 
 
-@skip_if_ansys_not_local
-def test_find_mapdl_linux():
-    # assuming Ansys MAPDL is installed, should be able to find it on linux
-    # without env var
-    bin_file, ver = find_mapdl()
-    assert os.path.isfile(bin_file)
-    assert isinstance(ver, float)
-
-
-@skip_if_ansys_not_local
-def test_migration():
-    """If the user configuration the mapdl path using pymapdl before
-    ansys-tools-path, ansys-tools-path should respect it."""
-    _clear_config_file()
-
-    old_settings_dir = platformdirs.user_data_dir(f"ansys_mapdl_core")
-    os.makedirs(old_settings_dir, exist_ok=True)
-    old_config_file = os.path.join(old_settings_dir, "config.txt")
-    shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
-    with open(old_config_file, "w") as f:
-        f.write(shell)
-
-    assert shell == get_mapdl_path()
-    assert not os.path.isfile(old_config_file)
-
-
-@skip_if_ansys_not_local
-def test_get_available_base_mapdl():
-    assert get_available_ansys_installations()
-
-
-@skip_if_ansys_not_local
-def test_is_valid_mapdl_executable_path():
-    path = get_available_ansys_installations().values()
-    path = list(path)[0]
-    assert not is_valid_executable_path("mapdl", path)
-
-
-def test_change_default_mapdl_path():
-    _clear_config_file()
-
-    shell = r"C:\Windows\System32\cmd.exe" if os.name == "nt" else "/bin/bash"
-
-    change_default_mapdl_path(shell)
-
-    assert shell == get_mapdl_path()
-
-    _clear_config_file()
-
+def test_change_default_mapdl_path_file_dont_exist(mock_empty_filesystem):
     with pytest.raises(FileNotFoundError):
-        change_default_mapdl_path("asdf")
+        change_default_mapdl_path(MAPDL_INSTALL_PATHS[1])
 
 
-@skip_if_ansys_not_local
-def test_save_mapdl_path():
-    _clear_config_file()
-
-    path = get_available_ansys_installations().values()
-    path = list(path)[0]
-
-    assert save_mapdl_path(path, allow_prompt=False)
-    assert save_mapdl_path(None, allow_prompt=False)
+@pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
+def test_change_ansys_path(mock_empty_filesystem):
+    change_default_ansys_path(MAPDL_INSTALL_PATHS[1])
 
 
-def test_warn_uncommon_executable_path():
-    with pytest.warns(UserWarning):
-        _check_uncommon_executable_path("mapdl", "qwer")
+def test_change_default_mapdl_path(mock_filesystem):
+    change_default_mapdl_path(MAPDL_INSTALL_PATHS[1])
 
 
-@skip_if_ansys_not_local
-def test_get_mapdl_path():
-    assert get_mapdl_path()
-    assert get_mapdl_path(version=222)
+def test_change_default_mechanical_path(mock_filesystem):
+    change_default_mechanical_path(MAPDL_INSTALL_PATHS[1])
 
 
-@pytest.fixture
-def mock_is_valid_executable_path(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr("ansys.tools.path.path.is_valid_executable_path", lambda _1, _2: True)
+@pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
+def test_find_ansys(mock_filesystem):
+    ansys_bin, ansys_version = find_ansys()
+    # windows filesystem being case insensive we need to make a case insensive comparison
+    if sys.platform == "win32":
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+    else:
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
 
 
-@pytest.mark.skipif(sys.platform != "win32", reason="Test only available on windows")
-@pytest.mark.parametrize("path,expected", windows_mapdl_executable_paths)
-def test_windows_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
-    assert _is_common_executable_path("mapdl", path) == expected
+@pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
+def test_find_ansys_empty_fs(mock_empty_filesystem):
+    ansys_bin, ansys_version = find_ansys()
+    assert (ansys_bin, ansys_version) == ("", "")
 
 
-@pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
-@pytest.mark.parametrize("path,expected", linux_mapdl_executable_paths)
-def test_linux_is_common_executable_path_mapdl(mock_is_valid_executable_path, path, expected):
-    assert _is_common_executable_path("mapdl", path) == expected
+def test_find_mapdl(mock_filesystem):
+    ansys_bin, ansys_version = find_mapdl()
+    # windows filesystem being case insensive we need to make a case insensive comparison
+    if sys.platform == "win32":
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+    else:
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
 
 
-@pytest.mark.skipif(sys.platform != "win32", reason="Test only available on windows")
-@pytest.mark.parametrize("path,expected", windows_mechanical_executable_paths)
-def test_windows_is_common_executable_path_mechanical(
-    mock_is_valid_executable_path, path, expected
-):
-    assert _is_common_executable_path("mechanical", path) == expected
+def test_find_mapdl_without_executable(mock_filesystem_without_executable):
+    ansys_bin, ansys_version = find_mapdl()
+    assert (ansys_bin, ansys_version) == ("", "")
 
 
-@pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
-@pytest.mark.parametrize("path,expected", linux_mechanical_executable_paths)
-def test_linux_is_common_executable_path_mechanical(mock_is_valid_executable_path, path, expected):
-    assert _is_common_executable_path("mechanical", path) == expected
-
-
-@pytest.fixture
-def mock_default_linux_base_path(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr("os.path.isdir", lambda x: (x == "/usr/ansys_inc"))
-    monkeypatch.setattr("ansys.tools.path.path.glob", lambda _: ["/usr/ansys_inc/v221"])
-
-
-@pytest.fixture
-def mock_empty_linux_base_path(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr("os.path.isdir", lambda x: (x == "/usr/ansys_inc"))
-    monkeypatch.setattr("ansys.tools.path.path.glob", lambda _: [])
-
-
-def test_get_available_ansys_installation(mock_default_linux_base_path):
-    assert get_available_ansys_installations() == {221: "/usr/ansys_inc/v221"}
-
-
-def test_empty_ansys_inttallation(mock_empty_linux_base_path):
-    assert get_available_ansys_installations() == {}
-
-
-def test_find_mechanical(mock_default_linux_base_path):
-    assert find_mechanical() == ("/usr/ansys_inc/v221/aisol/.workbench", 22.1)
+def test_get_available_ansys_installation(mock_filesystem):
+    print(dict(zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)))
+    print(get_available_ansys_installations())
+    assert get_available_ansys_installations() == dict(
+        zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)
+    )

@@ -106,7 +106,7 @@ def _get_default_linux_base_path():
     for path in LINUX_DEFAULT_DIRS:
         if os.path.isdir(path):
             return path
-    return None  # pragma: no cover
+    return None
 
 
 def _get_default_windows_base_path():  # pragma: no cover
@@ -228,7 +228,7 @@ def _get_unified_install_base_for_version(
         The base unified install path and version
     """
     versions = _get_available_base_unified(supported_versions)
-    if not versions:  # pragma: no cover
+    if not versions:
         return "", ""
 
     if not version:
