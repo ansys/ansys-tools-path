@@ -78,7 +78,6 @@ def _get_installed_windows_versions(
     # However the priority should be given to the non-student version.
     awp_roots: list[Tuple[int, str]] = []
     awp_roots_student: list[Tuple[int, str]] = []
-
     for ver in supported_versions:
         path_ = os.environ.get(f"AWP_ROOT{ver}", "")
         path_non_student = path_.replace("\\ANSYS Student", "")
@@ -106,7 +105,7 @@ def _get_default_linux_base_path():
     for path in LINUX_DEFAULT_DIRS:
         if os.path.isdir(path):
             return path
-    return None  # pragma: no cover
+    return None
 
 
 def _get_default_windows_base_path():  # pragma: no cover
@@ -228,7 +227,7 @@ def _get_unified_install_base_for_version(
         The base unified install path and version
     """
     versions = _get_available_base_unified(supported_versions)
-    if not versions:  # pragma: no cover
+    if not versions:
         return "", ""
 
     if not version:
@@ -515,7 +514,7 @@ def _save_path(
     if is_valid_executable_path(product, exe_loc):
         return exe_loc
     if allow_prompt:
-        exe_loc = _prompt_path(product)
+        exe_loc = _prompt_path(product)  # pragma: no cover
     return exe_loc
 
 
