@@ -20,7 +20,9 @@ from ansys.tools.path.path import (
 
 paths = [
     (
-        os.path.join("/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
+        os.path.join(
+            "/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"
+        ),
         211,
     ),
     (
@@ -37,7 +39,8 @@ paths = [
     ),
     (os.path.join("/", "usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), 211),
     pytest.param(
-        (os.path.join("/", "usr", "ansys_inc", "ansys", "bin", "mapdl"), 211), marks=pytest.mark.xfail
+        (os.path.join("/", "usr", "ansys_inc", "ansys", "bin", "mapdl"), 211),
+        marks=pytest.mark.xfail,
     ),
 ]
 
@@ -59,7 +62,9 @@ mechanical_paths = [
 
 linux_mapdl_executable_paths = [
     (
-        os.path.join("/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
+        os.path.join(
+            "/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"
+        ),
         True,
     ),
     (os.path.join("/", "usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), False),
@@ -96,7 +101,10 @@ windows_mechanical_executable_paths = [
 ]
 
 linux_mechanical_executable_paths = [
-    (os.path.join("/", "usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"), True),
+    (
+        os.path.join("/", "usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"),
+        True,
+    ),
 ]
 
 
@@ -241,7 +249,9 @@ def mock_empty_linux_base_path(monkeypatch: pytest.MonkeyPatch):
 
 
 def test_get_available_ansys_installation(mock_default_linux_base_path):
-    assert get_available_ansys_installations() == {221: os.path.join("/", "usr", "ansys_inc", "v221")}
+    assert get_available_ansys_installations() == {
+        221: os.path.join("/", "usr", "ansys_inc", "v221")
+    }
 
 
 def test_empty_ansys_inttallation(mock_empty_linux_base_path):
