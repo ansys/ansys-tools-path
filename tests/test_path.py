@@ -124,6 +124,14 @@ def test_find_mapdl(mock_filesystem):
         assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
 
 
+def test_find_specific_mapdl(mock_filesystem):
+    ansys_bin, ansys_version = find_mapdl(21.1)
+    if sys.platform == "win32":
+        assert (ansys_bin.lower(), ansys_version) == (MAPDL_INSTALL_PATHS[1].lower(), 21.1)
+    else:
+        assert (ansys_bin, ansys_version) == (MAPDL_INSTALL_PATHS[1], 21.1)
+
+
 def test_find_mapdl_without_executable(mock_filesystem_without_executable):
     ansys_bin, ansys_version = find_mapdl()
     assert (ansys_bin, ansys_version) == ("", "")
@@ -151,8 +159,6 @@ def test_inexistant_mechanical(mock_filesystem):
 
 
 def test_get_available_ansys_installation(mock_filesystem):
-    print(dict(zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)))
-    print(get_available_ansys_installations())
     assert get_available_ansys_installations() == dict(
         zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)
     )
