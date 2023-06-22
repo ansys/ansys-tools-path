@@ -20,7 +20,7 @@ from ansys.tools.path.path import (
 
 paths = [
     (
-        os.path.join("usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
+        os.path.join("/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
         211,
     ),
     (
@@ -35,14 +35,14 @@ paths = [
         ),
         202,
     ),
-    (os.path.join("usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), 211),
+    (os.path.join("/", "usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), 211),
     pytest.param(
-        (os.path.join("usr", "ansys_inc", "ansys", "bin", "mapdl"), 211), marks=pytest.mark.xfail
+        (os.path.join("/", "usr", "ansys_inc", "ansys", "bin", "mapdl"), 211), marks=pytest.mark.xfail
     ),
 ]
 
 mechanical_paths = [
-    (os.path.join("usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"), 211),
+    (os.path.join("/", "usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"), 211),
     (
         os.path.join(
             "C:\\", "Program Files", "ANSYS Inc", "v202", "aisol", "Bin", "winx64", "ANSYSWBU.exe"
@@ -59,10 +59,10 @@ mechanical_paths = [
 
 linux_mapdl_executable_paths = [
     (
-        os.path.join("usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
+        os.path.join("/", "usr", "dir_v2019.1", "slv", "ansys_inc", "v211", "ansys", "bin", "ansys211"),
         True,
     ),
-    (os.path.join("usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), False),
+    (os.path.join("/", "usr", "ansys_inc", "v211", "ansys", "bin", "mapdl"), False),
 ]
 
 windows_mapdl_executable_paths = [
@@ -96,7 +96,7 @@ windows_mechanical_executable_paths = [
 ]
 
 linux_mechanical_executable_paths = [
-    (os.path.join("usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"), True),
+    (os.path.join("/", "usr", "install", "ansys_inc", "v211", "ansys", "aisol", ".workbench"), True),
 ]
 
 
@@ -228,20 +228,20 @@ def test_linux_is_common_executable_path_mechanical(mock_is_valid_executable_pat
 
 @pytest.fixture
 def mock_default_linux_base_path(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr("os.path.isdir", lambda x: (x == os.path.join("usr", "ansys_inc")))
+    monkeypatch.setattr("os.path.isdir", lambda x: (x == os.path.join("/", "usr", "ansys_inc")))
     monkeypatch.setattr(
-        "ansys.tools.path.path.glob", lambda _: [os.path.join("usr", "ansys_inc", "v221")]
+        "ansys.tools.path.path.glob", lambda _: [os.path.join("/", "usr", "ansys_inc", "v221")]
     )
 
 
 @pytest.fixture
 def mock_empty_linux_base_path(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr("os.path.isdir", lambda x: (x == os.path.join("usr", "ansys_inc")))
+    monkeypatch.setattr("os.path.isdir", lambda x: (x == os.path.join("/", "usr", "ansys_inc")))
     monkeypatch.setattr("ansys.tools.path.path.glob", lambda _: [])
 
 
 def test_get_available_ansys_installation(mock_default_linux_base_path):
-    assert get_available_ansys_installations() == {221: os.path.join("usr", "ansys_inc", "v221")}
+    assert get_available_ansys_installations() == {221: os.path.join("/", "usr", "ansys_inc", "v221")}
 
 
 def test_empty_ansys_inttallation(mock_empty_linux_base_path):
@@ -251,6 +251,6 @@ def test_empty_ansys_inttallation(mock_empty_linux_base_path):
 @pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
 def test_find_mechanical(mock_default_linux_base_path):
     assert find_mechanical() == (
-        os.path.join("usr", "ansys_inc", "v221", "aisol", ".workbench"),
+        os.path.join("/", "usr", "ansys_inc", "v221", "aisol", ".workbench"),
         22.1,
     )
