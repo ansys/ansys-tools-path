@@ -77,6 +77,14 @@ def mock_empty_filesystem(fs):
     return fs
 
 
+@pytest.fixture
+def mock_awp_environment_variable(monkeypatch):
+    for awp_root_var in filter(lambda var: var.startswith("AWP_ROOT"), os.environ.keys()):
+        monkeypatch.delenv(awp_root_var)
+    for version, ansys_installation_path in zip(VERSIONS, ANSYS_INSTALLATION_PATHS):
+        monkeypatch.setenv(f"AWP_ROOT{version}", ansys_installation_path)
+
+
 def test_change_default_mapdl_path_file_dont_exist(mock_empty_filesystem):
     with pytest.raises(FileNotFoundError):
         change_default_mapdl_path(MAPDL_INSTALL_PATHS[1])
@@ -124,7 +132,7 @@ def test_find_mapdl(mock_filesystem):
         assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
 
 
-def test_find_specific_mapdl(mock_filesystem):
+def test_find_specific_mapdl(mock_filesystem, mock_awp_environment_variable):
     ansys_bin, ansys_version = find_mapdl(21.1)
     if sys.platform == "win32":
         assert (ansys_bin.lower(), ansys_version) == (MAPDL_INSTALL_PATHS[1].lower(), 21.1)
@@ -145,7 +153,7 @@ def test_find_mechanical(mock_filesystem):
         assert (ansys_bin, ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 
 
-def test_find_specific_mechanical(mock_filesystem):
+def test_find_specific_mechanical(mock_filesystem, mock_awp_environment_variable):
     ansys_bin, ansys_version = find_mechanical(21.1)
     if sys.platform == "win32":
         assert (ansys_bin.lower(), ansys_version) == (MECHANICAL_INSTALL_PATHS[1].lower(), 21.1)
@@ -158,7 +166,7 @@ def test_inexistant_mechanical(mock_filesystem):
         find_mechanical(21.6)
 
 
-def test_get_available_ansys_installation(mock_filesystem):
+def test_get_available_ansys_installation(mock_filesystem, mock_awp_environment_variable):
     assert get_available_ansys_installations() == dict(
         zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)
     )
@@ -170,23 +178,45 @@ def test_get_ansys_path(mock_filesystem):
 
 
 def test_get_mapdl_path(mock_filesystem):
-    assert get_mapdl_path() == LATEST_MAPDL_INSTALL_PATH
+    mapdl_path = get_mapdl_path()
+    if sys.platform == "win32":
+        assert mapdl_path is not None
+        assert mapdl_path.lower() == LATEST_MAPDL_INSTALL_PATH.lower()
+    else:
+        assert mapdl_path == LATEST_MAPDL_INSTALL_PATH
 
 
 def test_get_mechanical_path(mock_filesystem):
-    assert get_mechanical_path() == LATEST_MECHANICAL_INSTALL_PATH
+    mechanical_path = get_mechanical_path()
+    if sys.platform == "win32":
+        assert mechanical_path is not None
+        assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
+    else:
+        assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
 
 def test_save_mapdl_path(mock_filesystem):
     save_mapdl_path()
     with open(os.path.join(SETTINGS_DIR, "config.txt")) as file:
-        assert json.load(file) == {"mapdl": LATEST_MAPDL_INSTALL_PATH}
+        content = file.read()
+        json_file = json.loads(content)
+        json_file = {key: val.lower() for key, val in json_file.items()}
+        if sys.platform == "win32":
+            assert json_file == {"mapdl": LATEST_MAPDL_INSTALL_PATH.lower()}
+        else:
+            assert json_file == {"mapdl": LATEST_MAPDL_INSTALL_PATH}
 
 
 def test_save_mechanical_path(mock_filesystem):
     save_mechanical_path()
     with open(os.path.join(SETTINGS_DIR, "config.txt")) as file:
-        assert json.load(file) == {"mechanical": LATEST_MECHANICAL_INSTALL_PATH}
+        content = file.read()
+        json_file = json.loads(content)
+        json_file = {key: val.lower() for key, val in json_file.items()}
+        if sys.platform == "win32":
+            assert json_file == {"mechanical": LATEST_MECHANICAL_INSTALL_PATH.lower()}
+        else:
+            assert json_file == {"mechanical": LATEST_MECHANICAL_INSTALL_PATH}
 
 
 def test_version_from_path(mock_filesystem):

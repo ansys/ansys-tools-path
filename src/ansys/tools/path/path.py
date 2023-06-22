@@ -78,7 +78,6 @@ def _get_installed_windows_versions(
     # However the priority should be given to the non-student version.
     awp_roots: list[Tuple[int, str]] = []
     awp_roots_student: list[Tuple[int, str]] = []
-
     for ver in supported_versions:
         path_ = os.environ.get(f"AWP_ROOT{ver}", "")
         path_non_student = path_.replace("\\ANSYS Student", "")
