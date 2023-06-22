@@ -248,6 +248,7 @@ def test_empty_ansys_inttallation(mock_empty_linux_base_path):
     assert get_available_ansys_installations() == {}
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only available on linux")
 def test_find_mechanical(mock_default_linux_base_path):
     assert find_mechanical() == (
         os.path.join("usr", "ansys_inc", "v221", "aisol", ".workbench"),
