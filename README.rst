@@ -96,7 +96,7 @@ You need to follow these steps:
 
    .. code:: bash
 
-      python -m pip install .[test]
+      python -m pip install .[tests]
       python -m pip install .[doc]
       python -m pip install .[build]
 
