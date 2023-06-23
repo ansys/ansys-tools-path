@@ -223,7 +223,6 @@ def test_get_mechanical_path_custom(mock_filesystem):
             assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
         else:
             assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
-
     assert get_mechanical_path(False, version=193) is None
 
 
