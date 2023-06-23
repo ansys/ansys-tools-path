@@ -872,5 +872,10 @@ def get_latest_ansys_installation() -> Tuple[int, str]:
     if not installations:
         raise ValueError("No Ansys installation found")
 
-    max_version = max(installations, key=lambda k: (abs(k), k))
+    def sort_key(version: int) -> float:
+        if version < 0:
+            return abs(version) - 0.5
+        return float(version)
+
+    max_version = max(installations, key=sort_key)
     return (max_version, installations[max_version])
