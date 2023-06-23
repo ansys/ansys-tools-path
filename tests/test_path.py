@@ -212,7 +212,7 @@ def test_get_mechanical_path(mock_filesystem_with_config):
     else:
         assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
-        
+
 def test_get_mechanical_path_custom(mock_filesystem):
     """this test will make the function ask for the path to the installation
     and mock the input with LATEST_MECHANICAL_PATH.
@@ -236,7 +236,7 @@ def test_get_mechanical_specific(mock_filesystem):
     else:
         assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
-        
+
 def test_get_latest_ansys_installation(mock_filesystem):
     assert get_latest_ansys_installation() == (231, LATEST_ANSYS_INSTALLATION_PATHS)
 
