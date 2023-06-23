@@ -732,7 +732,7 @@ def _get_application_path(
                 if os.path.isfile(exe_loc):
                     return exe_loc
         except ValueError:
-            # Skip to out of the if statement
+            # Skip to go out of the if statement
             pass
 
     if allow_input:
