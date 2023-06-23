@@ -238,3 +238,8 @@ def test_version_from_path(mock_filesystem):
         version_from_path("mapdl", WRONG_FOLDER)
     with pytest.raises(RuntimeError):
         version_from_path("mechanical", WRONG_FOLDER)
+
+
+def test_get_latest_ansys_installation_empty_fs(mock_empty_filesystem):
+    with pytest.raises(ValueError):
+        get_latest_ansys_installation()
