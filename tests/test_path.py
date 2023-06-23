@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from unittest.mock import patch
 
 import platformdirs
 import pyfakefs  # noqa
@@ -65,6 +66,21 @@ def mock_filesystem(fs):
         fs.create_file(mechanical_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
     return fs
+
+
+@pytest.fixture
+def mock_filesystem_with_config(mock_filesystem):
+    config_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"), "config.txt"
+    )
+    mock_filesystem.create_file(config_location)
+    with open(config_location, "w") as config_file:
+        config_file.write(
+            json.dumps(
+                {"mapdl": LATEST_MAPDL_INSTALL_PATH, "mechanical": LATEST_MECHANICAL_INSTALL_PATH}
+            )
+        )
+    return mock_filesystem
 
 
 @pytest.fixture
@@ -173,11 +189,11 @@ def test_get_available_ansys_installation(mock_filesystem, mock_awp_environment_
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
-def test_get_ansys_path(mock_filesystem):
+def test_get_ansys_path(mock_filesystem_with_config):
     assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
 
 
-def test_get_mapdl_path(mock_filesystem):
+def test_get_mapdl_path(mock_filesystem_with_config):
     mapdl_path = get_mapdl_path()
     if sys.platform == "win32":
         assert mapdl_path is not None
@@ -186,13 +202,27 @@ def test_get_mapdl_path(mock_filesystem):
         assert mapdl_path == LATEST_MAPDL_INSTALL_PATH
 
 
-def test_get_mechanical_path(mock_filesystem):
+def test_get_mechanical_path(mock_filesystem_with_config):
     mechanical_path = get_mechanical_path()
     if sys.platform == "win32":
         assert mechanical_path is not None
         assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
     else:
         assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
+
+
+def test_get_mechanical_path_custom(mock_filesystem):
+    """this test will make the function ask for the path to the installation
+    and mock the input with LATEST_MECHANICAL_PATH.
+    Doing this (even if the version and the install path don't match)
+    allow to check that we can enter a path for a version not detected"""
+    with patch("builtins.input", side_effect=[LATEST_MECHANICAL_INSTALL_PATH]):
+        mechanical_path = get_mechanical_path(True, version=193)
+        assert mechanical_path is not None
+        if sys.platform == "win32":
+            assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
+        else:
+            assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
 
 def test_save_mapdl_path(mock_filesystem):
