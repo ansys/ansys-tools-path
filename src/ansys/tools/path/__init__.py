@@ -20,6 +20,7 @@ from ansys.tools.path.path import (
     find_mapdl,
     find_mechanical,
     get_available_ansys_installations,
+    get_latest_ansys_installation,
     get_mapdl_path,
     get_mechanical_path,
     save_mapdl_path,
