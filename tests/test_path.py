@@ -224,6 +224,17 @@ def test_get_mechanical_path_custom(mock_filesystem):
         else:
             assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
+    assert get_mechanical_path(False, version=193) is None
+
+
+def test_get_mechanical_specific(mock_filesystem):
+    mechanical_path = get_mechanical_path(version=23.1)
+    assert mechanical_path is not None
+    if sys.platform == "win32":
+        assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
+    else:
+        assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
+
 
 def test_save_mapdl_path(mock_filesystem):
     save_mapdl_path()

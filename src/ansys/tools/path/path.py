@@ -723,7 +723,6 @@ def _get_application_path(
 ):
     if version is None:
         exe_loc = _read_executable_path_from_config_file(product)
-        print(exe_loc)
         if exe_loc is not None:
             return exe_loc
     else:
