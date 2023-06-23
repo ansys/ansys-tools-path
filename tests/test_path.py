@@ -238,4 +238,3 @@ def test_version_from_path(mock_filesystem):
         version_from_path("mapdl", WRONG_FOLDER)
     with pytest.raises(RuntimeError):
         version_from_path("mechanical", WRONG_FOLDER)
-
