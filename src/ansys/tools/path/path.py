@@ -857,3 +857,31 @@ def version_from_path(product: PRODUCT_TYPE, path: str):
     elif product == "mapdl":
         return _mapdl_version_from_path(path)
     raise Exception("Unexpected product")
+
+
+def get_latest_ansys_installation() -> Tuple[int, str]:
+    """Return a tuple with the latest ansys installation version and its path
+
+    If there is a student version and a regular installation for the latest release, the regular one is returned
+
+    Returns
+    -------
+    Tuple[int, str]
+        Tuple with the latest version and path of the installation
+
+    Raise
+    -----
+    ValueError
+        No Ansys installation found
+    """
+    installations = get_available_ansys_installations()
+    if not installations:
+        raise ValueError("No Ansys installation found")
+
+    def sort_key(version: int) -> float:
+        if version < 0:
+            return abs(version) - 0.5
+        return float(version)
+
+    max_version = max(installations, key=sort_key)
+    return (max_version, installations[max_version])

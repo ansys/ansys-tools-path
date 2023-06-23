@@ -17,6 +17,7 @@ from ansys.tools.path import (
     find_mechanical,
     get_ansys_path,
     get_available_ansys_installations,
+    get_latest_ansys_installation,
     get_mapdl_path,
     get_mechanical_path,
     save_mapdl_path,
@@ -54,6 +55,7 @@ else:
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", ".workbench") for version in VERSIONS
     ]
 
+LATEST_ANSYS_INSTALLATION_PATHS = ANSYS_INSTALLATION_PATHS[-1]
 LATEST_MAPDL_INSTALL_PATH = MAPDL_INSTALL_PATHS[-1]
 LATEST_MECHANICAL_INSTALL_PATH = MECHANICAL_INSTALL_PATHS[-1]
 
@@ -210,7 +212,7 @@ def test_get_mechanical_path(mock_filesystem_with_config):
     else:
         assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
 
-
+        
 def test_get_mechanical_path_custom(mock_filesystem):
     """this test will make the function ask for the path to the installation
     and mock the input with LATEST_MECHANICAL_PATH.
@@ -233,6 +235,10 @@ def test_get_mechanical_specific(mock_filesystem):
         assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
     else:
         assert mechanical_path == LATEST_MECHANICAL_INSTALL_PATH
+
+        
+def test_get_latest_ansys_installation(mock_filesystem):
+    assert get_latest_ansys_installation() == (231, LATEST_ANSYS_INSTALLATION_PATHS)
 
 
 def test_save_mapdl_path(mock_filesystem):
@@ -272,3 +278,8 @@ def test_version_from_path(mock_filesystem):
         version_from_path("mapdl", WRONG_FOLDER)
     with pytest.raises(RuntimeError):
         version_from_path("mechanical", WRONG_FOLDER)
+
+
+def test_get_latest_ansys_installation_empty_fs(mock_empty_filesystem):
+    with pytest.raises(ValueError):
+        get_latest_ansys_installation()
