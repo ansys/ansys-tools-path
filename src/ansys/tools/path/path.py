@@ -82,12 +82,13 @@ def _get_installed_windows_versions(
         path_ = os.environ.get(f"AWP_ROOT{ver}", "")
         if path_ == "":
             continue
-        path_non_student = path_.replace("\\ANSYS Student", "")
 
         if "student" in path_.lower():
-            # Check if also exist a non-student version
-            awp_roots.append((ver, path_non_student))
             awp_roots_student.insert(0, (-1 * ver, path_))
+            # Check if also exist a non-student version
+            path_non_student = path_.replace("\\ANSYS Student", "")
+            if os.path.exists(path_non_student):
+                awp_roots.append((ver, path_non_student))
 
         else:
             awp_roots.append((ver, path_))
