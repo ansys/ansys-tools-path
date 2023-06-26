@@ -25,11 +25,16 @@ from ansys.tools.path import (
 )
 
 VERSIONS = [202, 211, 231]
+STUDENT_VERSIONS = [201, 211]
 
 if sys.platform == "win32":
     ANSYS_BASE_PATH = "C:\\Program Files\\ANSYS Inc"
     ANSYS_INSTALLATION_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}") for version in VERSIONS
+    ]
+    ANSYS_STUDENT_INSTALLATION_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"v{version}")
+        for version in STUDENT_VERSIONS
     ]
     MAPDL_INSTALL_PATHS = [
         os.path.join(
@@ -37,21 +42,58 @@ if sys.platform == "win32":
         )
         for version in VERSIONS
     ]
+    MAPDL_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH,
+            "ANSYS Student",
+            f"v{version}",
+            "ansys",
+            "bin",
+            "winx64",
+            f"ansys{version}.exe",
+        )
+        for version in STUDENT_VERSIONS
+    ]
     MECHANICAL_INSTALL_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", "bin", "winx64", "ansyswbu.exe")
         for version in VERSIONS
+    ]
+    MECHANICAL_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH,
+            "ANSYS Student",
+            f"v{version}",
+            "aisol",
+            "bin",
+            "winx64",
+            "ansyswbu.exe",
+        )
+        for version in STUDENT_VERSIONS
     ]
 else:
     ANSYS_BASE_PATH = "/ansys_inc"
     ANSYS_INSTALLATION_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}") for version in VERSIONS
     ]
+    ANSYS_STUDENT_INSTALLATION_PATH = [
+        os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"{version}") for version in STUDENT_VERSIONS
+    ]
     MAPDL_INSTALL_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", f"ansys{version}")
         for version in VERSIONS
     ]
+    MAPDL_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"ansys{version}"
+        )
+        for version in STUDENT_VERSIONS
+    ]
     MECHANICAL_INSTALL_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", ".workbench") for version in VERSIONS
+    ]
+    MECHANICAL_STUDENT_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "aisol", ".workbench")
+        for version in STUDENT_VERSIONS
     ]
 
 LATEST_ANSYS_INSTALLATION_PATHS = ANSYS_INSTALLATION_PATHS[-1]
@@ -61,9 +103,9 @@ LATEST_MECHANICAL_INSTALL_PATH = MECHANICAL_INSTALL_PATHS[-1]
 
 @pytest.fixture
 def mock_filesystem(fs):
-    for mapdl_install_path in MAPDL_INSTALL_PATHS:
+    for mapdl_install_path in MAPDL_INSTALL_PATHS + MAPDL_STUDENT_INSTALL_PATHS:
         fs.create_file(mapdl_install_path)
-    for mechanical_install_path in MECHANICAL_INSTALL_PATHS:
+    for mechanical_install_path in MECHANICAL_INSTALL_PATHS + MECHANICAL_STUDENT_INSTALL_PATHS:
         fs.create_file(mechanical_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
     return fs
@@ -85,6 +127,11 @@ def mock_awp_environment_variable(monkeypatch):
         monkeypatch.delenv(awp_root_var)
     for version, ansys_installation_path in zip(VERSIONS, ANSYS_INSTALLATION_PATHS):
         monkeypatch.setenv(f"AWP_ROOT{version}", ansys_installation_path)
+    # this will replace all standard version with the student version
+    for version, ansys_student_installation_path in zip(
+        STUDENT_VERSIONS, ANSYS_STUDENT_INSTALLATION_PATHS
+    ):
+        monkeypatch.setenv(f"AWP_ROOT{version}", ansys_student_installation_path)
 
 
 def test_change_default_mapdl_path_file_dont_exist(mock_empty_filesystem):
@@ -169,14 +216,34 @@ def test_inexistant_mechanical(mock_filesystem):
 
 
 def test_get_available_ansys_installation(mock_filesystem, mock_awp_environment_variable):
-    assert get_available_ansys_installations() == dict(
-        zip([202, 211, 231], ANSYS_INSTALLATION_PATHS)
-    )
+    available_ansys_installations = get_available_ansys_installations()
+    if sys.platform == "win32":
+        lowercase_available_ansys_installation = {}
+        for key, value in available_ansys_installations.items():
+            lowercase_available_ansys_installation[key] = value.lower()
+        lowercase_ansys_installation_paths = list(
+            map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
+        )
+        assert lowercase_available_ansys_installation == dict(
+            zip([202, 211, 231] + [-201, -211], lowercase_ansys_installation_paths)
+        )
+    else:
+        assert get_available_ansys_installations() == dict(
+            zip(
+                [202, 211, 231] + [-201, -211],
+                ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
+            )
+        )
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
 def test_get_ansys_path(mock_filesystem):
-    assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
+    mapdl_path = get_ansys_path()
+    if sys.platform == "win32":
+        assert mapdl_path is not None
+        assert mapdl_path.lower() == LATEST_MAPDL_INSTALL_PATH.lower()
+    else:
+        assert mapdl_path == LATEST_MAPDL_INSTALL_PATH
 
 
 def test_get_mapdl_path(mock_filesystem):
@@ -198,7 +265,17 @@ def test_get_mechanical_path(mock_filesystem):
 
 
 def test_get_latest_ansys_installation(mock_filesystem):
-    assert get_latest_ansys_installation() == (231, LATEST_ANSYS_INSTALLATION_PATHS)
+    latest_ansys_version, latest_ansys_installation_path = get_latest_ansys_installation()
+    if sys.platform == "win32":
+        assert (latest_ansys_version, latest_ansys_installation_path.lower()) == (
+            231,
+            LATEST_ANSYS_INSTALLATION_PATHS.lower(),
+        )
+    else:
+        assert latest_ansys_version, latest_ansys_installation_path == (
+            231,
+            LATEST_ANSYS_INSTALLATION_PATHS,
+        )
 
 
 def test_save_mapdl_path(mock_filesystem):
