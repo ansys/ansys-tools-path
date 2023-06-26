@@ -372,7 +372,9 @@ def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str):
         if is_windows():  # pragma: no cover
             return (
                 os.path.isfile(exe_loc)
-                and re.search("AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)))
+                and re.search(
+                    "AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)), re.IGNORECASE
+                )
                 is not None
             )
         return (
@@ -406,13 +408,14 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         is_valid_path = is_valid_executable_path("mechanical", exe_loc)
 
         if is_windows():  # pragma: no cover
+            lower_case_path = map(str.lower, path)
             return (
                 is_valid_path
                 and re.search(r"v\d\d\d", exe_loc) is not None
-                and "aisol" in path
-                and ("bin" in path or "Bin" in path)
-                and "winx64" in path
-                and ("AnsysWBU.exe" in path or "ANSYSWBU.exe" in path)
+                and "aisol" in lower_case_path
+                and "bin" in lower_case_path
+                and "winx64" in lower_case_path
+                and "ansyswbu.exe" in lower_case_path
             )
 
         return (
@@ -511,8 +514,6 @@ def _save_path(
         _change_default_path(product, exe_loc)
         return exe_loc
 
-    if is_valid_executable_path(product, exe_loc):
-        return exe_loc
     if allow_prompt:
         exe_loc = _prompt_path(product)  # pragma: no cover
     return exe_loc
@@ -650,7 +651,7 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
         f">>> from ansys.tools.path import save_{product}_path\n"
         f">>> save_{product}_path('/new/path/to/executable/')\n"
     )
-    while True:  # pragma: no cover
+    while True:
         exe_loc = input(f"Enter the location of an {product_name} ({product_pattern}):")
 
         if is_valid_executable_path(product, exe_loc):
@@ -661,7 +662,7 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
             break
         else:
             print(
-                "The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
+                f"The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
             )
     return exe_loc
 
@@ -720,21 +721,26 @@ def _read_executable_path_from_config_file(product_name: str):
 def _get_application_path(
     product: PRODUCT_TYPE, allow_input: bool = True, version: Optional[float] = None
 ):
-    exe_loc = None
-    if not version:
+    if version is None:
         exe_loc = _read_executable_path_from_config_file(product)
-        if exe_loc != None:  # verify
-            if not os.path.isfile(exe_loc) and allow_input:
-                exe_loc = _save_path(product)
-        elif allow_input:  # create configuration file
-            exe_loc = _save_path(product)
+        if exe_loc is not None:
+            return exe_loc
+    else:
+        try:
+            exe_loc, exe_version = _find_installation(product, version)
+            if (exe_loc, exe_version) != ("", ""):  # executable not found
+                if os.path.isfile(exe_loc):
+                    return exe_loc
+        except ValueError:
+            # Skip to go out of the if statement
+            pass
 
-    if exe_loc is None:
-        exe_loc = _find_installation(product, version=version)[0]
-        if not exe_loc:
-            exe_loc = None
+    if allow_input:
+        exe_loc = _prompt_path(product)
+        _change_default_path(product, exe_loc)
+        return exe_loc
 
-    return exe_loc
+    return None
 
 
 def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None) -> Optional[str]:
