@@ -76,7 +76,7 @@ else:
     ANSYS_INSTALLATION_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}") for version in VERSIONS
     ]
-    ANSYS_STUDENT_INSTALLATION_PATH = [
+    ANSYS_STUDENT_INSTALLATION_PATHS = [
         os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"{version}") for version in STUDENT_VERSIONS
     ]
     MAPDL_INSTALL_PATHS = [
