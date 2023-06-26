@@ -254,7 +254,7 @@ def test_get_available_ansys_installation(mock_filesystem, mock_awp_environment_
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
-def test_get_ansys_path(mock_filesystem):
+def test_get_ansys_path(mock_filesystem_with_config):
     mapdl_path = get_ansys_path()
     if sys.platform == "win32":
         assert mapdl_path is not None
