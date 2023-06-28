@@ -84,6 +84,7 @@ def mock_filesystem_with_config(mock_filesystem):
         )
     return mock_filesystem
 
+
 @pytest.fixture
 def mock_filesystem_with_empty_config(mock_filesystem):
     config_location = os.path.join(
