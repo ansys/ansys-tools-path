@@ -80,3 +80,9 @@ source = ["ansys.tools"]
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.pytest.ini_options]
+markers = [
+    "win32: Mark a test windows only",
+    "linux: Mark a test linux only"
+]

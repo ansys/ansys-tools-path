@@ -232,25 +232,28 @@ def test_inexistant_mechanical(mock_filesystem):
         find_mechanical(21.6)
 
 
-def test_get_available_ansys_installation(mock_filesystem, mock_awp_environment_variable):
+@pytest.mark.win32
+def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_environment_variable):
     available_ansys_installations = get_available_ansys_installations()
-    if sys.platform == "win32":
-        lowercase_available_ansys_installation = {}
-        for key, value in available_ansys_installations.items():
-            lowercase_available_ansys_installation[key] = value.lower()
-        lowercase_ansys_installation_paths = list(
-            map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
+    lowercase_available_ansys_installation = {}
+    for key, value in available_ansys_installations.items():
+        lowercase_available_ansys_installation[key] = value.lower()
+    lowercase_ansys_installation_paths = list(
+        map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
+    )
+    assert lowercase_available_ansys_installation == dict(
+        zip([202, 211, 231] + [-201, -211], lowercase_ansys_installation_paths)
+    )
+
+
+@pytest.mark.linux
+def test_get_available_ansys_installation_linux(mock_filesystem):
+    assert get_available_ansys_installations() == dict(
+        zip(
+            [202, 211, 231] + [-201, -211],
+            ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
         )
-        assert lowercase_available_ansys_installation == dict(
-            zip([202, 211, 231] + [-201, -211], lowercase_ansys_installation_paths)
-        )
-    else:
-        assert get_available_ansys_installations() == dict(
-            zip(
-                [202, 211, 231] + [-201, -211],
-                ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
-            )
-        )
+    )
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
