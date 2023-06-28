@@ -683,7 +683,7 @@ def _read_config_file(product_name: str) -> Dict[str, str]:
             content = f.read()
 
         if content:
-            return json.load(f)
+            return json.load(content)
 
     return {}
 
