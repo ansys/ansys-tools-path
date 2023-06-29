@@ -111,7 +111,7 @@ def _get_default_linux_base_path():
 def _get_default_windows_base_path():  # pragma: no cover
     """Get the default base path of the Ansys unified install on windows."""
 
-    base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS INC")
+    base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS Inc")
     if not os.path.exists(base_path):
         LOG.debug(f"The supposed 'base_path'{base_path} does not exist. No available ansys found.")
         return None
@@ -680,9 +680,12 @@ def _read_config_file(product_name: str) -> Dict[str, str]:
         _migrate_config_file(product_name)
     if os.path.isfile(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return {}
+            content = f.read()
+
+        if content:
+            return json.loads(content)
+
+    return {}
 
 
 def _write_config_file(config_data: Dict[str, str]):
@@ -725,15 +728,15 @@ def _get_application_path(
         exe_loc = _read_executable_path_from_config_file(product)
         if exe_loc is not None:
             return exe_loc
-    else:
-        try:
-            exe_loc, exe_version = _find_installation(product, version)
-            if (exe_loc, exe_version) != ("", ""):  # executable not found
-                if os.path.isfile(exe_loc):
-                    return exe_loc
-        except ValueError:
-            # Skip to go out of the if statement
-            pass
+
+    try:
+        exe_loc, exe_version = _find_installation(product, version)
+        if (exe_loc, exe_version) != ("", ""):  # executable not found
+            if os.path.isfile(exe_loc):
+                return exe_loc
+    except ValueError:
+        # Skip to go out of the if statement
+        pass
 
     if allow_input:
         exe_loc = _prompt_path(product)
@@ -763,7 +766,7 @@ def get_ansys_path(allow_input: bool = True, version: Optional[float] = None) ->
     """Deprecated, use `get_mapdl_path` instead"""
 
     warnings.warn(
-        "This method is going to be deprecated in future versions. Please use 'get_ansys_path'.",
+        "This method is going to be deprecated in future versions. Please use 'get_mapdl_path'.",
         category=DeprecationWarning,
     )
     return _get_application_path("mapdl", allow_input, version)

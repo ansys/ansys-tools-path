@@ -86,6 +86,17 @@ def mock_filesystem_with_config(mock_filesystem):
 
 
 @pytest.fixture
+def mock_filesystem_with_empty_config(mock_filesystem):
+    config_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"), "config.txt"
+    )
+    mock_filesystem.create_file(config_location)
+    with open(config_location, "w") as config_file:
+        config_file.write("")
+    return mock_filesystem
+
+
+@pytest.fixture
 def mock_filesystem_without_executable(fs):
     fs.create_dir(ANSYS_BASE_PATH)
 
@@ -283,3 +294,7 @@ def test_version_from_path(mock_filesystem):
 def test_get_latest_ansys_installation_empty_fs(mock_empty_filesystem):
     with pytest.raises(ValueError):
         get_latest_ansys_installation()
+
+
+def test_empty_config_file(mock_filesystem_with_empty_config):
+    assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
