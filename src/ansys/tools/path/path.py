@@ -80,12 +80,15 @@ def _get_installed_windows_versions(
     awp_roots_student: list[Tuple[int, str]] = []
     for ver in supported_versions:
         path_ = os.environ.get(f"AWP_ROOT{ver}", "")
-        path_non_student = path_.replace("\\ANSYS Student", "")
+        if path_ == "":
+            continue
 
-        if "student" in path_.lower() and os.path.exists(path_non_student):
-            # Check if also exist a non-student version
-            awp_roots.append((ver, path_non_student))
+        if "student" in path_.lower():
             awp_roots_student.insert(0, (-1 * ver, path_))
+            # Check if also exist a non-student version
+            path_non_student = path_.replace("\\ANSYS Student", "")
+            if os.path.exists(path_non_student):
+                awp_roots.append((ver, path_non_student))
 
         else:
             awp_roots.append((ver, path_))
@@ -125,18 +128,22 @@ def _expand_base_path(base_path: Optional[str]) -> Dict[int, str]:
 
     paths = glob(os.path.join(base_path, "v*"))
 
-    # Testing for ANSYS STUDENT version
-    if not paths:  # pragma: no cover
-        paths = glob(os.path.join(base_path, "ANSYS*"))
-
-    if not paths:
-        return {}
-
     ansys_paths: Dict[int, str] = {}
+
     for path in paths:
         ver_str = path[-3:]
         if is_float(ver_str):
             ansys_paths[int(ver_str)] = path
+
+    # Testing for ANSYS STUDENT version
+    paths = glob(os.path.join(base_path, "ANSYS*", "v*"))
+    if not paths:
+        return {}
+
+    for path in paths:
+        ver_str = path[-3:]
+        if is_float(ver_str):
+            ansys_paths[-int(ver_str)] = path
 
     return ansys_paths
 
@@ -174,7 +181,6 @@ def _get_available_base_unified(
         base_path = _get_default_linux_base_path()
     else:  # pragma: no cover
         raise OSError(f"Unsupported OS {os.name}")
-
     return _expand_base_path(base_path)
 
 
