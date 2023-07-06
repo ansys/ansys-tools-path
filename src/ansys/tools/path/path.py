@@ -4,7 +4,7 @@ import json
 import logging as LOG  # Temporal hack
 import os
 import re
-from typing import Callable, Dict, Literal, Optional, Tuple
+from typing import Callable, Dict, Literal, Optional, Tuple, Union
 import warnings
 
 import platformdirs
@@ -223,7 +223,7 @@ def get_available_ansys_installations(
 
 
 def _get_unified_install_base_for_version(
-    version: Optional[int | float] = None,
+    version: Optional[Union[int, float]] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
 ) -> Tuple[str, str]:
     """Search for the unified install of a given version from the supported versions.
@@ -258,7 +258,7 @@ def _get_unified_install_base_for_version(
 def find_mechanical(
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-) -> Tuple[str, float] | Tuple[Literal[""], Literal[""]]:
+) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
     """
     Search for the Mechanical path in the standard installation location.
 
@@ -294,9 +294,9 @@ def find_mechanical(
 
 
 def find_mapdl(
-    version: Optional[int | float] = None,
+    version: Optional[Union[int, float]] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-) -> Tuple[str, float | str]:
+) -> Tuple[str, Union[float, str]]:
     """Searches for Ansys MAPDL path within the standard install location
     and returns the path of the latest version.
 
