@@ -714,7 +714,7 @@ def _migrate_config_file(product_name: str) -> None:
         new_config_data[product_name] = mapdl_exe_localisation
         _write_config_file(new_config_data)
 
-    def _migrate_json_config_file(old_config_file_path: str) -> None:
+    def _migrate_json_config_file(old_config_file_path: str) -> None:  # pragma: no cover
         with open(old_config_file_path) as old_config_file:
             old_config_data = old_config_file.read()
         try:
