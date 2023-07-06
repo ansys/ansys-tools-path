@@ -413,6 +413,7 @@ def test_empty_config_file(mock_filesystem_with_empty_config):
     assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
 
 
+@pytest.mark.win32
 def test_migration_old_config_file(mock_filesystem_with_only_old_config):
     old_config1_location = os.path.join(
         platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
