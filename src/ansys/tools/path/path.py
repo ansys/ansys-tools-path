@@ -1,9 +1,10 @@
+from dataclasses import dataclass
 from glob import glob
 import json
 import logging as LOG  # Temporal hack
 import os
 import re
-from typing import Dict, Literal, Optional, Tuple
+from typing import Callable, Dict, Literal, Optional, Tuple
 import warnings
 
 import platformdirs
@@ -702,23 +703,66 @@ def _write_config_file(config_data: Dict[str, str]):
 
 def _migrate_config_file(product_name: str) -> None:
     """Migrate configuration if needed"""
-    if product_name not in ["mechanical", "mapdl"]:
-        return
 
-    old_config_file_name = "config.txt"
-    old_settings_dir = platformdirs.user_data_dir(f"ansys_{product_name}_core")
-    old_config_file = os.path.join(old_settings_dir, old_config_file_name)
-    if os.path.isfile(old_config_file):
-        with open(old_config_file) as f:
-            exe_loc = f.read()
-
+    def _migrate_txt_config_file(old_config_file_path: str) -> None:
+        with open(old_config_file_path) as old_config_file:
+            mapdl_exe_localisation: str = old_config_file.read()
         if os.path.isfile(CONFIG_FILE):
             new_config_data = _read_config_file(product_name)
         else:
-            new_config_data = {}
-        new_config_data[product_name] = exe_loc
+            new_config_data: Dict[str, str] = {}
+        new_config_data[product_name] = mapdl_exe_localisation
         _write_config_file(new_config_data)
-        os.remove(old_config_file)
+
+    def _migrate_json_config_file(old_config_file_path: str) -> None:
+        with open(old_config_file_path) as old_config_file:
+            old_config_data = old_config_file.read()
+        try:
+            old_config_data_json = json.loads(old_config_data)
+            _write_config_file(old_config_data_json)
+        except ValueError:
+            # if the config file cannot be parsed we simply throw it away
+            pass
+
+    @dataclass
+    class FileMigrationStrategy:
+        path: str
+        migration_function: Callable[[str], None]
+
+        def __call__(self):
+            self.migration_function(self.path)
+
+    if product_name not in ["mechanical", "mapdl"]:
+        return
+
+    file_migration_strategy_list: list[FileMigrationStrategy] = [
+        FileMigrationStrategy(
+            os.path.join(platformdirs.user_data_dir(f"ansys_{product_name}_core"), "config.txt"),
+            _migrate_txt_config_file,
+        ),
+        FileMigrationStrategy(
+            os.path.join(platformdirs.user_data_dir("ansys_tools_path"), "config.txt"),
+            _migrate_json_config_file,
+        ),
+    ]
+
+    # Filter to only keep config files that exists
+    file_migration_strategy_list = [
+        file_migration_strategy
+        for file_migration_strategy in file_migration_strategy_list
+        if os.path.exists(file_migration_strategy.path)
+    ]
+
+    if len(file_migration_strategy_list) == 0:
+        return
+
+    # we use the migration strategy of the last file
+    latest_file_migration_strategy = file_migration_strategy_list[-1]
+    latest_file_migration_strategy()
+
+    # remove all old config files
+    for file_migration_strategy in file_migration_strategy_list:
+        os.remove(file_migration_strategy.path)
 
 
 def _read_executable_path_from_config_file(product_name: str):

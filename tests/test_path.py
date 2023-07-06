@@ -150,6 +150,38 @@ def mock_empty_filesystem(fs):
 
 
 @pytest.fixture
+def mock_filesystem_with_only_old_config(mock_filesystem):
+    config1_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
+    )
+    mock_filesystem.create_file(config1_location)
+    with open(config1_location, "w") as config_file:
+        config_file.write(MAPDL_INSTALL_PATHS[0])
+    config2_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_tools_path"), "config.txt"
+    )
+    mock_filesystem.create_file(config2_location)
+    with open(config2_location, "w") as config_file:
+        config_file.write(
+            json.dumps(
+                {"mapdl": LATEST_MAPDL_INSTALL_PATH, "mechanical": LATEST_MECHANICAL_INSTALL_PATH}
+            )
+        )
+
+    return mock_filesystem
+
+
+@pytest.fixture
+def mock_filesystem_with_only_oldest_config(mock_filesystem):
+    config_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
+    )
+    mock_filesystem.create_file(config_location)
+    with open(config_location, "w") as config_file:
+        config_file.write(MAPDL_INSTALL_PATHS[0])
+
+
+@pytest.fixture
 def mock_awp_environment_variable(monkeypatch):
     for awp_root_var in filter(lambda var: var.startswith("AWP_ROOT"), os.environ.keys()):
         monkeypatch.delenv(awp_root_var)
@@ -379,3 +411,25 @@ def test_get_latest_ansys_installation_empty_fs(mock_empty_filesystem):
 
 def test_empty_config_file(mock_filesystem_with_empty_config):
     assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
+
+
+def test_migration_old_config_file(mock_filesystem_with_only_old_config):
+    old_config1_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
+    )
+    old_config2_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_tools_path"), "config.txt"
+    )
+    assert get_mapdl_path() == LATEST_MAPDL_INSTALL_PATH
+    assert not os.path.exists(old_config1_location)
+    assert not os.path.exists(old_config2_location)
+    assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
+
+
+def test_migration_oldtest_config_file(mock_filesystem_with_only_oldest_config):
+    old_config_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
+    )
+    assert get_mapdl_path() == MAPDL_INSTALL_PATHS[0]
+    assert not os.path.exists(old_config_location)
+    assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
