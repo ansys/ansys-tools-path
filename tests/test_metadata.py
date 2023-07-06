@@ -4,10 +4,7 @@ from ansys.tools.path import __version__
 
 
 def test_pkg_version():
-    try:
-        import importlib.metadata as importlib_metadata
-    except ModuleNotFoundError:  # pragma: no cover
-        import importlib_metadata
+    import importlib.metadata as importlib_metadata
 
     # Read from the pyproject.toml
     # major, minor, patch
