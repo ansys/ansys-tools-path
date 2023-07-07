@@ -348,7 +348,7 @@ def _find_installation(
     product: PRODUCT_TYPE,
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-) -> Tuple[str, float] | Tuple[Literal[""], Literal[""]]:
+) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
     if product == "mapdl":
         return find_mapdl(version, supported_versions)
     elif product == "mechanical":
@@ -359,7 +359,7 @@ def _find_installation(
 def find_ansys(
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-) -> Tuple[str, float] | Tuple[Literal[""], Literal[""]]:
+) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
     """Obsolete method, use find_mapdl."""
     warnings.warn(
         "This method is going to be deprecated in future versions. Please use 'find_mapdl'.",
