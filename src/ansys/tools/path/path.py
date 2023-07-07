@@ -71,7 +71,7 @@ CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
 
 def _get_installed_windows_versions(
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):  # pragma: no cover
+) -> Dict[int, str]:  # pragma: no cover
     """Get the AWP_ROOT environment variable values for supported versions."""
 
     # The student version overwrites the AWP_ROOT env var
@@ -103,7 +103,7 @@ def _get_installed_windows_versions(
     return installed_versions
 
 
-def _get_default_linux_base_path():
+def _get_default_linux_base_path() -> Optional[str]:
     """Get the default base path of the Ansys unified install on linux."""
 
     for path in LINUX_DEFAULT_DIRS:
@@ -112,7 +112,7 @@ def _get_default_linux_base_path():
     return None
 
 
-def _get_default_windows_base_path():  # pragma: no cover
+def _get_default_windows_base_path() -> Optional[str]:  # pragma: no cover
     """Get the default base path of the Ansys unified install on windows."""
 
     base_path = os.path.join(os.environ["PROGRAMFILES"], "ANSYS Inc")
@@ -151,7 +151,7 @@ def _expand_base_path(base_path: Optional[str]) -> Dict[int, str]:
 
 def _get_available_base_unified(
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):
+) -> Dict[int, str]:
     r"""Get a dictionary of available Ansys Unified Installation versions with
     their base paths.
 
@@ -187,7 +187,7 @@ def _get_available_base_unified(
 
 def get_available_ansys_installations(
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):
+) -> Dict[int, str]:
     """Return a dictionary of available Ansys unified installation versions with their base paths.
 
     Returns
@@ -296,7 +296,7 @@ def find_mechanical(
 def find_mapdl(
     version: Optional[Union[int, float]] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-) -> Tuple[str, Union[float, str]]:
+) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
     """Searches for Ansys MAPDL path within the standard install location
     and returns the path of the latest version.
 
@@ -348,7 +348,7 @@ def _find_installation(
     product: PRODUCT_TYPE,
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):
+) -> Tuple[str, float] | Tuple[Literal[""], Literal[""]]:
     if product == "mapdl":
         return find_mapdl(version, supported_versions)
     elif product == "mechanical":
@@ -359,7 +359,7 @@ def _find_installation(
 def find_ansys(
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
-):
+) -> Tuple[str, float] | Tuple[Literal[""], Literal[""]]:
     """Obsolete method, use find_mapdl."""
     warnings.warn(
         "This method is going to be deprecated in future versions. Please use 'find_mapdl'.",
@@ -369,7 +369,7 @@ def find_ansys(
     return _find_installation("mapdl", version, supported_versions)
 
 
-def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str):
+def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
     if product == "mapdl":
         return (
             os.path.isfile(exe_loc)
@@ -435,7 +435,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         raise Exception("unexpected application")
 
 
-def _change_default_path(product: PRODUCT_TYPE, exe_loc: str):
+def _change_default_path(product: PRODUCT_TYPE, exe_loc: str) -> None:
     if os.path.isfile(exe_loc):
         config_data = _read_config_file(product)
         config_data[product] = exe_loc
@@ -528,7 +528,7 @@ def _save_path(
 
 def save_mechanical_path(
     exe_loc: Optional[str] = None, allow_prompt: bool = True
-):  # pragma: no cover
+) -> str:  # pragma: no cover
     """Find the Mechanical path or query user.
 
     Parameters
@@ -765,7 +765,7 @@ def _migrate_config_file(product_name: str) -> None:
         os.remove(file_migration_strategy.path)
 
 
-def _read_executable_path_from_config_file(product_name: str):
+def _read_executable_path_from_config_file(product_name: str) -> Optional[str]:
     """Read the executable path for the product given by `product_name` from config file"""
     config_data = _read_config_file(product_name)
     return config_data.get(product_name, None)
@@ -773,7 +773,7 @@ def _read_executable_path_from_config_file(product_name: str):
 
 def _get_application_path(
     product: PRODUCT_TYPE, allow_input: bool = True, version: Optional[float] = None
-):
+) -> Optional[str]:
     if version is None:
         exe_loc = _read_executable_path_from_config_file(product)
         if exe_loc is not None:
@@ -838,7 +838,7 @@ def get_mechanical_path(allow_input: bool = True, version: Optional[float] = Non
     return _get_application_path("mechanical", allow_input, version)
 
 
-def _mechanical_version_from_path(path: str):
+def _mechanical_version_from_path(path: str) -> int:
     """Extract the Ansys Mechanical version from a path.
 
     Generally, the version of Mechanical is contained in the path:
@@ -865,7 +865,7 @@ def _mechanical_version_from_path(path: str):
     return int(matches[-1])
 
 
-def _mapdl_version_from_path(path: str):
+def _mapdl_version_from_path(path: str) -> int:
     """Extract ansys version from a path.  Generally, the version of
     Ansys MAPDL is contained in the path:
     C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe
@@ -891,7 +891,7 @@ def _mapdl_version_from_path(path: str):
     return int(matches[-1])
 
 
-def version_from_path(product: PRODUCT_TYPE, path: str):
+def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
     """Extract the product version from a path.
 
     Parameters
