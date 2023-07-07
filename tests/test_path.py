@@ -409,6 +409,7 @@ def test_get_latest_ansys_installation_empty_fs(mock_empty_filesystem):
         get_latest_ansys_installation()
 
 
+@pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
 def test_empty_config_file(mock_filesystem_with_empty_config):
     assert get_ansys_path() == LATEST_MAPDL_INSTALL_PATH
 
@@ -424,6 +425,19 @@ def test_migration_old_config_file(mock_filesystem_with_only_old_config):
     assert get_mapdl_path() == LATEST_MAPDL_INSTALL_PATH
     assert not os.path.exists(old_config1_location)
     assert not os.path.exists(old_config2_location)
+    assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
+
+
+@pytest.mark.linux
+def test_migration_old_config_file_linux(mock_filesystem_with_only_old_config):
+    """In this case no migration should take place as the config file already exists in linux
+    The latest change of location for the config file affected only windows
+    """
+    old_config1_location = os.path.join(
+        platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
+    )
+    assert get_mapdl_path() == LATEST_MAPDL_INSTALL_PATH
+    assert os.path.exists(old_config1_location)
     assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
 
 
