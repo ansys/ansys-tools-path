@@ -139,7 +139,7 @@ def _expand_base_path(base_path: Optional[str]) -> Dict[int, str]:
     # Testing for ANSYS STUDENT version
     paths = glob(os.path.join(base_path, "ANSYS*", "v*"))
     if not paths:
-        return {}
+        return ansys_paths
 
     for path in paths:
         ver_str = path[-3:]

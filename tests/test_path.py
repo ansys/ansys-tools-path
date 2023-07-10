@@ -114,6 +114,15 @@ def mock_filesystem(fs):
 
 
 @pytest.fixture
+def mock_filesystem_without_student_versions(fs):
+    for mapdl_install_path in MAPDL_INSTALL_PATHS:
+        fs.create_file(mapdl_install_path)
+    for mechanical_install_path in MECHANICAL_INSTALL_PATHS:
+        fs.create_file(mechanical_install_path)
+    fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
+
+
+@pytest.fixture
 def mock_filesystem_with_config(mock_filesystem):
     config_location = os.path.join(
         platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"), "config.txt"
@@ -254,6 +263,14 @@ def test_find_mapdl_without_executable(mock_filesystem_without_executable):
     assert (ansys_bin, ansys_version) == ("", "")
 
 
+def test_find_mapdl_without_student(mock_filesystem_without_student_versions):
+    ansys_bin, ansys_version = find_mapdl()
+    if sys.platform == "win32":
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+    else:
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
+
+
 def test_find_mechanical(mock_filesystem):
     ansys_bin, ansys_version = find_mechanical()
     if sys.platform == "win32":
@@ -273,6 +290,14 @@ def test_find_specific_mechanical(mock_filesystem, mock_awp_environment_variable
 def test_inexistant_mechanical(mock_filesystem):
     with pytest.raises(ValueError):
         find_mechanical(21.6)
+
+
+def test_find_mechanical_without_student(mock_filesystem_without_student_versions):
+    ansys_bin, ansys_version = find_mechanical()
+    if sys.platform == "win32":
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
+    else:
+        assert (ansys_bin, ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 
 
 @pytest.mark.win32
