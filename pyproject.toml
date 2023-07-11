@@ -35,7 +35,7 @@ dependencies = [
 tests = [
     "pytest==7.4.0",
     "pytest-cov==4.1.0",
-    "pyfakefs==5.2.2",
+    "pyfakefs==5.2.3",
 ]
 
 doc = [
