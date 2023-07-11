@@ -36,6 +36,7 @@ def test_get_available_ansys_installation():
 
 
 @skip_if_not_ansys_local
+@pytest.mark.linux
 def test_save_mapdl_path():
     if not os.path.isfile(CONFIG_FILE):
         old_config = None
@@ -43,12 +44,9 @@ def test_save_mapdl_path():
         with open(CONFIG_FILE, "r") as config_file:
             old_config = config_file.read()
 
-    path = get_available_ansys_installations().values()
-    path = list(path)[0]
+    path, _ = find_mapdl(version=222)
 
-    x = save_mapdl_path(path, allow_prompt=False)
-    assert x
-    print(x)
+    assert save_mapdl_path(path, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
         assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v222/ansys/bin/ansys222"}
 
