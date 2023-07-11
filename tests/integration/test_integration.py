@@ -3,12 +3,7 @@ import os
 
 import pytest
 
-from ansys.tools.path import (
-    find_mapdl,
-    find_mechanical,
-    get_available_ansys_installations,
-    save_mapdl_path,
-)
+from ansys.tools.path import find_mapdl, get_available_ansys_installations, save_mapdl_path
 from ansys.tools.path.path import CONFIG_FILE, _clear_config_file
 
 skip_if_not_ansys_local = pytest.mark.skipif(
@@ -19,13 +14,6 @@ skip_if_not_ansys_local = pytest.mark.skipif(
 @skip_if_not_ansys_local
 def test_find_mapdl():
     bin_file, ver = find_mapdl()
-    assert os.path.isfile(bin_file)
-    assert ver != ""
-
-
-@skip_if_not_ansys_local
-def test_find_mechanical():
-    bin_file, ver = find_mechanical()
     assert os.path.isfile(bin_file)
     assert ver != ""
 
