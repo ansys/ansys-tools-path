@@ -782,6 +782,8 @@ def _get_application_path(
         if exe_loc is not None:
             return exe_loc
 
+    LOG.debug(f"{product} path not found in config file")
+
     try:
         exe_loc, exe_version = _find_installation(product, version)
         if (exe_loc, exe_version) != ("", ""):  # executable not found
