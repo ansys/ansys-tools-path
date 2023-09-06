@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from glob import glob
 import json
-import logging as LOG  # Temporal hack
+import logging
 import os
 import re
 from typing import Callable, Dict, Literal, Optional, Tuple, Union
@@ -10,6 +10,8 @@ import warnings
 import platformdirs
 
 from ansys.tools.path.misc import is_float, is_linux, is_windows
+
+LOG = logging.getLogger(__name__)
 
 PRODUCT_TYPE = Literal["mapdl", "mechanical"]
 SUPPORTED_VERSIONS_TYPE = Dict[int, str]
@@ -107,6 +109,7 @@ def _get_default_linux_base_path() -> Optional[str]:
     """Get the default base path of the Ansys unified install on linux."""
 
     for path in LINUX_DEFAULT_DIRS:
+        LOG.debug(f"Checking {path} as a potential ansys directory")
         if os.path.isdir(path):
             return path
     return None
@@ -778,6 +781,8 @@ def _get_application_path(
         exe_loc = _read_executable_path_from_config_file(product)
         if exe_loc is not None:
             return exe_loc
+
+    LOG.debug(f"{product} path not found in config file")
 
     try:
         exe_loc, exe_version = _find_installation(product, version)
