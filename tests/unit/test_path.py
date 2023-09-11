@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import sys
 from unittest.mock import patch
@@ -8,6 +9,7 @@ import pyfakefs  # noqa
 import pytest
 
 from ansys.tools.path import (
+    LOG,
     SETTINGS_DIR,
     change_default_ansys_path,
     change_default_mapdl_path,
@@ -24,6 +26,8 @@ from ansys.tools.path import (
     save_mechanical_path,
     version_from_path,
 )
+
+LOG.setLevel(logging.DEBUG)
 
 VERSIONS = [202, 211, 231]
 STUDENT_VERSIONS = [201, 211]

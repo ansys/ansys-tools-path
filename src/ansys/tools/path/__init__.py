@@ -10,6 +10,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 
 from ansys.tools.path.path import (
+    LOG,
     SETTINGS_DIR,
     SUPPORTED_ANSYS_VERSIONS,
     change_default_mapdl_path,
@@ -30,6 +31,7 @@ from ansys.tools.path.path import get_ansys_path  # deprecated
 from ansys.tools.path.path import save_ansys_path  # deprecated
 
 __all__ = [
+    "LOG",
     "SETTINGS_DIR",
     "SUPPORTED_ANSYS_VERSIONS",
     "change_default_mapdl_path",

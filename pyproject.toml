@@ -33,20 +33,20 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "pytest==7.4.0",
+    "pytest==7.4.1",
     "pytest-cov==4.1.0",
     "pyfakefs==5.2.4",
 ]
 
 doc = [
-    "Sphinx==7.2.4",
+    "Sphinx==7.2.5",
     "numpydoc==1.5.0",
-    "ansys-sphinx-theme==0.10.4",
+    "ansys-sphinx-theme==0.10.6",
     "sphinx-copybutton==0.5.2",
 ]
 
 build = [
-    "build==0.10.0",
+    "build==1.0.0",
     "twine==4.0.2",
 ]
 
