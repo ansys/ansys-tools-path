@@ -46,7 +46,7 @@ doc = [
 ]
 
 build = [
-    "build==1.0.0",
+    "build==1.0.3",
     "twine==4.0.2",
 ]
 
