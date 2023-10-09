@@ -677,8 +677,8 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
     return exe_loc
 
 
-def _clear_config_file() -> None:
-    """Used by tests. We can consider supporting it on the library"""
+def clear_config_file() -> None:
+    """Remove the config file so it can be re-generated"""
     if os.path.isfile(CONFIG_FILE):
         os.remove(CONFIG_FILE)
 

@@ -14,6 +14,7 @@ from ansys.tools.path import (
     change_default_ansys_path,
     change_default_mapdl_path,
     change_default_mechanical_path,
+    clear_config_file,
     find_ansys,
     find_mapdl,
     find_mechanical,
@@ -477,3 +478,9 @@ def test_migration_oldtest_config_file(mock_filesystem_with_only_oldest_config):
     assert get_mapdl_path() == MAPDL_INSTALL_PATHS[0]
     assert not os.path.exists(old_config_location)
     assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
+
+
+def test_clear_config_file(mock_filesystem_with_config):
+    assert os.path.isfile(os.path.join(SETTINGS_DIR, "config.txt"))
+    clear_config_file()
+    assert not os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
