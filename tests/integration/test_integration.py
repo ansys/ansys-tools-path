@@ -4,7 +4,7 @@ import os
 import pytest
 
 from ansys.tools.path import (
-    clear_config_file,
+    clear_configuration,
     find_mapdl,
     get_available_ansys_installations,
     save_mapdl_path,
@@ -46,7 +46,7 @@ def test_save_mapdl_path():
     assert save_mapdl_path(None, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
         assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v222/ansys/bin/ansys222"}
-    clear_config_file()
+    clear_configuration("all")
     if old_config is not None:
         with open(CONFIG_FILE, "w") as config_file:
             config_file.write(old_config)

@@ -14,7 +14,7 @@ from ansys.tools.path import (
     change_default_ansys_path,
     change_default_mapdl_path,
     change_default_mechanical_path,
-    clear_config_file,
+    clear_configuration,
     find_ansys,
     find_mapdl,
     find_mechanical,
@@ -471,7 +471,7 @@ def test_migration_old_config_file_linux(mock_filesystem_with_only_old_config):
     assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
 
 
-def test_migration_oldtest_config_file(mock_filesystem_with_only_oldest_config):
+def test_migration_oldest_config_file(mock_filesystem_with_only_oldest_config):
     old_config_location = os.path.join(
         platformdirs.user_data_dir(appname="ansys_mapdl_core"), "config.txt"
     )
@@ -481,6 +481,13 @@ def test_migration_oldtest_config_file(mock_filesystem_with_only_oldest_config):
 
 
 def test_clear_config_file(mock_filesystem_with_config):
-    assert os.path.isfile(os.path.join(SETTINGS_DIR, "config.txt"))
-    clear_config_file()
-    assert not os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
+    clear_configuration("mapdl")
+    with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
+        content = json.loads(file.read())
+        assert "mapdl" not in content
+        assert content["mechanical"] is not None
+    clear_configuration("mechanical")
+    assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
+    with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
+        content = json.loads(file.read())
+        assert content == {}
