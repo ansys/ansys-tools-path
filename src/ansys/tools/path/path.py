@@ -679,10 +679,17 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
     return exe_loc
 
 
-def _clear_config_file() -> None:
-    """Used by tests. We can consider supporting it on the library"""
-    if os.path.isfile(CONFIG_FILE):
-        os.remove(CONFIG_FILE)
+def clear_configuration(product: Union[PRODUCT_TYPE, Literal["all"]]) -> None:
+    """Clear the entry of the specified product in the configuration file"""
+    config = (
+        _read_config_file()
+    )  # we use read_config_file here because it will do the migration if necessary
+    if product == "all":
+        _write_config_file({})
+        return
+    if product in config:
+        del config[product]
+        _write_config_file(config)
 
 
 def _read_config_file() -> Dict[PRODUCT_TYPE, str]:
