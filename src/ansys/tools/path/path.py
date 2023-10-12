@@ -681,12 +681,12 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
 
 def clear_configuration(product: Union[PRODUCT_TYPE, Literal["all"]]) -> None:
     """Clear the entry of the specified product in the configuration file"""
-    if not os.path.isfile(CONFIG_FILE):
-        return
+    config = (
+        _read_config_file()
+    )  # we use read_config_file here because it will do the migration if necessary
     if product == "all":
         _write_config_file({})
         return
-    config = _read_config_file(product)
     if product in config:
         del config[product]
         _write_config_file(config)
