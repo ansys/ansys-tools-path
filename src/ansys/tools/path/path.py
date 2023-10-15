@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-from typing import Callable, Dict, Literal, Optional, Tuple, Union
+from typing import Callable, Dict, Literal, Optional, Tuple, Union, cast
 import warnings
 
 import platformdirs
@@ -69,6 +69,8 @@ if not os.path.isdir(SETTINGS_DIR):  # pragma: no cover
         )
 
 CONFIG_FILE = os.path.join(SETTINGS_DIR, CONFIG_FILE_NAME)
+
+# FileMigrationStrategy: TypeAlias = Callable[[], Dict[PRODUCT_TYPE, str]]
 
 
 def _get_installed_windows_versions(
@@ -440,7 +442,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
 
 def _change_default_path(product: PRODUCT_TYPE, exe_loc: str) -> None:
     if os.path.isfile(exe_loc):
-        config_data = _read_config_file(product)
+        config_data = _read_config_file()
         config_data[product] = exe_loc
         _write_config_file(config_data)
     else:
@@ -666,7 +668,7 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
 
         if is_valid_executable_path(product, exe_loc):
             _check_uncommon_executable_path(product, exe_loc)
-            config_data = _read_config_file(product)
+            config_data = _read_config_file()
             config_data[product] = exe_loc
             _write_config_file(config_data)
             break
@@ -677,17 +679,24 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
     return exe_loc
 
 
-def _clear_config_file() -> None:
-    """Used by tests. We can consider supporting it on the library"""
-    if os.path.isfile(CONFIG_FILE):
-        os.remove(CONFIG_FILE)
+def clear_configuration(product: Union[PRODUCT_TYPE, Literal["all"]]) -> None:
+    """Clear the entry of the specified product in the configuration file"""
+    config = (
+        _read_config_file()
+    )  # we use read_config_file here because it will do the migration if necessary
+    if product == "all":
+        _write_config_file({})
+        return
+    if product in config:
+        del config[product]
+        _write_config_file(config)
 
 
-def _read_config_file(product_name: str) -> Dict[str, str]:
+def _read_config_file() -> Dict[PRODUCT_TYPE, str]:
     """Read config file for a given product, migrating if needed"""
 
     if not os.path.isfile(CONFIG_FILE):
-        _migrate_config_file(product_name)
+        _migrate_config_file()
     if os.path.isfile(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             content = f.read()
@@ -698,53 +707,66 @@ def _read_config_file(product_name: str) -> Dict[str, str]:
     return {}
 
 
-def _write_config_file(config_data: Dict[str, str]):
+def _write_config_file(config_data: Dict[PRODUCT_TYPE, str]):
     """Warning - this isn't threadsafe"""
     with open(CONFIG_FILE, "w") as f:
         json.dump(config_data, f)
 
 
-def _migrate_config_file(product_name: str) -> None:
+def _migrate_config_file() -> None:
     """Migrate configuration if needed"""
 
-    def _migrate_txt_config_file(old_config_file_path: str) -> None:
-        with open(old_config_file_path) as old_config_file:
-            mapdl_exe_localisation: str = old_config_file.read()
+    def _migrate_txt_config_file() -> Dict[PRODUCT_TYPE, str]:
+        old_mapdl_config_path = os.path.join(
+            platformdirs.user_data_dir(f"ansys_mapdl_core"), "config.txt"
+        )
+        old_mechanical_config_path = os.path.join(
+            platformdirs.user_data_dir(f"ansys_mechanical_core"), "config.txt"
+        )
         if os.path.isfile(CONFIG_FILE):
-            new_config_data = _read_config_file(product_name)
+            new_config_data = _read_config_file()
         else:
-            new_config_data: Dict[str, str] = {}
-        new_config_data[product_name] = mapdl_exe_localisation
-        _write_config_file(new_config_data)
+            new_config_data: Dict[PRODUCT_TYPE, str] = {}
 
-    def _migrate_json_config_file(old_config_file_path: str) -> None:  # pragma: no cover
-        with open(old_config_file_path) as old_config_file:
+        if "mapdl" not in new_config_data and os.path.exists(old_mapdl_config_path):
+            with open(old_mapdl_config_path) as old_mapdl_config_file:
+                new_config_data["mapdl"] = old_mapdl_config_file.read()
+
+        if "mechanical" not in new_config_data and os.path.exists(old_mechanical_config_path):
+            with open(old_mechanical_config_path) as old_mechanical_config_file:
+                new_config_data["mechanical"] = old_mechanical_config_file.read()
+
+        return new_config_data
+
+    def _migrate_json_config_file() -> Dict[PRODUCT_TYPE, str]:  # pragma: no cover
+        with open(
+            os.path.join(platformdirs.user_data_dir("ansys_tools_path"), "config.txt")
+        ) as old_config_file:
             old_config_data = old_config_file.read()
         try:
-            old_config_data_json = json.loads(old_config_data)
-            _write_config_file(old_config_data_json)
+            return cast(Dict[PRODUCT_TYPE, str], json.loads(old_config_data))
         except ValueError:
-            # if the config file cannot be parsed we simply throw it away
-            pass
+            # if the config file cannot be parsed we simply return an empty dict
+            return {}
 
     @dataclass
     class FileMigrationStrategy:
-        path: str
-        migration_function: Callable[[str], None]
+        paths: list[str]
+        migration_function: Callable[[], Dict[PRODUCT_TYPE, str]]
 
         def __call__(self):
-            self.migration_function(self.path)
-
-    if product_name not in ["mechanical", "mapdl"]:
-        return
+            return self.migration_function()
 
     file_migration_strategy_list: list[FileMigrationStrategy] = [
         FileMigrationStrategy(
-            os.path.join(platformdirs.user_data_dir(f"ansys_{product_name}_core"), "config.txt"),
+            [
+                os.path.join(platformdirs.user_data_dir(f"ansys_mapdl_core"), "config.txt"),
+                os.path.join(platformdirs.user_data_dir(f"ansys_mechanical_core"), "config.txt"),
+            ],
             _migrate_txt_config_file,
         ),
         FileMigrationStrategy(
-            os.path.join(platformdirs.user_data_dir("ansys_tools_path"), "config.txt"),
+            [os.path.join(platformdirs.user_data_dir("ansys_tools_path"), "config.txt")],
             _migrate_json_config_file,
         ),
     ]
@@ -753,7 +775,7 @@ def _migrate_config_file(product_name: str) -> None:
     file_migration_strategy_list = [
         file_migration_strategy
         for file_migration_strategy in file_migration_strategy_list
-        if os.path.exists(file_migration_strategy.path)
+        if any(map(os.path.exists, file_migration_strategy.paths))
     ]
 
     if len(file_migration_strategy_list) == 0:
@@ -761,16 +783,18 @@ def _migrate_config_file(product_name: str) -> None:
 
     # we use the migration strategy of the last file
     latest_file_migration_strategy = file_migration_strategy_list[-1]
-    latest_file_migration_strategy()
+    _write_config_file(latest_file_migration_strategy())
 
     # remove all old config files
     for file_migration_strategy in file_migration_strategy_list:
-        os.remove(file_migration_strategy.path)
+        for path in file_migration_strategy.paths:
+            if os.path.exists(path):
+                os.remove(path)
 
 
-def _read_executable_path_from_config_file(product_name: str) -> Optional[str]:
+def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Optional[str]:
     """Read the executable path for the product given by `product_name` from config file"""
-    config_data = _read_config_file(product_name)
+    config_data = _read_config_file()
     return config_data.get(product_name, None)
 
 
