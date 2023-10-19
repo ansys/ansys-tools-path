@@ -50,4 +50,3 @@ def test_save_mapdl_path():
     if old_config is not None:
         with open(CONFIG_FILE, "w") as config_file:
             config_file.write(old_config)
-
