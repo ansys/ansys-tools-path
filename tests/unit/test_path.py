@@ -34,7 +34,7 @@ from ansys.tools.path import (
 
 LOG.setLevel(logging.DEBUG)
 
-VERSIONS = [202, 211, 231, 232]
+VERSIONS = [202, 211, 231]
 STUDENT_VERSIONS = [201, 211]
 
 if sys.platform == "win32":
