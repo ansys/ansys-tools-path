@@ -232,6 +232,11 @@ def test_change_default_mapdl_path_file_dont_exist(mock_empty_filesystem):
         change_default_mapdl_path(MAPDL_INSTALL_PATHS[1])
 
 
+def test_change_default_dyna_path_file_dont_exist(mock_empty_filesystem):
+    with pytest.raises(FileNotFoundError):
+        change_default_dyna_path(DYNA_INSTALL_PATHS[1])
+
+
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
 def test_change_ansys_path(mock_empty_filesystem):
     with pytest.raises(FileNotFoundError):
@@ -382,6 +387,15 @@ def test_get_mapdl_path(mock_filesystem_with_config):
         assert mapdl_path == LATEST_MAPDL_INSTALL_PATH
 
 
+def test_get_dyna_path(mock_filesystem_with_config):
+    dyna_path = get_dyna_path()
+    if sys.platform == "win32":
+        assert dyna_path is not None
+        assert dyna_path.lower() == LATEST_DYNA_INSTALL_PATH.lower()
+    else:
+        assert dyna_path == LATEST_DYNA_INSTALL_PATH
+
+
 def test_get_mechanical_path(mock_filesystem_with_config):
     mechanical_path = get_mechanical_path()
     if sys.platform == "win32":
@@ -439,6 +453,18 @@ def test_save_mapdl_path(mock_filesystem):
             assert json_file == {"mapdl": LATEST_MAPDL_INSTALL_PATH.lower()}
         else:
             assert json_file == {"mapdl": LATEST_MAPDL_INSTALL_PATH}
+
+
+def test_save_dyna_path(mock_filesystem):
+    save_dyna_path()
+    with open(os.path.join(SETTINGS_DIR, "config.txt")) as file:
+        content = file.read()
+        json_file = json.loads(content)
+        json_file = {key: val.lower() for key, val in json_file.items()}
+        if sys.platform == "win32":
+            assert json_file == {"dyna": LATEST_DYNA_INSTALL_PATH.lower()}
+        else:
+            assert json_file == {"dyna": LATEST_DYNA_INSTALL_PATH}
 
 
 def test_save_mechanical_path(mock_filesystem):

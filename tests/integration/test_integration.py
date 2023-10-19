@@ -71,11 +71,11 @@ def test_save_dyna_path():
 
     path, _ = find_dyna(version=222)
 
-    assert save_mapdl_path(path, allow_prompt=False)
+    assert save_dyna_path(path, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
         assert json.loads(config_file.read()) == {"dyna": "/ansys_inc/v222/ansys/bin/lsdyna222"}
 
-    assert save_mapdl_path(None, allow_prompt=False)
+    assert save_dyna_path(None, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
         assert json.loads(config_file.read()) == {"dyna": "/ansys_inc/v222/ansys/bin/lsdyna222"}
     clear_configuration("all")
