@@ -13,9 +13,11 @@ from ansys.tools.path import (
     SETTINGS_DIR,
     change_default_ansys_path,
     change_default_mapdl_path,
+    change_default_dyna_path,
     change_default_mechanical_path,
     clear_configuration,
     find_ansys,
+    find_dyna,
     find_mapdl,
     find_mechanical,
     get_ansys_path,
@@ -23,14 +25,16 @@ from ansys.tools.path import (
     get_latest_ansys_installation,
     get_mapdl_path,
     get_mechanical_path,
+    get_dyna_path,
     save_mapdl_path,
     save_mechanical_path,
+    save_dyna_path,
     version_from_path,
 )
 
 LOG.setLevel(logging.DEBUG)
 
-VERSIONS = [202, 211, 231]
+VERSIONS = [202, 211, 231, 232]
 STUDENT_VERSIONS = [201, 211]
 
 if sys.platform == "win32":
@@ -45,6 +49,12 @@ if sys.platform == "win32":
     MAPDL_INSTALL_PATHS = [
         os.path.join(
             ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", "winx64", f"ansys{version}.exe"
+        )
+        for version in VERSIONS
+    ]
+    DYNA_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", "winx64", f"lsdyna{version}.exe"
         )
         for version in VERSIONS
     ]
@@ -89,6 +99,10 @@ else:
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", f"ansys{version}")
         for version in VERSIONS
     ]
+    DYNA_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", f"lsdyna{version}")
+        for version in VERSIONS
+    ]
     MAPDL_STUDENT_INSTALL_PATHS = [
         os.path.join(
             ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"ansys{version}"
@@ -105,6 +119,7 @@ else:
 
 LATEST_ANSYS_INSTALLATION_PATHS = ANSYS_INSTALLATION_PATHS[-1]
 LATEST_MAPDL_INSTALL_PATH = MAPDL_INSTALL_PATHS[-1]
+LATEST_DYNA_INSTALL_PATH = DYNA_INSTALL_PATHS[-1]
 LATEST_MECHANICAL_INSTALL_PATH = MECHANICAL_INSTALL_PATHS[-1]
 
 
@@ -136,7 +151,11 @@ def mock_filesystem_with_config(mock_filesystem):
     with open(config_location, "w") as config_file:
         config_file.write(
             json.dumps(
-                {"mapdl": LATEST_MAPDL_INSTALL_PATH, "mechanical": LATEST_MECHANICAL_INSTALL_PATH}
+                {
+                    "mapdl": LATEST_MAPDL_INSTALL_PATH,
+                    "mechanical": LATEST_MECHANICAL_INSTALL_PATH,
+                    "dyna": LATEST_DYNA_INSTALL_PATH,
+                }
             )
         )
     return mock_filesystem
@@ -275,6 +294,21 @@ def test_find_mapdl_without_student(mock_filesystem_without_student_versions):
     else:
         assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
 
+
+def test_find_dyna(mock_filesystem):
+    dyna_bin, dyna_version = find_dyna()
+    # windows filesystem being case insensive we need to make a case insensive comparison
+    if sys.platform == "win32":
+        assert (dyna_bin.lower(), dyna_version) == (LATEST_DYNA_INSTALL_PATH.lower(), 23.1)
+    else:
+        assert (dyna_bin, dyna_version) == (LATEST_DYNA_INSTALL_PATH, 23.1)
+
+def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
+    dyna_bin, dyna_version = find_dyna(21.1)
+    if sys.platform == "win32":
+        assert (dyna_bin.lower(), find_dyna) == (DYNA_INSTALL_PATHS[1].lower(), 21.1)
+    else:
+        assert (dyna_bin, find_dyna) == (DYNA_INSTALL_PATHS[1], 21.1)
 
 def test_find_mechanical(mock_filesystem):
     ansys_bin, ansys_version = find_mechanical()
