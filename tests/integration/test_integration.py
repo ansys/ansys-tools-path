@@ -5,11 +5,11 @@ import pytest
 
 from ansys.tools.path import (
     clear_configuration,
-    find_mapdl,
     find_dyna,
+    find_mapdl,
     get_available_ansys_installations,
-    save_mapdl_path,
     save_dyna_path,
+    save_mapdl_path,
 )
 from ansys.tools.path.path import CONFIG_FILE
 
@@ -59,6 +59,7 @@ def test_save_mapdl_path():
     if old_config is not None:
         with open(CONFIG_FILE, "w") as config_file:
             config_file.write(old_config)
+
 
 @skip_if_not_ansys_local
 @pytest.mark.linux

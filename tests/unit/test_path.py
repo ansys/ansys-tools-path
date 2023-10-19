@@ -12,8 +12,8 @@ from ansys.tools.path import (
     LOG,
     SETTINGS_DIR,
     change_default_ansys_path,
-    change_default_mapdl_path,
     change_default_dyna_path,
+    change_default_mapdl_path,
     change_default_mechanical_path,
     clear_configuration,
     find_ansys,
@@ -22,13 +22,13 @@ from ansys.tools.path import (
     find_mechanical,
     get_ansys_path,
     get_available_ansys_installations,
+    get_dyna_path,
     get_latest_ansys_installation,
     get_mapdl_path,
     get_mechanical_path,
-    get_dyna_path,
+    save_dyna_path,
     save_mapdl_path,
     save_mechanical_path,
-    save_dyna_path,
     version_from_path,
 )
 
@@ -303,12 +303,14 @@ def test_find_dyna(mock_filesystem):
     else:
         assert (dyna_bin, dyna_version) == (LATEST_DYNA_INSTALL_PATH, 23.1)
 
+
 def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
     dyna_bin, dyna_version = find_dyna(21.1)
     if sys.platform == "win32":
         assert (dyna_bin.lower(), find_dyna) == (DYNA_INSTALL_PATHS[1].lower(), 21.1)
     else:
         assert (dyna_bin, find_dyna) == (DYNA_INSTALL_PATHS[1], 21.1)
+
 
 def test_find_mechanical(mock_filesystem):
     ansys_bin, ansys_version = find_mechanical()
