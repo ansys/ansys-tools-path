@@ -44,6 +44,9 @@ PRODUCT_EXE_INFO = {
         "pattern": "ansysxxx",
         "patternpath": "vXXX/ansys/bin/ansysXXX",
     },
+    "dyna": {
+        "name": "Ansys LS-DYNA", # patternpath and pattern are not used for dyna
+    },
     "mechanical": {
         "name": "Ansys Mechanical",
     },
@@ -433,6 +436,9 @@ def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
             os.path.isfile(exe_loc)
             and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
         )
+    elif product == "dyna":
+        # dyna executable paths could be anything, really
+        return True
     elif product == "mechanical":
         if is_windows():  # pragma: no cover
             return (
@@ -465,7 +471,8 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
             and "ansys" in path
             and "bin" in path
         )
-
+    elif product == "dyna":
+        return "dyna" in exe_loc
     elif product == "mechanical":
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
@@ -766,9 +773,9 @@ def save_ansys_path(exe_loc: Optional[str] = None, allow_prompt: bool = True) ->
 
 
 def _check_uncommon_executable_path(product: PRODUCT_TYPE, exe_loc: str):
-    product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
-    product_name = PRODUCT_EXE_INFO[product]["name"]
     if not _is_common_executable_path(product, exe_loc):
+        product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
+        product_name = PRODUCT_EXE_INFO[product]["name"]
         warnings.warn(
             f"The supplied path ('{exe_loc}') does not match the usual {product_name} executable path style"
             f"('directory/{product_pattern_path}'). "

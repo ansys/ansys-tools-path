@@ -312,25 +312,25 @@ def test_find_dyna(mock_filesystem):
 def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
     dyna_bin, dyna_version = find_dyna(21.1)
     if sys.platform == "win32":
-        assert (dyna_bin.lower(), find_dyna) == (DYNA_INSTALL_PATHS[1].lower(), 21.1)
+        assert (dyna_bin.lower(), dyna_version) == (DYNA_INSTALL_PATHS[1].lower(), 21.1)
     else:
-        assert (dyna_bin, find_dyna) == (DYNA_INSTALL_PATHS[1], 21.1)
+        assert (dyna_bin, dyna_version) == (DYNA_INSTALL_PATHS[1], 21.1)
 
 
 def test_find_mechanical(mock_filesystem):
-    ansys_bin, ansys_version = find_mechanical()
+    mechanical_bin, mechanical_version = find_mechanical()
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
     else:
-        assert (ansys_bin, ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
+        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 
 
 def test_find_specific_mechanical(mock_filesystem, mock_awp_environment_variable):
-    ansys_bin, ansys_version = find_mechanical(21.1)
+    mechanical_bin, mechanical_version = find_mechanical(21.1)
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (MECHANICAL_INSTALL_PATHS[1].lower(), 21.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (MECHANICAL_INSTALL_PATHS[1].lower(), 21.1)
     else:
-        assert (ansys_bin, ansys_version) == (MECHANICAL_INSTALL_PATHS[1], 21.1)
+        assert (mechanical_bin, mechanical_version) == (MECHANICAL_INSTALL_PATHS[1], 21.1)
 
 
 def test_inexistant_mechanical(mock_filesystem):
@@ -339,11 +339,11 @@ def test_inexistant_mechanical(mock_filesystem):
 
 
 def test_find_mechanical_without_student(mock_filesystem_without_student_versions):
-    ansys_bin, ansys_version = find_mechanical()
+    mechanical_bin, mechanical_version = find_mechanical()
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
     else:
-        assert (ansys_bin, ansys_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
+        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 
 
 @pytest.mark.win32
