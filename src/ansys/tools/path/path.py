@@ -399,6 +399,7 @@ def find_dyna(
         ansys_bin = os.path.join(ans_path, "ansys", "bin", f"lsdyna{version}")
     return ansys_bin, int(version) / 10
 
+
 def _find_installation(
     product: PRODUCT_TYPE,
     version: Optional[float] = None,
