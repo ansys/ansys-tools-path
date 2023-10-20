@@ -47,6 +47,7 @@ test-output.xml
 /.ipynb_checkpoints
 
 .venv
+/env
 .DS_Store
 doc/_build/*/*
 
