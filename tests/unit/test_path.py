@@ -320,7 +320,10 @@ def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
 def test_find_mechanical(mock_filesystem):
     mechanical_bin, mechanical_version = find_mechanical()
     if sys.platform == "win32":
-        assert (mechanical_bin.lower(), mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (
+            LATEST_MECHANICAL_INSTALL_PATH.lower(),
+            23.1,
+        )
     else:
         assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 
@@ -328,7 +331,10 @@ def test_find_mechanical(mock_filesystem):
 def test_find_specific_mechanical(mock_filesystem, mock_awp_environment_variable):
     mechanical_bin, mechanical_version = find_mechanical(21.1)
     if sys.platform == "win32":
-        assert (mechanical_bin.lower(), mechanical_version) == (MECHANICAL_INSTALL_PATHS[1].lower(), 21.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (
+            MECHANICAL_INSTALL_PATHS[1].lower(),
+            21.1,
+        )
     else:
         assert (mechanical_bin, mechanical_version) == (MECHANICAL_INSTALL_PATHS[1], 21.1)
 
@@ -341,7 +347,10 @@ def test_inexistant_mechanical(mock_filesystem):
 def test_find_mechanical_without_student(mock_filesystem_without_student_versions):
     mechanical_bin, mechanical_version = find_mechanical()
     if sys.platform == "win32":
-        assert (mechanical_bin.lower(), mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH.lower(), 23.1)
+        assert (mechanical_bin.lower(), mechanical_version) == (
+            LATEST_MECHANICAL_INSTALL_PATH.lower(),
+            23.1,
+        )
     else:
         assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
 

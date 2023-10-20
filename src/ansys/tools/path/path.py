@@ -45,7 +45,7 @@ PRODUCT_EXE_INFO = {
         "patternpath": "vXXX/ansys/bin/ansysXXX",
     },
     "dyna": {
-        "name": "Ansys LS-DYNA", # patternpath and pattern are not used for dyna
+        "name": "Ansys LS-DYNA",  # patternpath and pattern are not used for dyna
     },
     "mechanical": {
         "name": "Ansys Mechanical",
