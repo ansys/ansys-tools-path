@@ -26,9 +26,10 @@ import click
 
 from ansys.tools.path.path import _save_path
 
+
 @click.command()
 @click.help_option("--help", "-h")
-@click.argument('location')
+@click.argument("location")
 @click.option(
     "--name",
     default=None,
