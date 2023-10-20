@@ -116,7 +116,9 @@ else:
         for version in VERSIONS
     ]
     DYNA_STUDENT_INSTALL_PATHS = [
-        os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"lsdyna{version}")
+        os.path.join(
+            ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"lsdyna{version}"
+        )
         for version in VERSIONS
     ]
     MAPDL_STUDENT_INSTALL_PATHS = [
