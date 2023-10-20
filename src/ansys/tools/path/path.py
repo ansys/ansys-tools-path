@@ -784,21 +784,29 @@ def _check_uncommon_executable_path(product: PRODUCT_TYPE, exe_loc: str):
 
 
 def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
-    product_name = PRODUCT_EXE_INFO[product]["name"]
-    product_pattern = PRODUCT_EXE_INFO[product]["pattern"]
-    product_pattern_path = PRODUCT_EXE_INFO[product]["patternpath"]
+    product_info = PRODUCT_EXE_INFO[product]
+    product_name = product_info["name"]
+    has_pattern = "pattern" in product_info and "patternpath" in product_info
     print(f"Cached {product} executable not found")
+    print(f"You are about to enter manually the path of the {product_name} executable\n")
+    if has_pattern:
+        product_pattern = product_info["pattern"]
+        product_pattern_path = product_info["patternpath"]
+        print(
+            f"({product_pattern}, where XXX is the version\n"
+            f"This file is very likely to contained in path ending in '{product_pattern_path}'.\n"
+        )
     print(
-        f"You are about to enter manually the path of the {product_name} executable\n"
-        f"({product_pattern}, where XXX is the version\n"
-        f"This file is very likely to contained in path ending in '{product_pattern_path}'.\n"
         "\nIf you experience problems with the input path you can overwrite the configuration\n"
         "file by typing:\n"
         f">>> from ansys.tools.path import save_{product}_path\n"
         f">>> save_{product}_path('/new/path/to/executable/')\n"
     )
     while True:
-        exe_loc = input(f"Enter the location of an {product_name} ({product_pattern}):")
+        if has_pattern:
+            exe_loc = input(f"Enter the location of {product_name} ({product_pattern}):")
+        else:
+            exe_loc = input(f"Enter the location of {product_name}:")
 
         if is_valid_executable_path(product, exe_loc):
             _check_uncommon_executable_path(product, exe_loc)
@@ -807,9 +815,12 @@ def _prompt_path(product: PRODUCT_TYPE) -> str:  # pragma: no cover
             _write_config_file(config_data)
             break
         else:
-            print(
-                f"The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
-            )
+            if has_pattern:
+                print(
+                    f"The supplied path is either: not a valid file path, or does not match '{product_pattern}' name."
+                )
+            else:
+                print(f"The supplied path is either: not a valid file path.")
     return exe_loc
 
 
@@ -933,7 +944,7 @@ def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Option
 
 
 def _get_application_path(
-    product: PRODUCT_TYPE, allow_input: bool = True, version: Optional[float] = None
+    product: PRODUCT_TYPE, allow_input: bool = True, version: Optional[float] = None, find: bool = True
 ) -> Optional[str]:
     if version is None:
         exe_loc = _read_executable_path_from_config_file(product)
@@ -942,14 +953,15 @@ def _get_application_path(
 
     LOG.debug(f"{product} path not found in config file")
 
-    try:
-        exe_loc, exe_version = _find_installation(product, version)
-        if (exe_loc, exe_version) != ("", ""):  # executable not found
-            if os.path.isfile(exe_loc):
-                return exe_loc
-    except ValueError:
-        # Skip to go out of the if statement
-        pass
+    if find:
+        try:
+            exe_loc, exe_version = _find_installation(product, version)
+            if (exe_loc, exe_version) != ("", ""):  # executable not found
+                if os.path.isfile(exe_loc):
+                    return exe_loc
+        except ValueError:
+            # Skip to go out of the if statement
+            pass
 
     if allow_input:
         exe_loc = _prompt_path(product)
@@ -959,8 +971,12 @@ def _get_application_path(
     return None
 
 
-def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None) -> Optional[str]:
-    """Acquires Ansys MAPDL Path from a cached file or user input
+def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
+    """Acquires Ansys MAPDL Path:
+
+    First, it looks in the configuration file, used by `save_mapdl_path`
+    Then, it tries to find it based on conventions for where it usually is.
+    Lastly, it takes user input
 
     Parameters
     ----------
@@ -971,12 +987,19 @@ def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None) ->
         Version of Ansys MAPDL to search for. For example ``version=22.2``.
         If ``None``, use latest.
 
+    find: bool, optional
+        Allow ansys-tools-path to search for Ansys Mechanical in typical installation locations
+
     """
-    return _get_application_path("mapdl", allow_input, version)
+    return _get_application_path("mapdl", allow_input, version, find)
 
 
-def get_dyna_path(allow_input: bool = True, version: Optional[float] = None) -> Optional[str]:
+def get_dyna_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
     """Acquires Ansys LS-Dyna Path from a cached file or user input
+
+    First, it looks in the configuration file, used by `save_dyna_path`
+    Then, it tries to find it based on conventions for where it usually is.
+    Lastly, it takes user input
 
     Parameters
     ----------
@@ -987,8 +1010,11 @@ def get_dyna_path(allow_input: bool = True, version: Optional[float] = None) -> 
         Version of Ansys LS-Dyna to search for. For example ``version=22.2``.
         If ``None``, use latest.
 
+    find: bool, optional
+        Allow ansys-tools-path to search for Ansys Mechanical in typical installation locations
+
     """
-    return _get_application_path("dyna", allow_input, version)
+    return _get_application_path("dyna", allow_input, version, find)
 
 
 def get_ansys_path(allow_input: bool = True, version: Optional[float] = None) -> Optional[str]:
@@ -998,11 +1024,15 @@ def get_ansys_path(allow_input: bool = True, version: Optional[float] = None) ->
         "This method is going to be deprecated in future versions. Please use 'get_mapdl_path'.",
         category=DeprecationWarning,
     )
-    return _get_application_path("mapdl", allow_input, version)
+    return _get_application_path("mapdl", allow_input, version, True)
 
 
-def get_mechanical_path(allow_input: bool = True, version: Optional[float] = None) -> Optional[str]:
-    """Acquires Ansys Mechanical Path from a cached file or user input
+def get_mechanical_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
+    """Acquires Ansys Mechanical Path
+
+    First, it looks in the configuration file, used by `save_mechanical_path`
+    Then, it tries to find it based on conventions for where it usually is.
+    Lastly, it takes user input
 
     Parameters
     ----------
@@ -1013,8 +1043,11 @@ def get_mechanical_path(allow_input: bool = True, version: Optional[float] = Non
         Version of Ansys Mechanical to search for. For example ``version=22.2``.
         If ``None``, use latest.
 
+    find: bool, optional
+        Allow ansys-tools-path to search for Ansys Mechanical in typical installation locations
+
     """
-    return _get_application_path("mechanical", allow_input, version)
+    return _get_application_path("mechanical", allow_input, version, find)
 
 
 def _mechanical_version_from_path(path: str) -> int:

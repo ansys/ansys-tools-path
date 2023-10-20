@@ -28,6 +28,7 @@ classifiers = [
 ]
 dependencies = [
     "platformdirs>=3.6.0",
+    "click>=8.1.3", # for CLI interface
 ]
 
 
@@ -52,6 +53,9 @@ build = [
 
 [tool.flit.module]
 name = "ansys.tools.path"
+
+[project.scripts]
+save-ansys-path = "ansys.tools.path.save:cli"
 
 [project.urls]
 Source = "https://github.com/ansys/ansys-tools-path"
