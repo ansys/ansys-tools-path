@@ -555,7 +555,7 @@ def change_default_dyna_path(exe_loc: str) -> None:
 
     Change default Ansys LS-Dyna location on Windows
 
-    >>> dyna_path = 'C:/Program Files/ANSYS Inc/v1232/ansys/bin/winx64/LSDYNA232.exe'
+    >>> dyna_path = 'C:/Program Files/ANSYS Inc/v232/ansys/bin/winx64/LSDYNA232.exe'
     >>> change_default_dyna_path(dyna_path)
 
     """
