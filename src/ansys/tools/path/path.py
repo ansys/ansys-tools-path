@@ -944,7 +944,10 @@ def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Option
 
 
 def _get_application_path(
-    product: PRODUCT_TYPE, allow_input: bool = True, version: Optional[float] = None, find: bool = True
+    product: PRODUCT_TYPE,
+    allow_input: bool = True,
+    version: Optional[float] = None,
+    find: bool = True,
 ) -> Optional[str]:
     if version is None:
         exe_loc = _read_executable_path_from_config_file(product)
@@ -971,7 +974,9 @@ def _get_application_path(
     return None
 
 
-def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
+def get_mapdl_path(
+    allow_input: bool = True, version: Optional[float] = None, find: bool = True
+) -> Optional[str]:
     """Acquires Ansys MAPDL Path:
 
     First, it looks in the configuration file, used by `save_mapdl_path`
@@ -994,7 +999,9 @@ def get_mapdl_path(allow_input: bool = True, version: Optional[float] = None, fi
     return _get_application_path("mapdl", allow_input, version, find)
 
 
-def get_dyna_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
+def get_dyna_path(
+    allow_input: bool = True, version: Optional[float] = None, find: bool = True
+) -> Optional[str]:
     """Acquires Ansys LS-Dyna Path from a cached file or user input
 
     First, it looks in the configuration file, used by `save_dyna_path`
@@ -1027,7 +1034,9 @@ def get_ansys_path(allow_input: bool = True, version: Optional[float] = None) ->
     return _get_application_path("mapdl", allow_input, version, True)
 
 
-def get_mechanical_path(allow_input: bool = True, version: Optional[float] = None, find: bool = True) -> Optional[str]:
+def get_mechanical_path(
+    allow_input: bool = True, version: Optional[float] = None, find: bool = True
+) -> Optional[str]:
     """Acquires Ansys Mechanical Path
 
     First, it looks in the configuration file, used by `save_mechanical_path`
