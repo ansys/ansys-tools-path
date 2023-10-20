@@ -580,6 +580,10 @@ def test_clear_config_file(mock_filesystem_with_config):
         assert "mapdl" not in content
         assert content["mechanical"] is not None
     clear_configuration("mechanical")
+    with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
+        content = json.loads(file.read())
+        assert "mechanical" not in content
+    clear_configuration("dyna")
     assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
     with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
         content = json.loads(file.read())
