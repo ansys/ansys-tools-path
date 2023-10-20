@@ -58,6 +58,18 @@ if sys.platform == "win32":
         )
         for version in VERSIONS
     ]
+    DYNA_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH,
+            "ANSYS Student",
+            f"v{version}",
+            "ansys",
+            "bin",
+            "winx64",
+            f"lsdyna{version}.exe",
+        )
+        for version in STUDENT_VERSIONS
+    ]
     MAPDL_STUDENT_INSTALL_PATHS = [
         os.path.join(
             ANSYS_BASE_PATH,
@@ -103,6 +115,10 @@ else:
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "ansys", "bin", f"lsdyna{version}")
         for version in VERSIONS
     ]
+    DYNA_STUDENT_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"lsdyna{version}")
+        for version in VERSIONS
+    ]
     MAPDL_STUDENT_INSTALL_PATHS = [
         os.path.join(
             ANSYS_BASE_PATH, "ANSYS Student", f"v{version}", "ansys", "bin", f"ansys{version}"
@@ -129,6 +145,8 @@ def mock_filesystem(fs):
         fs.create_file(mapdl_install_path)
     for mechanical_install_path in MECHANICAL_INSTALL_PATHS + MECHANICAL_STUDENT_INSTALL_PATHS:
         fs.create_file(mechanical_install_path)
+    for dyna_install_path in DYNA_INSTALL_PATHS + DYNA_STUDENT_INSTALL_PATHS:
+        fs.create_file(dyna_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
     return fs
 
@@ -139,6 +157,8 @@ def mock_filesystem_without_student_versions(fs):
         fs.create_file(mapdl_install_path)
     for mechanical_install_path in MECHANICAL_INSTALL_PATHS:
         fs.create_file(mechanical_install_path)
+    for dyna_install_path in DYNA_INSTALL_PATHS:
+        fs.create_file(dyna_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
 
 
