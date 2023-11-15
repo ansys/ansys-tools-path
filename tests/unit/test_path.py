@@ -38,7 +38,7 @@ from ansys.tools.path import (
 
 LOG.setLevel(logging.DEBUG)
 
-VERSIONS = [202, 211, 231]
+VERSIONS = [202, 211, 231, 241]
 STUDENT_VERSIONS = [201, 211]
 
 if sys.platform == "win32":
@@ -106,6 +106,18 @@ if sys.platform == "win32":
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", "bin", "winx64", "DSSolverProxy2.exe")
         for version in VERSIONS
     ]
+    AMK_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH,
+            "ANSYS Student",
+            f"v{version}",
+            "aisol",
+            "bin",
+            "winx64",
+            "dssolverproxy2.exe",
+        )
+        for version in STUDENT_VERSIONS
+    ]
 else:
     ANSYS_BASE_PATH = "/ansys_inc"
     ANSYS_INSTALLATION_PATHS = [
@@ -139,6 +151,18 @@ else:
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", "bin", "linx64", "DSSolverProxy2.exe")
         for version in VERSIONS
     ]
+    AMK_STUDENT_INSTALL_PATHS = [
+        os.path.join(
+            ANSYS_BASE_PATH,
+            "ANSYS Student",
+            f"v{version}",
+            "aisol",
+            "bin",
+            "linx64",
+            "DSSolverProxy2.exe",
+        )
+        for version in STUDENT_VERSIONS
+    ]
     MECHANICAL_INSTALL_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", ".workbench") for version in VERSIONS
     ]
@@ -162,6 +186,8 @@ def mock_filesystem(fs):
         fs.create_file(mechanical_install_path)
     for dyna_install_path in DYNA_INSTALL_PATHS + DYNA_STUDENT_INSTALL_PATHS:
         fs.create_file(dyna_install_path)
+    for amk_install_path in AMK_INSTALL_PATHS + AMK_STUDENT_INSTALL_PATHS:
+        fs.create_file(amk_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
     return fs
 
@@ -293,7 +319,7 @@ def test_change_default_mechanical_path(mock_filesystem):
 
 
 def test_change_default_amk_path(mock_filesystem):
-    change_default_amk_path(AMK_INSTALL_PATHS[1])
+    change_default_amk_path(AMK_INSTALL_PATHS[3])
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
@@ -364,7 +390,7 @@ def test_find_amk(mock_filesystem):
     if sys.platform == "win32":
         assert (amk_bin.lower(), mechanical_version) == (
             LATEST_AMK_INSTALL_PATH.lower(),
-            23.1,
+            24.1,
         )
     else:
         assert (amk_bin, mechanical_version) == (LATEST_AMK_INSTALL_PATH, 23.1)
@@ -375,7 +401,7 @@ def test_find_specific_amk(mock_filesystem, mock_awp_environment_variable):
     if sys.platform == "win32":
         assert (amk_bin.lower(), mechanical_version) == (
             AMK_INSTALL_PATHS[1].lower(),
-            21.1,
+            24.1,
         )
     else:
         assert (amk_bin, mechanical_version) == (AMK_INSTALL_PATHS[1], 21.1)
@@ -384,6 +410,17 @@ def test_find_specific_amk(mock_filesystem, mock_awp_environment_variable):
 def test_inexistant_amk(mock_filesystem):
     with pytest.raises(ValueError):
         find_amk(21.6)
+
+
+def test_find_amk_without_student(mock_filesystem_without_student_versions):
+    amk_bin, amk_version = find_amk()
+    if sys.platform == "win32":
+        assert (amk_bin.lower(), amk_version) == (
+            LATEST_AMK_INSTALL_PATH.lower(),
+            24.1,
+        )
+    else:
+        assert (amk_bin, amk_version) == (LATEST_AMK_INSTALL_PATH, 23.1)
 
 
 def test_find_mechanical(mock_filesystem):
@@ -501,7 +538,7 @@ def test_get_amk_path_custom(mock_filesystem):
 
 
 def test_get_amk_specific(mock_filesystem):
-    amk_path = get_amk_path(version=23.1)
+    amk_path = get_amk_path(version=24.1)
     assert amk_path is not None
     if sys.platform == "win32":
         assert amk_path.lower() == LATEST_AMK_INSTALL_PATH.lower()
