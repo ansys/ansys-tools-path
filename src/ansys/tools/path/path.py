@@ -577,7 +577,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
             and "aisol" in path
             and "bin" in path
             and "linx64" in path
-            and "DSSolverProxy2.exe" in path
+            and "dssolverproxy2.exe" in path
         )
     else:
         raise Exception("unexpected application")
