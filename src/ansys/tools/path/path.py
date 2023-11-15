@@ -13,7 +13,7 @@ from ansys.tools.path.misc import is_float, is_linux, is_windows
 
 LOG = logging.getLogger(__name__)
 
-PRODUCT_TYPE = Literal["mapdl", "mechanical"]
+PRODUCT_TYPE = Literal["mapdl", "mechanical", "dyna", "amk"]
 SUPPORTED_VERSIONS_TYPE = Dict[int, str]
 
 LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
@@ -22,6 +22,7 @@ LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 CONFIG_FILE_NAME = "config.txt"
 
 SUPPORTED_ANSYS_VERSIONS: SUPPORTED_VERSIONS_TYPE = {
+    242: "2024R2",
     241: "2024R1",
     232: "2023R2",
     231: "2023R1",
@@ -49,6 +50,11 @@ PRODUCT_EXE_INFO = {
     },
     "mechanical": {
         "name": "Ansys Mechanical",
+    },
+    "amk": {
+        "name": "Ansys Mechanical Kernel",
+        "pattern": "DSSolverProxy2",
+        "patternpath": "vXXX/aisol/bin/linx64/DSSolverProxy2.exe",
     },
 }
 
@@ -263,6 +269,39 @@ def _get_unified_install_base_for_version(
     return ans_path, str(version)
 
 
+def find_amk(
+    version: Optional[float] = None,
+    supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
+) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
+    """
+    Search for the Ansys Mechanical Kernel path in the standard installation location.
+
+    Returns
+    -------
+    amk_path : str
+        Full path to the executable file for the latest AMK version.
+    version : float | str
+        Version in the float format. For example, ``24.1`` for 2023 R1.
+        If no version has be found, version is set to ""
+
+    Examples
+    --------
+    On Linux:
+
+    >>> from ansys.mechanical.core.mechanical import find_amk
+    >>> find_amk()
+    (/usr/ansys_inc/v241/aisol/bin/linx64/DSSolverProxy2.exe, 24.1)
+    """
+    ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
+    if not ans_path or not version:
+        return "", ""
+    if is_windows():  # pragma: no cover
+        amk_path: str = os.path.join(ans_path, "aisol", "bin", "winx64", "DSSolverProxy2.exe")
+    else:
+        amk_path: str = os.path.join(ans_path, "aisol", "bin", "linx64", "DSSolverProxy2.exe")
+    return amk_path, int(version) / 10
+
+
 def find_mechanical(
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
@@ -291,7 +330,7 @@ def find_mechanical(
     >>> find_mechanical()
     (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
     """
-    ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
         return "", ""
     if is_windows():  # pragma: no cover
@@ -341,7 +380,7 @@ def find_mapdl(
     >>> find_mapdl()
     (/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)
     """
-    ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
         return "", ""
 
@@ -392,7 +431,7 @@ def find_dyna(
     >>> find_dyna()
     (/usr/ansys_inc/v232/ansys/bin/lsdyna232, 23.2)
     """
-    ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
+    ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
         return "", ""
 
@@ -414,6 +453,8 @@ def _find_installation(
         return find_mechanical(version, supported_versions)
     elif product == "dyna":
         return find_dyna(version, supported_versions)
+    elif product == "amk":
+        return find_amk(version, supported_versions)
     raise Exception("unexpected product")
 
 
@@ -451,6 +492,14 @@ def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         return (
             os.path.isfile(exe_loc)
             and re.search(".workbench", os.path.basename(os.path.normpath(exe_loc))) is not None
+        )
+    elif product == "amk":
+        return (
+            os.path.isfile(exe_loc)
+            and re.search(
+                "DSSolverProxy2.exe", os.path.basename(os.path.normpath(exe_loc)), re.IGNORECASE
+            )
+            is not None
         )
     raise Exception("unexpected application")
 
@@ -495,6 +544,31 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
             and re.search(r"v\d\d\d", exe_loc) is not None
             and "aisol" in path
             and ".workbench" in path
+        )
+    elif product == "amk":
+        path = os.path.normpath(exe_loc)
+        path = path.split(os.sep)
+
+        is_valid_path = is_valid_executable_path("amk", exe_loc)
+
+        if is_windows():  # pragma: no cover
+            lower_case_path = map(str.lower, path)
+            return (
+                is_valid_path
+                and re.search(r"v\d\d\d", exe_loc) is not None
+                and "aisol" in lower_case_path
+                and "bin" in lower_case_path
+                and "winx64" in lower_case_path
+                and "dssolverproxy2.exe" in lower_case_path
+            )
+
+        return (
+            is_valid_path
+            and re.search(r"v\d\d\d", exe_loc) is not None
+            and "aisol" in path
+            and "bin" in path
+            and "linx64" in path
+            and "DSSolverProxy2.exe" in path
         )
     else:
         raise Exception("unexpected application")
@@ -562,6 +636,34 @@ def change_default_dyna_path(exe_loc: str) -> None:
     _change_default_path("dyna", exe_loc)
 
 
+def change_default_amk_path(exe_loc: str) -> None:
+    """Change your default AMK path.
+
+    Parameters
+    ----------
+    exe_loc : str
+        Full path for the Ansys Mechanical Kernel executable file to use.
+
+    Examples
+    --------
+    On Windows:
+
+    >>> from ansys.tools.path import change_default_amk_path, get_amk_path
+    >>> change_default_amk_path('C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/DSSolverProxy2.exe')
+    >>> get_amk_path()
+    'C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/DSSolverProxy2.exe'
+
+    On Linux:
+
+    >>> from ansys.tools.path import change_default_amk_path, get_amk_path
+    >>> change_default_amk_path('/ansys_inc/v231/aisol/bin/linx64/DSSolverProxy2.exe')
+    >>> get_amk_path()
+    /ansys_inc/v231/aisol/bin/linx64/DSSolverProxy2.exe'
+
+    """
+    _change_default_path("amk", exe_loc)
+
+
 def change_default_mechanical_path(exe_loc: str) -> None:
     """Change your default Mechanical path.
 
@@ -616,6 +718,56 @@ def _save_path(
     if allow_prompt:
         exe_loc = _prompt_path(product)  # pragma: no cover
     return exe_loc
+
+
+def save_amk_path(
+    exe_loc: Optional[str] = None, allow_prompt: bool = True
+) -> str:  # pragma: no cover
+    """Find the Ansys Mechanical Kernel path or query user.
+
+    Parameters
+    ----------
+    exe_loc : string, optional
+        Path for the AMK executable file (``DSSolverProxy2.exe``).
+        The default is ``None``, in which case an attempt is made to
+        obtain the path from the following sources in this order:
+
+        - The default AMK paths (for example,
+          ``C:/Program Files/Ansys Inc/vXXX/aiso/bin/winx64/DSSolverProxy2.exe``)
+        - The configuration file
+        - User input
+
+        If a path is supplied, this method performs some checks. If the
+        checks are successful, it writes this path to the configuration
+        file.
+
+    Returns
+    -------
+    str
+        Path for the Ansys Mechanical Kernel executable file.
+
+    Notes
+    -----
+    The location of the configuration file ``config.txt`` can be found in
+    ``ansys.tools.path.SETTINGS_DIR``. For example:
+
+    .. code:: pycon
+
+        >>> from ansys.tools.path import SETTINGS_DIR
+        >>> import os
+        >>> print(os.path.join(SETTINGS_DIR, "config.txt"))
+        C:/Users/[username]]/AppData/Local/Ansys/ansys_tools_path/config.txt
+
+    You can change the default for the ``exe_loc`` parameter either by modifying the
+    ``config.txt`` file or by running this code:
+
+    .. code:: pycon
+
+       >>> from ansys.tools.path import save_amk_path
+       >>> save_amk_path("/new/path/to/executable")
+
+    """
+    return _save_path("amk", exe_loc, allow_prompt)
 
 
 def save_mechanical_path(
@@ -1032,6 +1184,31 @@ def get_ansys_path(allow_input: bool = True, version: Optional[float] = None) ->
         category=DeprecationWarning,
     )
     return _get_application_path("mapdl", allow_input, version, True)
+
+
+def get_amk_path(
+    allow_input: bool = True, version: Optional[float] = None, find: bool = True
+) -> Optional[str]:
+    """Acquires Ansys Mechanical Kernel Path
+
+    First, it looks in the configuration file, used by `save_amk_path`
+    Then, it tries to find it based on conventions for where it usually is.
+    Lastly, it takes user input
+
+    Parameters
+    ----------
+    allow_input : bool, optional
+        Allow user input to find Ansys Mechanical Kernel path.  The default is ``True``.
+
+    version : float, optional
+        Version of Ansys Mechanical to search for. For example ``version=22.2``.
+        If ``None``, use latest.
+
+    find: bool, optional
+        Allow ansys-tools-path to search for Ansys Mechanical Kernel in typical installation locations
+
+    """
+    return _get_application_path("amk", allow_input, version, find)
 
 
 def get_mechanical_path(

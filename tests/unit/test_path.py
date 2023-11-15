@@ -11,21 +11,25 @@ import pytest
 from ansys.tools.path import (
     LOG,
     SETTINGS_DIR,
+    change_default_amk_path,
     change_default_ansys_path,
     change_default_dyna_path,
     change_default_mapdl_path,
     change_default_mechanical_path,
     clear_configuration,
+    find_amk,
     find_ansys,
     find_dyna,
     find_mapdl,
     find_mechanical,
+    get_amk_path,
     get_ansys_path,
     get_available_ansys_installations,
     get_dyna_path,
     get_latest_ansys_installation,
     get_mapdl_path,
     get_mechanical_path,
+    save_amk_path,
     save_dyna_path,
     save_mapdl_path,
     save_mechanical_path,
@@ -98,6 +102,10 @@ if sys.platform == "win32":
         )
         for version in STUDENT_VERSIONS
     ]
+    AMK_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", "bin", "winx64", "DSSolverProxy2.exe")
+        for version in VERSIONS
+    ]
 else:
     ANSYS_BASE_PATH = "/ansys_inc"
     ANSYS_INSTALLATION_PATHS = [
@@ -127,6 +135,10 @@ else:
         )
         for version in STUDENT_VERSIONS
     ]
+    AMK_INSTALL_PATHS = [
+        os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", "bin", "linx64", "DSSolverProxy2.exe")
+        for version in VERSIONS
+    ]
     MECHANICAL_INSTALL_PATHS = [
         os.path.join(ANSYS_BASE_PATH, f"v{version}", "aisol", ".workbench") for version in VERSIONS
     ]
@@ -139,6 +151,7 @@ LATEST_ANSYS_INSTALLATION_PATHS = ANSYS_INSTALLATION_PATHS[-1]
 LATEST_MAPDL_INSTALL_PATH = MAPDL_INSTALL_PATHS[-1]
 LATEST_DYNA_INSTALL_PATH = DYNA_INSTALL_PATHS[-1]
 LATEST_MECHANICAL_INSTALL_PATH = MECHANICAL_INSTALL_PATHS[-1]
+LATEST_AMK_INSTALL_PATH = AMK_INSTALL_PATHS[-1]
 
 
 @pytest.fixture
@@ -161,6 +174,8 @@ def mock_filesystem_without_student_versions(fs):
         fs.create_file(mechanical_install_path)
     for dyna_install_path in DYNA_INSTALL_PATHS:
         fs.create_file(dyna_install_path)
+    for amk_install_path in AMK_INSTALL_PATHS:
+        fs.create_file(amk_install_path)
     fs.create_dir(platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys"))
 
 
@@ -177,6 +192,7 @@ def mock_filesystem_with_config(mock_filesystem):
                     "mapdl": LATEST_MAPDL_INSTALL_PATH,
                     "mechanical": LATEST_MECHANICAL_INSTALL_PATH,
                     "dyna": LATEST_DYNA_INSTALL_PATH,
+                    "amk": LATEST_AMK_INSTALL_PATH,
                 }
             )
         )
@@ -276,6 +292,10 @@ def test_change_default_mechanical_path(mock_filesystem):
     change_default_mechanical_path(MECHANICAL_INSTALL_PATHS[1])
 
 
+def test_change_default_amk_path(mock_filesystem):
+    change_default_amk_path(AMK_INSTALL_PATHS[1])
+
+
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
 def test_find_ansys(mock_filesystem):
     ansys_bin, ansys_version = find_ansys()
@@ -337,6 +357,33 @@ def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
         assert (dyna_bin.lower(), dyna_version) == (DYNA_INSTALL_PATHS[1].lower(), 21.1)
     else:
         assert (dyna_bin, dyna_version) == (DYNA_INSTALL_PATHS[1], 21.1)
+
+
+def test_find_amk(mock_filesystem):
+    amk_bin, mechanical_version = find_amk()
+    if sys.platform == "win32":
+        assert (amk_bin.lower(), mechanical_version) == (
+            LATEST_AMK_INSTALL_PATH.lower(),
+            23.1,
+        )
+    else:
+        assert (amk_bin, mechanical_version) == (LATEST_AMK_INSTALL_PATH, 23.1)
+
+
+def test_find_specific_amk(mock_filesystem, mock_awp_environment_variable):
+    amk_bin, mechanical_version = find_amk(21.1)
+    if sys.platform == "win32":
+        assert (amk_bin.lower(), mechanical_version) == (
+            AMK_INSTALL_PATHS[1].lower(),
+            21.1,
+        )
+    else:
+        assert (amk_bin, mechanical_version) == (AMK_INSTALL_PATHS[1], 21.1)
+
+
+def test_inexistant_amk(mock_filesystem):
+    with pytest.raises(ValueError):
+        find_amk(21.6)
 
 
 def test_find_mechanical(mock_filesystem):
@@ -429,6 +476,39 @@ def test_get_dyna_path(mock_filesystem_with_config):
         assert dyna_path == LATEST_DYNA_INSTALL_PATH
 
 
+def test_get_amk_path(mock_filesystem_with_config):
+    amk_path = get_amk_path()
+    if sys.platform == "win32":
+        assert amk_path is not None
+        assert amk_path.lower() == LATEST_AMK_INSTALL_PATH.lower()
+    else:
+        assert amk_path == LATEST_AMK_INSTALL_PATH
+
+
+def test_get_amk_path_custom(mock_filesystem):
+    """this test will make the function ask for the path to the installation
+    and mock the input with LATEST_AMK_PATH.
+    Doing this (even if the version and the install path don't match)
+    allow to check that we can enter a path for a version not detected"""
+    with patch("builtins.input", side_effect=[LATEST_AMK_INSTALL_PATH]):
+        amk_path = get_amk_path(True, version=193)
+        assert amk_path is not None
+        if sys.platform == "win32":
+            assert amk_path.lower() == LATEST_AMK_INSTALL_PATH.lower()
+        else:
+            assert amk_path == LATEST_AMK_INSTALL_PATH
+    assert get_amk_path(False, version=193) is None
+
+
+def test_get_amk_specific(mock_filesystem):
+    amk_path = get_amk_path(version=23.1)
+    assert amk_path is not None
+    if sys.platform == "win32":
+        assert amk_path.lower() == LATEST_AMK_INSTALL_PATH.lower()
+    else:
+        assert amk_path == LATEST_AMK_INSTALL_PATH
+
+
 def test_get_mechanical_path(mock_filesystem_with_config):
     mechanical_path = get_mechanical_path()
     if sys.platform == "win32":
@@ -498,6 +578,18 @@ def test_save_dyna_path(mock_filesystem):
             assert json_file == {"dyna": LATEST_DYNA_INSTALL_PATH.lower()}
         else:
             assert json_file == {"dyna": LATEST_DYNA_INSTALL_PATH}
+
+
+def test_save_amk_path(mock_filesystem):
+    save_amk_path()
+    with open(os.path.join(SETTINGS_DIR, "config.txt")) as file:
+        content = file.read()
+        json_file = json.loads(content)
+        json_file = {key: val.lower() for key, val in json_file.items()}
+        if sys.platform == "win32":
+            assert json_file == {"amk": LATEST_AMK_INSTALL_PATH.lower()}
+        else:
+            assert json_file == {"amk": LATEST_AMK_INSTALL_PATH}
 
 
 def test_save_mechanical_path(mock_filesystem):

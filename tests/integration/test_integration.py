@@ -5,6 +5,7 @@ import pytest
 
 from ansys.tools.path import (
     clear_configuration,
+    find_amk,
     find_mapdl,
     get_available_ansys_installations,
     save_mapdl_path,
@@ -14,6 +15,13 @@ from ansys.tools.path.path import CONFIG_FILE
 skip_if_not_ansys_local = pytest.mark.skipif(
     os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
 )
+
+
+@skip_if_not_ansys_local
+def test_find_amk():
+    bin_file, ver = find_amk()
+    assert os.path.isfile(bin_file)
+    assert ver != ""
 
 
 @skip_if_not_ansys_local
