@@ -39,6 +39,13 @@ SUPPORTED_ANSYS_VERSIONS: SUPPORTED_VERSIONS_TYPE = {
     191: "19.1",
 }
 
+SUPPORTED_AMK_VERSIONS: SUPPORTED_VERSIONS_TYPE = {
+    242: "2024R2",
+    241: "2024R1",
+    232: "2023R2",
+    231: "2023R1",
+}
+
 PRODUCT_EXE_INFO = {
     "mapdl": {
         "name": "Ansys MAPDL",
@@ -273,7 +280,7 @@ def _get_unified_install_base_for_version(
 
 def find_amk(
     version: Optional[float] = None,
-    supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
+    supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_AMK_VERSIONS,
 ) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
     """
     Search for the Ansys Mechanical Kernel path in the standard installation location.
