@@ -53,17 +53,19 @@ PRODUCT_EXE_INFO = {
     },
     "amk": {
         "name": "Ansys Mechanical Kernel",
-        "pattern": "DSSolverProxy2",
-        "patternpath": "vXXX/aisol/bin/linx64/DSSolverProxy2.exe",
     },
 }
 
 if is_windows():  # pragma: no cover
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
+    PRODUCT_EXE_INFO["amk"]["patternpath"] = "vXXX/aisol/bin/winx64/DSSolverProxy2.exe"
+    PRODUCT_EXE_INFO["amk"]["pattern"] = "DSSolverProxy2.exe"
 else:
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/.workbench"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
+    PRODUCT_EXE_INFO["amk"]["patternpath"] = "vXXX/aisol/bin/linx64/DSSolverProxy2.exe"
+    PRODUCT_EXE_INFO["amk"]["pattern"] = "DSSolverProxy2.exe"
 
 # settings directory
 SETTINGS_DIR = platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
