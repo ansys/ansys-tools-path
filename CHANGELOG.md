@@ -15,3 +15,9 @@ Further information about contributing to ansys-tools-path can be found in
 [ansys-tools-path github page](https://github.com/ansys/ansys-tools-path).
 
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/
+
+
+## <a name="0.4.dev1">0.4.dev1 - November 15th 2023 - Support Ansys Mechanical Kernel as Product</a>
+### What's Changed:
+    - Support Ansys Mechanical Kernel as a product.
+    - Support Mechanical version 24.2
