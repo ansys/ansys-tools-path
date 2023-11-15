@@ -293,13 +293,13 @@ def find_amk(
     (/usr/ansys_inc/v241/aisol/bin/linx64/DSSolverProxy2.exe, 24.1)
     """
     ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
-    if not ans_path or not version:
+    if not ans_path or not ans_version:
         return "", ""
     if is_windows():  # pragma: no cover
         amk_path: str = os.path.join(ans_path, "aisol", "bin", "winx64", "DSSolverProxy2.exe")
     else:
         amk_path: str = os.path.join(ans_path, "aisol", "bin", "linx64", "DSSolverProxy2.exe")
-    return amk_path, int(version) / 10
+    return amk_path, int(ans_version) / 10
 
 
 def find_mechanical(
