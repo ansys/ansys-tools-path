@@ -396,7 +396,7 @@ def find_mapdl(
     if is_windows():
         ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"ansys{ans_version}.exe")
     else:
-        ansys_bin = os.path.join(ans_path, "ansys", "bin", f"ansys{version}")
+        ansys_bin = os.path.join(ans_path, "ansys", "bin", f"ansys{ans_version}")
     return ansys_bin, int(ans_version) / 10
 
 
