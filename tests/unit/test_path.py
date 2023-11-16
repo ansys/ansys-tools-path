@@ -480,7 +480,7 @@ def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_envi
 def test_get_available_ansys_installation_linux(mock_filesystem):
     assert get_available_ansys_installations() == dict(
         zip(
-            [202, 211, 231, 241, 242] + [-201, -211],
+            [202, 211, 231, 232, 241, 242] + [-201, -211],
             ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
         )
     )
