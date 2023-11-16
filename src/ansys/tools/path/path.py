@@ -559,9 +559,9 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         path = path.split(os.sep)
 
         is_valid_path = is_valid_executable_path("amk", exe_loc)
+        lower_case_path = map(str.lower, path)
 
         if is_windows():  # pragma: no cover
-            lower_case_path = map(str.lower, path)
             return (
                 is_valid_path
                 and re.search(r"v\d\d\d", exe_loc) is not None
@@ -577,7 +577,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
             and "aisol" in path
             and "bin" in path
             and "linx64" in path
-            and "dssolverproxy2.exe" in path
+            and "dssolverproxy2.exe" in lower_case_path
         )
     else:
         raise Exception("unexpected application")
