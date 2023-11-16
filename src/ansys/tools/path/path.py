@@ -340,13 +340,13 @@ def find_mechanical(
     (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
     """
     ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
-    if not ans_path or not version:
+    if not ans_path or not ans_version:
         return "", ""
     if is_windows():  # pragma: no cover
         mechanical_bin = os.path.join(ans_path, "aisol", "bin", "winx64", f"AnsysWBU.exe")
     else:
         mechanical_bin = os.path.join(ans_path, "aisol", ".workbench")
-    return mechanical_bin, int(version) / 10
+    return mechanical_bin, int(ans_version) / 10
 
 
 def find_mapdl(
@@ -390,14 +390,14 @@ def find_mapdl(
     (/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)
     """
     ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
-    if not ans_path or not version:
+    if not ans_path or not ans_version:
         return "", ""
 
     if is_windows():
-        ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"ansys{version}.exe")
+        ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"ansys{ans_version}.exe")
     else:
         ansys_bin = os.path.join(ans_path, "ansys", "bin", f"ansys{version}")
-    return ansys_bin, int(version) / 10
+    return ansys_bin, int(ans_version) / 10
 
 
 def find_dyna(
@@ -441,14 +441,14 @@ def find_dyna(
     (/usr/ansys_inc/v232/ansys/bin/lsdyna232, 23.2)
     """
     ans_path, ans_version = _get_unified_install_base_for_version(version, supported_versions)
-    if not ans_path or not version:
+    if not ans_path or not ans_version:
         return "", ""
 
     if is_windows():
-        ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"LSDYNA{version}.exe")
+        ansys_bin = os.path.join(ans_path, "ansys", "bin", "winx64", f"LSDYNA{ans_version}.exe")
     else:
-        ansys_bin = os.path.join(ans_path, "ansys", "bin", f"lsdyna{version}")
-    return ansys_bin, int(version) / 10
+        ansys_bin = os.path.join(ans_path, "ansys", "bin", f"lsdyna{ans_version}")
+    return ansys_bin, int(ans_version) / 10
 
 
 def _find_installation(
