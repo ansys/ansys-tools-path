@@ -478,14 +478,17 @@ def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_envi
 
 # @pytest.mark.linux
 def test_get_available_ansys_installation_linux(mock_filesystem):
-    available_install_list = get_available_ansys_installations()
-    expected_values = dict(
-        zip(
-            [202, 211] + [-201, -211, -231, -232, -241, -242],
-            ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
-        )
+    available_ansys_installations = get_available_ansys_installations()
+    lowercase_available_ansys_installation = {}
+    for key, value in available_ansys_installations.items():
+        lowercase_available_ansys_installation[key] = value.lower()
+    lowercase_ansys_installation_paths = list(
+        map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
     )
-    assert available_install_list == expected_values
+    expected_values = dict(
+        zip([202, 211, 231, 232, 241, 242] + [-201, -211], lowercase_ansys_installation_paths)
+    )
+    assert lowercase_available_ansys_installation == expected_values
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
