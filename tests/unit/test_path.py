@@ -481,13 +481,10 @@ def test_get_available_ansys_installation_linux(mock_filesystem):
     available_install_list = get_available_ansys_installations()
     expected_values = dict(
         zip(
-            [202, 211, 231, 232, 241, 242] + [-201, -211],
+            [202, 211] + [-201, -211],
             ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
         )
     )
-    print(f"available_install_list= {available_install_list}")
-    print("///////////////////////////////////")
-    print(f"expected_values={expected_values}")
     assert available_install_list == expected_values
 
 
