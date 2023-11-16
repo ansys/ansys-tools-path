@@ -38,7 +38,7 @@ from ansys.tools.path import (
 
 LOG.setLevel(logging.DEBUG)
 
-VERSIONS = [202, 211, 231, 241, 242]
+VERSIONS = [202, 211, 231, 232, 241, 242]
 STUDENT_VERSIONS = [201, 211]
 AMK_VERSIONS = [231, 232, 241, 242]
 
@@ -472,13 +472,14 @@ def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_envi
         map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
     )
     assert lowercase_available_ansys_installation == dict(
-        zip([202, 211, 231, 241, 242] + [-201, -211], lowercase_ansys_installation_paths)
+        zip([202, 211, 231, 232, 241, 242] + [-201, -211], lowercase_ansys_installation_paths)
     )
 
 
-@pytest.mark.linux
+# @pytest.mark.linux
 def test_get_available_ansys_installation_linux(mock_filesystem):
-    assert get_available_ansys_installations() == dict(
+    available_install_list = get_available_ansys_installations()
+    assert available_install_list == dict(
         zip(
             [202, 211, 231, 232, 241, 242] + [-201, -211],
             ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
