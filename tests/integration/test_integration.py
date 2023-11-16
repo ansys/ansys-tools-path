@@ -16,8 +16,12 @@ skip_if_not_ansys_local = pytest.mark.skipif(
     os.environ.get("ANSYS_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
 )
 
+skip_if_not_ansys_amk_local = pytest.mark.skipif(
+    os.environ.get("ANSYS_AMK_LOCAL", "").upper() != "TRUE", reason="Skipping on CI"
+)
 
-@skip_if_not_ansys_local
+
+@skip_if_not_ansys_amk_local
 def test_find_amk():
     bin_file, ver = find_amk()
     assert os.path.isfile(bin_file)
