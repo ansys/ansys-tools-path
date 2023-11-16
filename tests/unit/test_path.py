@@ -38,7 +38,7 @@ from ansys.tools.path import (
 
 LOG.setLevel(logging.DEBUG)
 
-VERSIONS = [202, 211, 231, 241]
+VERSIONS = [202, 211, 231, 241, 242]
 STUDENT_VERSIONS = [201, 211]
 AMK_VERSIONS = [231, 232, 241, 242]
 
@@ -328,9 +328,9 @@ def test_find_ansys(mock_filesystem):
     ansys_bin, ansys_version = find_ansys()
     # windows filesystem being case insensive we need to make a case insensive comparison
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 24.2)
     else:
-        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 24.2)
 
 
 @pytest.mark.filterwarnings("ignore", category=DeprecationWarning)
@@ -343,9 +343,9 @@ def test_find_mapdl(mock_filesystem):
     ansys_bin, ansys_version = find_mapdl()
     # windows filesystem being case insensive we need to make a case insensive comparison
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 24.2)
     else:
-        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 24.2)
 
 
 def test_find_specific_mapdl(mock_filesystem, mock_awp_environment_variable):
@@ -364,18 +364,18 @@ def test_find_mapdl_without_executable(mock_filesystem_without_executable):
 def test_find_mapdl_without_student(mock_filesystem_without_student_versions):
     ansys_bin, ansys_version = find_mapdl()
     if sys.platform == "win32":
-        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 23.1)
+        assert (ansys_bin.lower(), ansys_version) == (LATEST_MAPDL_INSTALL_PATH.lower(), 24.2)
     else:
-        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 23.1)
+        assert (ansys_bin, ansys_version) == (LATEST_MAPDL_INSTALL_PATH, 24.2)
 
 
 def test_find_dyna(mock_filesystem):
     dyna_bin, dyna_version = find_dyna()
     # windows filesystem being case insensive we need to make a case insensive comparison
     if sys.platform == "win32":
-        assert (dyna_bin.lower(), dyna_version) == (LATEST_DYNA_INSTALL_PATH.lower(), 23.1)
+        assert (dyna_bin.lower(), dyna_version) == (LATEST_DYNA_INSTALL_PATH.lower(), 24.2)
     else:
-        assert (dyna_bin, dyna_version) == (LATEST_DYNA_INSTALL_PATH, 23.1)
+        assert (dyna_bin, dyna_version) == (LATEST_DYNA_INSTALL_PATH, 24.2)
 
 
 def test_find_specific_dyna(mock_filesystem, mock_awp_environment_variable):
@@ -429,10 +429,10 @@ def test_find_mechanical(mock_filesystem):
     if sys.platform == "win32":
         assert (mechanical_bin.lower(), mechanical_version) == (
             LATEST_MECHANICAL_INSTALL_PATH.lower(),
-            23.1,
+            24.2,
         )
     else:
-        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
+        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 24.2)
 
 
 def test_find_specific_mechanical(mock_filesystem, mock_awp_environment_variable):
@@ -456,10 +456,10 @@ def test_find_mechanical_without_student(mock_filesystem_without_student_version
     if sys.platform == "win32":
         assert (mechanical_bin.lower(), mechanical_version) == (
             LATEST_MECHANICAL_INSTALL_PATH.lower(),
-            23.1,
+            24.2,
         )
     else:
-        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 23.1)
+        assert (mechanical_bin, mechanical_version) == (LATEST_MECHANICAL_INSTALL_PATH, 24.2)
 
 
 @pytest.mark.win32
@@ -472,7 +472,7 @@ def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_envi
         map(str.lower, ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS)
     )
     assert lowercase_available_ansys_installation == dict(
-        zip([202, 211, 231] + [-201, -211], lowercase_ansys_installation_paths)
+        zip([202, 211, 231, 241, 242] + [-201, -211], lowercase_ansys_installation_paths)
     )
 
 
@@ -480,7 +480,7 @@ def test_get_available_ansys_installation_windows(mock_filesystem, mock_awp_envi
 def test_get_available_ansys_installation_linux(mock_filesystem):
     assert get_available_ansys_installations() == dict(
         zip(
-            [202, 211, 231] + [-201, -211],
+            [202, 211, 231, 241, 242] + [-201, -211],
             ANSYS_INSTALLATION_PATHS + ANSYS_STUDENT_INSTALLATION_PATHS,
         )
     )
@@ -572,7 +572,7 @@ def test_get_mechanical_path_custom(mock_filesystem):
 
 
 def test_get_mechanical_specific(mock_filesystem):
-    mechanical_path = get_mechanical_path(version=23.1)
+    mechanical_path = get_mechanical_path(version=24.2)
     assert mechanical_path is not None
     if sys.platform == "win32":
         assert mechanical_path.lower() == LATEST_MECHANICAL_INSTALL_PATH.lower()
@@ -584,12 +584,12 @@ def test_get_latest_ansys_installation(mock_filesystem):
     latest_ansys_version, latest_ansys_installation_path = get_latest_ansys_installation()
     if sys.platform == "win32":
         assert (latest_ansys_version, latest_ansys_installation_path.lower()) == (
-            231,
+            242,
             LATEST_ANSYS_INSTALLATION_PATHS.lower(),
         )
     else:
         assert latest_ansys_version, latest_ansys_installation_path == (
-            231,
+            242,
             LATEST_ANSYS_INSTALLATION_PATHS,
         )
 
@@ -648,7 +648,7 @@ def test_version_from_path(mock_filesystem):
     else:
         WRONG_FOLDER = "/f"
     assert version_from_path("mapdl", MAPDL_INSTALL_PATHS[0]) == 202
-    assert version_from_path("mechanical", LATEST_MECHANICAL_INSTALL_PATH) == 231
+    assert version_from_path("mechanical", LATEST_MECHANICAL_INSTALL_PATH) == 242
     with pytest.raises(Exception):
         version_from_path("skvbhksbvks", LATEST_MAPDL_INSTALL_PATH)
     with pytest.raises(RuntimeError):
@@ -713,6 +713,10 @@ def test_clear_config_file(mock_filesystem_with_config):
     with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
         content = json.loads(file.read())
         assert "mechanical" not in content
+    clear_configuration("amk")
+    with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
+        content = json.loads(file.read())
+        assert "amk" not in content
     clear_configuration("dyna")
     assert os.path.exists(os.path.join(SETTINGS_DIR, "config.txt"))
     with open(os.path.join(SETTINGS_DIR, "config.txt"), "r") as file:
