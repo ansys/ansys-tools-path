@@ -55,9 +55,13 @@ PRODUCT_EXE_INFO = {
 if is_windows():  # pragma: no cover
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
+    PRODUCT_EXE_INFO["dyna"]["patternpath"] = "vXXX/ansys/bin/winx64/LSDYNAXXX.exe"
+    PRODUCT_EXE_INFO["dyna"]["pattern"] = "LSDYNAXXX.exe"
 else:
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/.workbench"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
+    PRODUCT_EXE_INFO["dyna"]["patternpath"] = "vXXX/ansys/bin/lsdynaXXX"
+    PRODUCT_EXE_INFO["dyna"]["pattern"] = "lsdynaXXX"
 
 # settings directory
 SETTINGS_DIR = platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
