@@ -22,6 +22,7 @@ LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
 CONFIG_FILE_NAME = "config.txt"
 
 SUPPORTED_ANSYS_VERSIONS: SUPPORTED_VERSIONS_TYPE = {
+    242: "2024R2",
     241: "2024R1",
     232: "2023R2",
     231: "2023R1",
@@ -55,9 +56,13 @@ PRODUCT_EXE_INFO = {
 if is_windows():  # pragma: no cover
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/bin/winx64/AnsysWBU.exe"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = "AnsysWBU.exe"
+    PRODUCT_EXE_INFO["dyna"]["patternpath"] = "vXXX/ansys/bin/winx64/LSDYNAXXX.exe"
+    PRODUCT_EXE_INFO["dyna"]["pattern"] = "LSDYNAXXX.exe"
 else:
     PRODUCT_EXE_INFO["mechanical"]["patternpath"] = "vXXX/aisol/.workbench"
     PRODUCT_EXE_INFO["mechanical"]["pattern"] = ".workbench"
+    PRODUCT_EXE_INFO["dyna"]["patternpath"] = "vXXX/ansys/bin/lsdynaXXX"
+    PRODUCT_EXE_INFO["dyna"]["pattern"] = "lsdynaXXX"
 
 # settings directory
 SETTINGS_DIR = platformdirs.user_data_dir(appname="ansys_tools_path", appauthor="Ansys")
