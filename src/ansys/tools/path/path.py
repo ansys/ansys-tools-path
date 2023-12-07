@@ -287,14 +287,14 @@ def find_mechanical(
     --------
     On Windows:
 
-    >>> from ansys.mechanical.core.mechanical import find_mechanical
+    >>> from ansys.tools.path import find_mechanical
     >>> find_mechanical()
-    'C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1
+    ('C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1)
 
     On Linux:
 
     >>> find_mechanical()
-    (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
+    ('/usr/ansys_inc/v231/aisol/.workbench', 23.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
