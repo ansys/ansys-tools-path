@@ -294,7 +294,7 @@ def find_mechanical(
     On Linux:
 
     >>> find_mechanical()
-    (/usr/ansys_inc/v231/aisol/.workbench, 23.1)
+    ('/usr/ansys_inc/v231/aisol/.workbench', 23.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
