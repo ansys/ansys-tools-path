@@ -287,9 +287,9 @@ def find_mechanical(
     --------
     On Windows:
 
-    >>> from ansys.tools.path import find_mechanical
+    >>> from ansys.mechanical.core.mechanical import find_mechanical
     >>> find_mechanical()
-    ('C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1)
+    'C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1
 
     On Linux:
 
