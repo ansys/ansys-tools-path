@@ -38,7 +38,7 @@ doc = [
     "sphinx-copybutton==0.5.2",
 ]
 
-build = ["build==1.0.3", "twine==4.0.2"]
+build = ["build==1.0.3", "twine==5.0.0"]
 
 [tool.flit.module]
 name = "ansys.tools.path"
