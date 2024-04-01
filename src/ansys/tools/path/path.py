@@ -9,11 +9,14 @@ import warnings
 
 import platformdirs
 
+from ansys.tools.path.applications import ApplicationPlugin, dyna, mapdl, mechanical
 from ansys.tools.path.misc import is_float, is_linux, is_windows
+
+PLUGINS: Dict[str, ApplicationPlugin] = {"mechanical": mechanical, "dyna": dyna, "mapdl": mapdl}
 
 LOG = logging.getLogger(__name__)
 
-PRODUCT_TYPE = Literal["mapdl", "mechanical"]
+PRODUCT_TYPE = Literal["mapdl", "mechanical", "dyna"]
 SUPPORTED_VERSIONS_TYPE = Dict[int, str]
 
 LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
@@ -409,10 +412,11 @@ def find_dyna(
 
 
 def _find_installation(
-    product: PRODUCT_TYPE,
+    product: str,
     version: Optional[float] = None,
     supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS,
 ) -> Union[Tuple[str, float], Tuple[Literal[""], Literal[""]]]:
+
     if product == "mapdl":
         return find_mapdl(version, supported_versions)
     elif product == "mechanical":
@@ -435,29 +439,12 @@ def find_ansys(
     return _find_installation("mapdl", version, supported_versions)
 
 
+def _has_plugin(product: str) -> bool:
+    return product in PLUGINS
+
+
 def is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
-    if product == "mapdl":
-        return (
-            os.path.isfile(exe_loc)
-            and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
-        )
-    elif product == "dyna":
-        # dyna executable paths could be anything, really
-        return True
-    elif product == "mechanical":
-        if is_windows():  # pragma: no cover
-            return (
-                os.path.isfile(exe_loc)
-                and re.search(
-                    "AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)), re.IGNORECASE
-                )
-                is not None
-            )
-        return (
-            os.path.isfile(exe_loc)
-            and re.search(".workbench", os.path.basename(os.path.normpath(exe_loc))) is not None
-        )
-    raise Exception("unexpected application")
+    return PLUGINS[product].is_valid_executable_path(exe_loc)
 
 
 def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
@@ -505,10 +492,10 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         raise Exception("unexpected application")
 
 
-def _change_default_path(product: PRODUCT_TYPE, exe_loc: str) -> None:
+def _change_default_path(application: str, exe_loc: str) -> None:
     if os.path.isfile(exe_loc):
         config_data = _read_config_file()
-        config_data[product] = exe_loc
+        config_data[application] = exe_loc
         _write_config_file(config_data)
     else:
         raise FileNotFoundError("File %s is invalid or does not exist" % exe_loc)
@@ -609,17 +596,16 @@ def change_default_ansys_path(exe_loc: str) -> None:
 def _save_path(
     product: PRODUCT_TYPE, exe_loc: Optional[str] = None, allow_prompt: bool = True
 ) -> str:
-    if exe_loc is None:
+    has_plugin = _has_plugin(product)
+    if exe_loc is None and has_plugin:
         exe_loc, _ = _find_installation(product)
-
-    if is_valid_executable_path(product, exe_loc):
-        _check_uncommon_executable_path(product, exe_loc)
-
-        _change_default_path(product, exe_loc)
-        return exe_loc
-
-    if allow_prompt:
+    if exe_loc == "" and allow_prompt:
         exe_loc = _prompt_path(product)  # pragma: no cover
+
+    if has_plugin:
+        if is_valid_executable_path(product, exe_loc):
+            _check_uncommon_executable_path(product, exe_loc)
+    _change_default_path(product, exe_loc)
     return exe_loc
 
 
@@ -949,7 +935,7 @@ def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Option
 
 
 def _get_application_path(
-    product: PRODUCT_TYPE,
+    product: str,
     allow_input: bool = True,
     version: Optional[float] = None,
     find: bool = True,
@@ -960,6 +946,8 @@ def _get_application_path(
             return exe_loc
 
     LOG.debug(f"{product} path not found in config file")
+    if not _has_plugin(product):
+        raise Exception(f"Application {product} not registered.")
 
     if find:
         try:
