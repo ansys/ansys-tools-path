@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-from typing import Callable, Dict, Literal, Optional, Tuple, Union, cast
+from typing import Callable, Dict, List, Literal, Optional, Tuple, Union, cast
 import warnings
 
 import platformdirs
@@ -593,9 +593,7 @@ def change_default_ansys_path(exe_loc: str) -> None:
     _change_default_path("mapdl", exe_loc)
 
 
-def _save_path(
-    product: PRODUCT_TYPE, exe_loc: Optional[str] = None, allow_prompt: bool = True
-) -> str:
+def _save_path(product: str, exe_loc: Optional[str] = None, allow_prompt: bool = True) -> str:
     has_plugin = _has_plugin(product)
     if exe_loc is None and has_plugin:
         exe_loc, _ = _find_installation(product)
@@ -887,7 +885,7 @@ def _migrate_config_file() -> None:
 
     @dataclass
     class FileMigrationStrategy:
-        paths: list[str]
+        paths: List[str]
         migration_function: Callable[[], Dict[PRODUCT_TYPE, str]]
 
         def __call__(self):
@@ -932,6 +930,11 @@ def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Option
     """Read the executable path for the product given by `product_name` from config file"""
     config_data = _read_config_file()
     return config_data.get(product_name, None)
+
+
+def get_saved_application_path(application: str) -> Optional[str]:
+    exe_loc = _read_executable_path_from_config_file(application)
+    return exe_loc
 
 
 def _get_application_path(
