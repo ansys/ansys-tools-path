@@ -17,6 +17,11 @@ Further information about contributing to ansys-tools-path can be found in
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/
 
 
+## [v0.5.0]() - 2 April 2024
+
+### What's changed
+Support arbitrary application names with "save" and "get"
+
 ## [v0.4.0]() - 17 November 2023
 
 ### What's Changed
