@@ -594,7 +594,7 @@ def change_default_ansys_path(exe_loc: str) -> None:
 
 
 def _save_path(
-    product: PRODUCT_TYPE, exe_loc: Optional[str] = None, allow_prompt: bool = True
+    product: str, exe_loc: Optional[str] = None, allow_prompt: bool = True
 ) -> str:
     has_plugin = _has_plugin(product)
     if exe_loc is None and has_plugin:
@@ -932,6 +932,11 @@ def _read_executable_path_from_config_file(product_name: PRODUCT_TYPE) -> Option
     """Read the executable path for the product given by `product_name` from config file"""
     config_data = _read_config_file()
     return config_data.get(product_name, None)
+
+
+def get_saved_application_path(application: str) -> Optional[str]:
+    exe_loc = _read_executable_path_from_config_file(application)
+    return exe_loc
 
 
 def _get_application_path(
