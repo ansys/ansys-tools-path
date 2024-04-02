@@ -593,9 +593,7 @@ def change_default_ansys_path(exe_loc: str) -> None:
     _change_default_path("mapdl", exe_loc)
 
 
-def _save_path(
-    product: str, exe_loc: Optional[str] = None, allow_prompt: bool = True
-) -> str:
+def _save_path(product: str, exe_loc: Optional[str] = None, allow_prompt: bool = True) -> str:
     has_plugin = _has_plugin(product)
     if exe_loc is None and has_plugin:
         exe_loc, _ = _find_installation(product)
