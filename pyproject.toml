@@ -33,12 +33,12 @@ tests = ["pytest==8.1.1", "pytest-cov==5.0.0", "pyfakefs==5.3.5"]
 
 doc = [
     "Sphinx==7.2.6",
-    "numpydoc==1.6.0",
-    "ansys-sphinx-theme==0.14.1",
+    "numpydoc==1.7.0",
+    "ansys-sphinx-theme==0.15.0",
     "sphinx-copybutton==0.5.2",
 ]
 
-build = ["build==1.1.1", "twine==5.0.0"]
+build = ["build==1.2.1", "twine==5.0.0"]
 
 [tool.flit.module]
 name = "ansys.tools.path"
