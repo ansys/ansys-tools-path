@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-from typing import Callable, Dict, Literal, Optional, Tuple, Union, cast
+from typing import Callable, Dict, List, Literal, Optional, Tuple, Union, cast
 import warnings
 
 import platformdirs
@@ -887,7 +887,7 @@ def _migrate_config_file() -> None:
 
     @dataclass
     class FileMigrationStrategy:
-        paths: list[str]
+        paths: List[str]
         migration_function: Callable[[], Dict[PRODUCT_TYPE, str]]
 
         def __call__(self):
