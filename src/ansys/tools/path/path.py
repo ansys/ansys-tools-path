@@ -943,17 +943,19 @@ def _get_application_path(
     version: Optional[float] = None,
     find: bool = True,
 ) -> Optional[str]:
-
     _exe_loc = _read_executable_path_from_config_file(product)
-    if _exe_loc is not None:
-        _version = version_from_path("mechanical", _exe_loc)
-        if _version == version:
-            return _exe_loc
-        else:
-            LOG.debug(
-                f"Application {product} requested version {version} does not match with {_version} "
-                f"in config file. Trying to find version {version} in system ..."
-            )
+    if version is None and _exe_loc is not None:
+        return _exe_loc
+    else:
+        if _exe_loc is not None:
+            _version = version_from_path(product, _exe_loc)
+            if _version == version:
+                return _exe_loc
+            else:
+                LOG.debug(
+                    f"Application {product} requested version {version} does not match with {_version} "
+                    f"in config file. Trying to find version {version} in system ..."
+                )
 
     LOG.debug(f"{product} path not found in config file")
     if not _has_plugin(product):
