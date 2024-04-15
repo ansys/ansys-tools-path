@@ -945,8 +945,8 @@ def _get_application_path(
 ) -> Optional[str]:
 
     _exe_loc = _read_executable_path_from_config_file(product)
-    _version = version_from_path("mechanical", _exe_loc)
     if _exe_loc is not None:
+        _version = version_from_path("mechanical", _exe_loc)
         if _version == version:
             return _exe_loc
         else:
