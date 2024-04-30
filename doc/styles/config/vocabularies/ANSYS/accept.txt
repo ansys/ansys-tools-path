@@ -1,4 +1,2 @@
-ANSYS
-Ansys
-ansys
+[Aa]nsys
 (?i)API
