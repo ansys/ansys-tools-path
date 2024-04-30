@@ -28,10 +28,10 @@ How to use
 ----------
 
 You can use any of the functions available in the :ref:`ref_api`
-to identify the path of the local ANSYS installation.
+to identify the path of the local Ansys installation.
 
 For example you can use :func:`find_ansys <ansys.tools.path.find_ansys>`
-to locate the path of the latest ANSYS installation available:
+to locate the path of the latest Ansys installation available:
 
 .. code:: pycon
 
