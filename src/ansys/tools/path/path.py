@@ -967,6 +967,8 @@ def _get_application_path(
             if (exe_loc, exe_version) != ("", ""):  # executable not found
                 if os.path.isfile(exe_loc):
                     return exe_loc
+            else:
+                raise Exception("{product} executable not found in default locations")
         except ValueError:
             # Skip to go out of the if statement
             pass
