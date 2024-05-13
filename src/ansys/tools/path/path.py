@@ -967,8 +967,6 @@ def _get_application_path(
             if (exe_loc, exe_version) != ("", ""):  # executable not found
                 if os.path.isfile(exe_loc):
                     return exe_loc
-            else:
-                raise Exception("{product} executable not found in default locations")
         except ValueError:
             # Skip to go out of the if statement
             pass
@@ -1133,6 +1131,8 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
         Integer version number (for example, 231).
 
     """
+    if not isinstance(path, str):
+        raise ValueError("Provided path is not a string")
     if product == "mechanical":
         return _mechanical_version_from_path(path)
     elif product == "mapdl":
