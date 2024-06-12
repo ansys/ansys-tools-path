@@ -1132,6 +1132,8 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
         Integer version number (for example, 231).
 
     """
+    if not isinstance(path, str):
+        raise ValueError(f"Provided path '{path}' is not a string.")
     if product == "mechanical":
         return _mechanical_version_from_path(path)
     elif product == "mapdl":
