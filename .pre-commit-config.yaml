@@ -41,6 +41,13 @@ repos:
   hooks:
     - id: check-github-workflows
 
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.4.2
+  hooks:
+    - id: add-license-headers
+      args:
+      - --start_year=2023
+
 # - repo: https://github.com/pycqa/pydocstyle
 #   rev: 6.1.1
 #   hooks:
