@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import get_version_match
-from ansys_sphinx_theme import pyansys_logo_black as logo
 
 from ansys.tools.path import __version__
 
@@ -14,8 +13,7 @@ copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
 
-# Select desired logo, theme, and declare the html title
-html_logo = logo
+# Select desired theme, and declare the html title
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "ansys-tools-path"
 
@@ -29,6 +27,7 @@ html_context = {
     "doc_path": "doc/source",
 }
 html_theme_options = {
+    "logo": "pyansys",
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
         "version_match": switcher_version,
