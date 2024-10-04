@@ -1,9 +1,12 @@
-# Authors
-
-## Project Lead
-
-*   [German Martinez Ayuso](https://github.com/germa89)
-
-## Contributors
-
-*   [Roberto Pastor Muela](https://github.com/RobPasMue)
+# This is the list of ansys-tools-path's significant contributors.
+#
+# This file does not necessarily list everyone who has contributed code.
+#
+# For contributions made under a Corporate CLA, the organization is
+# added to this file.
+#
+# If you have contributed to the repository and want to be added to this file,
+# submit a request.
+#
+#
+ANSYS, Inc.
