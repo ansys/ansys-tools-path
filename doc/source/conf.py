@@ -40,10 +40,15 @@ html_theme_options = {
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
+    "ansys_sphinx_theme_autoapi": {
+        "project": project,
+        "directory": "src/ansys",
+    },
 }
 
 # Sphinx extensions
 extensions = [
+    "ansys_sphinx_theme.extension.autoapi",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "numpydoc",
@@ -63,6 +68,8 @@ intersphinx_mapping = {
     # "grpc": ("https://grpc.github.io/grpc/python/", None),
 }
 
+suppress_warnings = ["label.*", "autoapi.python_import_resolution", "design.grid", "config.cache"]
+
 # numpydoc configuration
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
@@ -73,7 +80,7 @@ numpydoc_validate = True
 numpydoc_validation_checks = {
     "GL06",  # Found unknown section
     "GL07",  # Sections are in the wrong order.
-    "GL08",  # The object does not have a docstring
+    # "GL08",  # The object does not have a docstring
     "GL09",  # Deprecation warning should precede extended summary
     "GL10",  # reST directives {directives} must be followed by two colons
     "SS01",  # No summary found
