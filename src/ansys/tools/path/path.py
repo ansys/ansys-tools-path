@@ -41,8 +41,8 @@ LOG = logging.getLogger(__name__)
 PRODUCT_TYPE = Literal["mapdl", "mechanical", "dyna"]
 SUPPORTED_VERSIONS_TYPE = Dict[int, str]
 
-LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
-LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
+linux_default_dirs = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
+LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in linux_default_dirs]
 
 CONFIG_FILE_NAME = "config.txt"
 

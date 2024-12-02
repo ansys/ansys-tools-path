@@ -48,6 +48,7 @@ test-output.xml
 
 .venv
 /env
+.env
 .DS_Store
 doc/_build/*/*
-
+doc/source/api/*
