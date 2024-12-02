@@ -68,7 +68,9 @@ intersphinx_mapping = {
     # "grpc": ("https://grpc.github.io/grpc/python/", None),
 }
 
-suppress_warnings = ["label.*", "autoapi.python_import_resolution", "design.grid", "config.cache"]
+suppress_warnings = [
+    "ref.python",
+]
 
 # numpydoc configuration
 numpydoc_show_class_members = False
