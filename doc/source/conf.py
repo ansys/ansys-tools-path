@@ -71,7 +71,7 @@ intersphinx_mapping = {
 suppress_warnings = [
     "ref.python",
 ]
-
+show_warning_types = True
 # numpydoc configuration
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
