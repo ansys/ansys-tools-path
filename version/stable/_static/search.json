@@ -1,0 +1,142 @@
+[
+    {
+        "objectID": "api",
+        "href": "api.html#api",
+        "title": "API",
+        "section": "API",
+        "text": "find_ansys([version, supported_versions])\nObsolete method, use find_mapdl.\nget_available_ansys_installations([...])\nReturn a dictionary of available Ansys unified installation versions with their base paths.\nchange_default_ansys_path(exe_loc)\nDeprecated, use change_default_mapdl_path instead\nsave_ansys_path([exe_loc, allow_prompt])\nDeprecated, use save_mapdl_path instead\nAPI\nfind_ansys\nget_available_ansys_installations\nchange_default_ansys_path\nsave_ansys_path"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.change_default_ansys_path",
+        "href": "_autosummary/ansys.tools.path.change_default_ansys_path.html#change_default_ansys_path",
+        "title": "change_default_ansys_path",
+        "section": "change_default_ansys_path",
+        "text": "Deprecated, use change_default_mapdl_path instead\nchange_default_ansys_path"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.change_default_ansys_path",
+        "href": "_autosummary/ansys.tools.path.change_default_ansys_path.html#ansys.tools.path.change_default_ansys_path",
+        "title": "change_default_ansys_path > change_default_ansys_path > change_default_ansys_path",
+        "section": "change_default_ansys_path > change_default_ansys_path",
+        "text": "ansys.tools.path.change_default_ansys_path(exe_loc: str) -> None\n\nDeprecated, use change_default_mapdl_path instead\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#contributing",
+        "title": "Contributing",
+        "section": "Contributing",
+        "text": "Contributing"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#how-to-install",
+        "title": "Contributing > How to install",
+        "section": "How to install",
+        "text": "At least two installation modes are provided: user and developer.\nHow to install"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#for-users",
+        "title": "Contributing > For users",
+        "section": "For users",
+        "text": "In order to install ansys-tools-path, make sure you\nhave the latest version of pip. To do so, run:\nThen, you can simply execute:\nFor users\nansys-tools-path"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#for-developers",
+        "title": "Contributing > For developers",
+        "section": "For developers",
+        "text": "Installing ansys-tools-path in developer mode allows\nyou to modify the source and enhance it.\nBefore contributing to the project, please refer to the PyAnsys Developer’s guide.\nYou need to follow these steps:\nStart by cloning this repository:\nCreate a fresh-clean Python environment and activate it:\nMake sure you have the latest required build system and doc, testing, and CI tools:\nInstall the project in editable mode:\nFor developers\nansys-tools-path"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#how-to-testing",
+        "title": "Contributing > How to testing",
+        "section": "How to testing",
+        "text": "If required, you can always call the style commands (black, isort,\nflake8…) or unit testing ones (pytest) from the command line. However,\nthis does not guarantee that your project is being tested in an isolated\nenvironment, which is the reason why tools like tox exist.\nHow to testing"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#a-note-on-pre-commit",
+        "title": "Contributing > A note on pre-commit",
+        "section": "A note on pre-commit",
+        "text": "The style checks take advantage of pre-commit. Developers are not forced but\nencouraged to install this tool via:\nA note on pre-commit"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#documentation",
+        "title": "Contributing > Documentation",
+        "section": "Documentation",
+        "text": "For building documentation, you can either run the usual rules provided in the\nSphinx Makefile, such us:\nDocumentation"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#distributing",
+        "title": "Contributing > Distributing",
+        "section": "Distributing",
+        "text": "If you would like to create either source or wheel files, start by installing\nthe building requirements and then executing the build module:\nDistributing"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.get_available_ansys_installations",
+        "href": "_autosummary/ansys.tools.path.get_available_ansys_installations.html#get_available_ansys_installations",
+        "title": "get_available_ansys_installations",
+        "section": "get_available_ansys_installations",
+        "text": "Return a dictionary of available Ansys unified installation versions with their base paths.\nReturn all Ansys unified installations paths in Windows.\nOn Windows, It uses the environment variable AWP_ROOTXXX.\nThe student versions are returned at the end of the dict and\nwith negative value for the version.\nReturn all installed Ansys paths in Linux.\nget_available_ansys_installations\npython:dict\npython:str\nAWP_ROOTXXX"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.get_available_ansys_installations",
+        "href": "_autosummary/ansys.tools.path.get_available_ansys_installations.html#ansys.tools.path.get_available_ansys_installations",
+        "title": "get_available_ansys_installations > get_available_ansys_installations > get_available_ansys_installations",
+        "section": "get_available_ansys_installations > get_available_ansys_installations",
+        "text": "ansys.tools.path.get_available_ansys_installations(supported_versions: Dict[int, str] = {191: '19.1', 192: '19.2', 193: '19.3', 194: '19.4', 195: '19.5', 201: '2020R1', 202: '2020R2', 211: '2021R1', 212: '2021R2', 221: '2022R1', 222: '2022R2', 231: '2023R1', 232: '2023R2', 241: '2024R1', 242: '2024R2', 251: '2025R1', 252: '2025R2'}) -> Dict[int, str]\n\nReturn a dictionary of available Ansys unified installation versions with their base paths.\n\nReturns\n\npython:dict[int: python:str]\n\nReturn all Ansys unified installations paths in Windows.\n\nNotes\n\nOn Windows, It uses the environment variable AWP_ROOTXXX.\n\nThe student versions are returned at the end of the dict and\nwith negative value for the version.\n\nExamples\n\n>>> from ansys.tools.path import get_available_ansys_installations\n>>> get_available_ansys_installations()\n{222: 'C:\\Program Files\\ANSYS Inc\\v222',\n 212: 'C:\\Program Files\\ANSYS Inc\\v212',\n -222: 'C:\\Program Files\\ANSYS Inc\\ANSYS Student\\v222'}\n\nReturn all installed Ansys paths in Linux.\n\n>>> get_available_ansys_installations()\n{194: '/usr/ansys_inc/v194',\n 202: '/usr/ansys_inc/v202',\n 211: '/usr/ansys_inc/v211'}\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.find_ansys",
+        "href": "_autosummary/ansys.tools.path.find_ansys.html#find_ansys",
+        "title": "find_ansys",
+        "section": "find_ansys",
+        "text": "Obsolete method, use find_mapdl.\nfind_ansys"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.find_ansys",
+        "href": "_autosummary/ansys.tools.path.find_ansys.html#ansys.tools.path.find_ansys",
+        "title": "find_ansys > find_ansys > find_ansys",
+        "section": "find_ansys > find_ansys",
+        "text": "ansys.tools.path.find_ansys(version: float | None = None, supported_versions: Dict[int, str] = {191: '19.1', 192: '19.2', 193: '19.3', 194: '19.4', 195: '19.5', 201: '2020R1', 202: '2020R2', 211: '2021R1', 212: '2021R2', 221: '2022R1', 222: '2022R2', 231: '2023R1', 232: '2023R2', 241: '2024R1', 242: '2024R2', 251: '2025R1', 252: '2025R2'}) -> Tuple[str, float] | Tuple[Literal[''], Literal['']]\n\nObsolete method, use find_mapdl.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.save_ansys_path",
+        "href": "_autosummary/ansys.tools.path.save_ansys_path.html#save_ansys_path",
+        "title": "save_ansys_path",
+        "section": "save_ansys_path",
+        "text": "Deprecated, use save_mapdl_path instead\nsave_ansys_path"
+    },
+    {
+        "objectID": "_autosummary/ansys.tools.path.save_ansys_path",
+        "href": "_autosummary/ansys.tools.path.save_ansys_path.html#ansys.tools.path.save_ansys_path",
+        "title": "save_ansys_path > save_ansys_path > save_ansys_path",
+        "section": "save_ansys_path > save_ansys_path",
+        "text": "ansys.tools.path.save_ansys_path(exe_loc: str | None = None, allow_prompt: bool = True) -> str\n\nDeprecated, use save_mapdl_path instead\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#ansys-tools-path-a-tool-to-locate-ansys-products",
+        "title": "ansys-tools-path: A tool to locate Ansys products",
+        "section": "ansys-tools-path: A tool to locate Ansys products",
+        "text": "ansys-tools-path: A tool to locate Ansys products\nansys-tools-path"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#how-to-install",
+        "title": "ansys-tools-path: A tool to locate Ansys products > How to install",
+        "section": "How to install",
+        "text": "In order to install ansys-tools-path, make sure you\nhave the latest version of pip. To do so, run:\nThen, you can simply execute:\nHow to install\nansys-tools-path"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#how-to-use",
+        "title": "ansys-tools-path: A tool to locate Ansys products > How to use",
+        "section": "How to use",
+        "text": "You can use any of the functions available in the ref_api\nto identify the path of the local Ansys installation.\nFor example you can use find_ansys\nto locate the path of the latest Ansys installation available:\nHow to use\nfind_ansys"
+    }
+]
