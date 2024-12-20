@@ -1088,57 +1088,49 @@ def get_mechanical_path(
     return _get_application_path("mechanical", allow_input, version, find)
 
 
-def _mechanical_version_from_path(path: str) -> int:
-    """Extract the Ansys Mechanical version from a path.
-
-    Generally, the version of Mechanical is contained in the path:
-
-    - On Windows, for example: ``C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe``
-    - On Linux, for example: ``/usr/ansys_inc/v231/aisol/.workbench``
+def _version_from_path(path: str, product_name: str, path_version_regex: str) -> int:
+    """Extract the version from the executable path.
 
     Parameters
     ----------
-    path : str
-        Path to the Mechanical executable file.
+    path: str
+        The path to the Ansys executable. For example:
+
+        Mechanical:
+        - Windows: ``C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe``
+        - Linux: ``/usr/ansys_inc/v231/aisol/.workbench``
+
+        MAPDL:
+        - Windows: ``C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe``
+        - Linux: ``/usr/ansys_inc/v211/ansys/bin/mapdl``
+
+    product_name: str
+        The name of the product. For example:
+
+        mapdl = "Ansys MAPDL"
+        mechanical = "Ansys Mechanical"
+
+    path_version_regex: str
+        The regex used to find Ansys versions in the executable path. For example:
+
+        mapdl = r"v(\d\d\d).ansys"
+        mechanical = r'v(\d\d\d)'
 
     Returns
     -------
     int
-        Integer version number (for example, 231).
-
+        The version in the executable path. For example, "232".
     """
-    # expect v<ver>/ansys
-    # replace \\ with / to account for possible windows path
-    matches = re.findall(r"v(\d\d\d)", path.replace("\\", "/"), re.IGNORECASE)
-    if not matches:
-        raise RuntimeError(f"Unable to extract Mechanical version from {path}.")
-    return int(matches[-1])
-
-
-def _mapdl_version_from_path(path: str) -> int:
-    """Extract ansys version from a path.  Generally, the version of
-    Ansys MAPDL is contained in the path:
-    C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe
-    /usr/ansys_inc/v211/ansys/bin/mapdl
-    Note that if the Ansys MAPDL executable, you have to rely on the version
-    in the path.
-    Parameters
-    ----------
-    path : str
-        Path to the Ansys MAPDL executable
-
-    Returns
-    -------
-    int
-        Integer version number (e.g. 211).
-
-    """
-    # expect v<ver>/ansys
-    # replace \\ with / to account for possible windows path
-    matches = re.findall(r"v(\d\d\d).ansys", path.replace("\\", "/"), re.IGNORECASE)
-    if not matches:
-        raise RuntimeError(f"Unable to extract Ansys version from {path}")
-    return int(matches[-1])
+    error_message = f"Unable to extract {product_name} version from {path}."
+    if path:
+        # expect v<ver>/ansys
+        # replace \\ with / to account for possible windows path
+        matches = re.findall(rf"{path_version_regex}", path.replace("\\", "/"), re.IGNORECASE)
+        if not matches:
+            raise RuntimeError(error_message)
+        return int(matches[-1])
+    else:
+        raise RuntimeError(error_message)
 
 
 def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
@@ -1155,17 +1147,18 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
         Integer version number (for example, 231).
 
     """
+    product_name = PRODUCT_EXE_INFO[product]["name"]
     if not isinstance(path, str):
         raise ValueError(
             f'The provided path, "{path}", is not a valid string. '
-            f'If "{product}" is not installed in the default location, use ``save-ansys-path`` '
-            f"to save the path so it can be found by ``ansys-tools-path``."
+            f"Run the following command to save the path to the {product_name} executable:\n\n"
+            f"    save-ansys-path --name {product} /path/to/{product}-executable\n"
         )
-    if product == "mechanical":
-        return _mechanical_version_from_path(path)
-    elif product == "mapdl":
-        return _mapdl_version_from_path(path)
-    raise Exception("Unexpected product")
+    if (product != "dyna") and (product in PRODUCT_EXE_INFO.keys()):
+        path_version_regex = r"v(\d\d\d).ansys" if product == "mapdl" else r"v(\d\d\d)"
+        return _version_from_path(path, product_name, path_version_regex)
+    else:
+        raise Exception(f"Unexpected product, {product}")
 
 
 def get_latest_ansys_installation() -> Tuple[int, str]:
