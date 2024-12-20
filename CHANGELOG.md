@@ -16,10 +16,11 @@ Further information about contributing to ansys-tools-path can be found in
 
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/
 
-## [Unreleased]()
+## [v0.7.1]() - 20 December 2024
 
 ### What's Changed
 Update docs with autoapi [#252](https://github.com/ansys/ansys-tools-path/pull/252)
+Update error handling for path [#261](https://github.com/ansys/ansys-tools-path/pull/261)
 
 ## [v0.7.0]() - 13 November 2024
 
