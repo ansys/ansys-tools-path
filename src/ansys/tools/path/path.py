@@ -1157,8 +1157,8 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
     """
     if not isinstance(path, str):
         raise ValueError(
-            f'The provided path, "{path}", is not a valid string.'
-            f'If "{product}" is not installed in the default location, use ``save-ansys-path``'
+            f'The provided path, "{path}", is not a valid string. '
+            f'If "{product}" is not installed in the default location, use ``save-ansys-path`` '
             f"to save the path so it can be found by ``ansys-tools-path``."
         )
     if product == "mechanical":
