@@ -41,8 +41,8 @@ LOG = logging.getLogger(__name__)
 PRODUCT_TYPE = Literal["mapdl", "mechanical", "dyna"]
 SUPPORTED_VERSIONS_TYPE = Dict[int, str]
 
-LINUX_DEFAULT_DIRS = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
-LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in LINUX_DEFAULT_DIRS]
+linux_default_dirs = [["/", "usr", "ansys_inc"], ["/", "ansys_inc"], ["/", "install", "ansys_inc"]]
+LINUX_DEFAULT_DIRS = [os.path.join(*each) for each in linux_default_dirs]
 
 CONFIG_FILE_NAME = "config.txt"
 
@@ -999,7 +999,7 @@ def _get_application_path(
         exe_loc = _prompt_path(product)
         _change_default_path(product, exe_loc)
         return exe_loc
-
+    warnings.warn(f"No path found for {product} in default locations.")
     return None
 
 
@@ -1156,7 +1156,11 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
 
     """
     if not isinstance(path, str):
-        raise ValueError(f"Provided path '{path}' is not a string.")
+        raise ValueError(
+            f'The provided path, "{path}", is not a valid string. '
+            f'If "{product}" is not installed in the default location, use ``save-ansys-path`` '
+            f"to save the path so it can be found by ``ansys-tools-path``."
+        )
     if product == "mechanical":
         return _mechanical_version_from_path(path)
     elif product == "mapdl":
