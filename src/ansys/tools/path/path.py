@@ -999,7 +999,7 @@ def _get_application_path(
         exe_loc = _prompt_path(product)
         _change_default_path(product, exe_loc)
         return exe_loc
-    warnings.warn(f"No path found for {product} in default locations")
+    warnings.warn(f"No path found for {product} in default locations.")
     return None
 
 
