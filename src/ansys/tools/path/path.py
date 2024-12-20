@@ -999,7 +999,7 @@ def _get_application_path(
         exe_loc = _prompt_path(product)
         _change_default_path(product, exe_loc)
         return exe_loc
-
+    warnings.warn(f"No path found for {product} in default locations")
     return None
 
 
@@ -1109,6 +1109,8 @@ def _mechanical_version_from_path(path: str) -> int:
     """
     # expect v<ver>/ansys
     # replace \\ with / to account for possible windows path
+    if path is None:
+        raise Exception("Path is None")
     matches = re.findall(r"v(\d\d\d)", path.replace("\\", "/"), re.IGNORECASE)
     if not matches:
         raise RuntimeError(f"Unable to extract Mechanical version from {path}.")
@@ -1156,7 +1158,11 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
 
     """
     if not isinstance(path, str):
-        raise ValueError(f"Provided path '{path}' is not a string.")
+        raise ValueError(
+            f"Provided path '{path}' is not valid string."
+            "Check if the {product} is installed in default location"
+            "If not use 'save-ansys-path' to save the path."
+        )
     if product == "mechanical":
         return _mechanical_version_from_path(path)
     elif product == "mapdl":
