@@ -1,0 +1,618 @@
+[
+    {
+        "objectID": "api/ansys/tools/path/index",
+        "href": "api/ansys/tools/path/index.html#the-ansystoolspath-library",
+        "title": "The ansys.tools.path library",
+        "section": "The ansys.tools.path library",
+        "text": "The ansys.tools.path library\nansys.tools.path"
+    },
+    {
+        "objectID": "api/ansys/tools/path/index",
+        "href": "api/ansys/tools/path/index.html#summary",
+        "title": "The ansys.tools.path library > Summary",
+        "section": "Summary",
+        "text": "applications\nApplication plugin for ansys-tools-path.\nmisc\nMiscellaneous functions used by ansys-tools-path.\npath\nsave\nConvenience CLI to save path for ansys application in configuration.\nchange_default_dyna_path\nChange your default Ansys LS-Dyna path.\nchange_default_mapdl_path\nChange your default Ansys MAPDL path.\nchange_default_mechanical_path\nChange your default Mechanical path.\nclear_configuration\nClear the entry of the specified product in the configuration file\nfind_dyna\nSearches for Ansys LS-Dyna path within the standard install location\nfind_mapdl\nSearches for Ansys MAPDL path within the standard install location\nfind_mechanical\nSearch for the Mechanical path in the standard installation location.\nget_available_ansys_installations\nReturn a dictionary of available Ansys unified installation versions with their base paths.\nget_dyna_path\nAcquires Ansys LS-Dyna Path from a cached file or user input\nget_latest_ansys_installation\nReturn a tuple with the latest ansys installation version and its path\nget_mapdl_path\nAcquires Ansys MAPDL Path:\nget_mechanical_path\nAcquires Ansys Mechanical Path\nget_saved_application_path\nsave_dyna_path\nFind Ansys LD-Dyna’s path or query user.\nsave_mapdl_path\nFind Ansys MAPDL’s path or query user.\nsave_mechanical_path\nFind the Mechanical path or query user.\nversion_from_path\nExtract the product version from a path.\nchange_default_ansys_path\nDeprecated, use change_default_mapdl_path instead\nfind_ansys\nObsolete method, use find_mapdl.\nget_ansys_path\nDeprecated, use get_mapdl_path instead\nsave_ansys_path\nDeprecated, use save_mapdl_path instead\nLOG\nSETTINGS_DIR\nSUPPORTED_ANSYS_VERSIONS\nSummary\napplications\nmisc\npath\nsave\nchange_default_dyna_path\nchange_default_mapdl_path\nchange_default_mechanical_path\nclear_configuration\nfind_dyna\nfind_mapdl\nfind_mechanical\nget_available_ansys_installations\nget_dyna_path\nget_latest_ansys_installation\nget_mapdl_path\nget_mechanical_path\nget_saved_application_path\nsave_dyna_path\nsave_mapdl_path\nsave_mechanical_path\nversion_from_path\nchange_default_ansys_path\nfind_ansys\nget_ansys_path\nsave_ansys_path\nLOG\nSETTINGS_DIR\nSUPPORTED_ANSYS_VERSIONS"
+    },
+    {
+        "objectID": "api/ansys/tools/path/index",
+        "href": "api/ansys/tools/path/index.html#description",
+        "title": "The ansys.tools.path library > Description",
+        "section": "Description",
+        "text": "tools to find/cache installed Ansys products.\nWARNING: This is not concurrent-safe (multiple python processes might race on this data.)\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/index",
+        "href": "api/ansys/tools/path/index.html#module-detail",
+        "title": "The ansys.tools.path library > Module detail",
+        "section": "Module detail",
+        "text": "Module detail"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#contributing",
+        "title": "Contributing",
+        "section": "Contributing",
+        "text": "Contributing"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#how-to-install",
+        "title": "Contributing > How to install",
+        "section": "How to install",
+        "text": "At least two installation modes are provided: user and developer.\nHow to install"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#for-users",
+        "title": "Contributing > For users",
+        "section": "For users",
+        "text": "In order to install ansys-tools-path, make sure you\nhave the latest version of pip. To do so, run:\nThen, you can simply execute:\nFor users\nansys-tools-path"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#for-developers",
+        "title": "Contributing > For developers",
+        "section": "For developers",
+        "text": "Installing ansys-tools-path in developer mode allows\nyou to modify the source and enhance it.\nBefore contributing to the project, please refer to the PyAnsys Developer’s guide.\nYou need to follow these steps:\nStart by cloning this repository:\nCreate a fresh-clean Python environment and activate it:\nMake sure you have the latest required build system and doc, testing, and CI tools:\nInstall the project in editable mode:\nFor developers\nansys-tools-path"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#how-to-testing",
+        "title": "Contributing > How to testing",
+        "section": "How to testing",
+        "text": "If required, you can always call the style commands (black, isort,\nflake8…) or unit testing ones (pytest) from the command line. However,\nthis does not guarantee that your project is being tested in an isolated\nenvironment, which is the reason why tools like tox exist.\nHow to testing"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#a-note-on-pre-commit",
+        "title": "Contributing > A note on pre-commit",
+        "section": "A note on pre-commit",
+        "text": "The style checks take advantage of pre-commit. Developers are not forced but\nencouraged to install this tool via:\nA note on pre-commit"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#documentation",
+        "title": "Contributing > Documentation",
+        "section": "Documentation",
+        "text": "For building documentation, you can either run the usual rules provided in the\nSphinx Makefile, such us:\nDocumentation"
+    },
+    {
+        "objectID": "contribute",
+        "href": "contribute.html#distributing",
+        "title": "Contributing > Distributing",
+        "section": "Distributing",
+        "text": "If you would like to create either source or wheel files, start by installing\nthe building requirements and then executing the build module:\nDistributing"
+    },
+    {
+        "objectID": "api/index",
+        "href": "api/index.html#api-reference",
+        "title": "API reference",
+        "section": "API reference",
+        "text": "This section describes ansys-tools-path endpoints, their capabilities, and how\nto interact with them programmatically.\nAPI reference"
+    },
+    {
+        "objectID": "api/ansys/tools/path/save/index",
+        "href": "api/ansys/tools/path/save/index.html#the-savepy-module",
+        "title": "The save.py module",
+        "section": "The save.py module",
+        "text": "The save.py module\nsave.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/save/index",
+        "href": "api/ansys/tools/path/save/index.html#summary",
+        "title": "The save.py module > Summary",
+        "section": "Summary",
+        "text": "cli\nCLI tool to store the path of a solver.\nSummary\ncli"
+    },
+    {
+        "objectID": "api/ansys/tools/path/save/index",
+        "href": "api/ansys/tools/path/save/index.html#description",
+        "title": "The save.py module > Description",
+        "section": "Description",
+        "text": "Convenience CLI to save path for ansys application in configuration.\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/save/index",
+        "href": "api/ansys/tools/path/save/index.html#module-detail",
+        "title": "The save.py module > Module detail",
+        "section": "Module detail",
+        "text": "CLI tool to store the path of a solver.\nUSAGE:\nThe following example demonstrates the main use of this tool:\n$ save-ansys-path –name dyna /path/to/dyna\nModule detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/save/index",
+        "href": "api/ansys/tools/path/save/index.html#save.cli",
+        "title": "The save.py module > Module detail > cli",
+        "section": "Module detail > cli",
+        "text": "save.cli(name: str, location: str, allow_prompt: bool)\n\nCLI tool to store the path of a solver.\n\nUSAGE:\n\nThe following example demonstrates the main use of this tool:\n\n$ save-ansys-path –name dyna /path/to/dyna\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/dyna/index",
+        "href": "api/ansys/tools/path/applications/dyna/index.html#the-dynapy-module",
+        "title": "The dyna.py module",
+        "section": "The dyna.py module",
+        "text": "The dyna.py module\ndyna.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/dyna/index",
+        "href": "api/ansys/tools/path/applications/dyna/index.html#summary",
+        "title": "The dyna.py module > Summary",
+        "section": "Summary",
+        "text": "is_valid_executable_path\nSummary\nis_valid_executable_path"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/dyna/index",
+        "href": "api/ansys/tools/path/applications/dyna/index.html#description",
+        "title": "The dyna.py module > Description",
+        "section": "Description",
+        "text": "dyna-specific logic for ansys-tools-path.\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/dyna/index",
+        "href": "api/ansys/tools/path/applications/dyna/index.html#module-detail",
+        "title": "The dyna.py module > Module detail",
+        "section": "Module detail",
+        "text": "Module detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/dyna/index",
+        "href": "api/ansys/tools/path/applications/dyna/index.html#dyna.is_valid_executable_path",
+        "title": "The dyna.py module > Module detail > is_valid_executable_path",
+        "section": "Module detail > is_valid_executable_path",
+        "text": "dyna.is_valid_executable_path(exe_loc: str) -> bool\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#the-miscpy-module",
+        "title": "The misc.py module",
+        "section": "The misc.py module",
+        "text": "The misc.py module\nmisc.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#summary",
+        "title": "The misc.py module > Summary",
+        "section": "Summary",
+        "text": "is_float\nReturns true when a string can be converted to a float\nis_windows\nCheck if the host machine is on Windows.\nis_linux\nCheck if the host machine is Linux.\nSummary\nis_float\nis_windows\nis_linux"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#description",
+        "title": "The misc.py module > Description",
+        "section": "Description",
+        "text": "Miscellaneous functions used by ansys-tools-path.\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#module-detail",
+        "title": "The misc.py module > Module detail",
+        "section": "Module detail",
+        "text": "Returns true when a string can be converted to a float\nCheck if the host machine is on Windows.\nCheck if the host machine is Linux.\nModule detail\nTrue\nif\nthe\nhost\nmachine\nis\non\nWindows\nFalse\nTrue\nif\nthe\nhost\nmachine\nis\nLinux\nFalse"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#misc.is_float",
+        "title": "The misc.py module > Module detail > is_float",
+        "section": "Module detail > is_float",
+        "text": "misc.is_float(input_string: str) -> bool\n\nReturns true when a string can be converted to a float\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#misc.is_windows",
+        "title": "The misc.py module > Module detail > is_windows",
+        "section": "Module detail > is_windows",
+        "text": "misc.is_windows() -> bool\n\nCheck if the host machine is on Windows.\n\nReturns\n\nTrue if the host machine is on Windows, False otherwise.\n\n\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/misc/index",
+        "href": "api/ansys/tools/path/misc/index.html#misc.is_linux",
+        "title": "The misc.py module > Module detail > is_linux",
+        "section": "Module detail > is_linux",
+        "text": "misc.is_linux() -> bool\n\nCheck if the host machine is Linux.\n\nReturns\n\nTrue if the host machine is Linux, False otherwise.\n\n\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#the-pathpy-module",
+        "title": "The path.py module",
+        "section": "The path.py module",
+        "text": "The path.py module\npath.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#summary",
+        "title": "The path.py module > Summary",
+        "section": "Summary",
+        "text": "get_available_ansys_installations\nReturn a dictionary of available Ansys unified installation versions with their base paths.\nfind_mechanical\nSearch for the Mechanical path in the standard installation location.\nfind_mapdl\nSearches for Ansys MAPDL path within the standard install location\nfind_dyna\nSearches for Ansys LS-Dyna path within the standard install location\nfind_ansys\nObsolete method, use find_mapdl.\nis_valid_executable_path\nchange_default_mapdl_path\nChange your default Ansys MAPDL path.\nchange_default_dyna_path\nChange your default Ansys LS-Dyna path.\nchange_default_mechanical_path\nChange your default Mechanical path.\nchange_default_ansys_path\nDeprecated, use change_default_mapdl_path instead\nsave_mechanical_path\nFind the Mechanical path or query user.\nsave_dyna_path\nFind Ansys LD-Dyna’s path or query user.\nsave_mapdl_path\nFind Ansys MAPDL’s path or query user.\nsave_ansys_path\nDeprecated, use save_mapdl_path instead\nclear_configuration\nClear the entry of the specified product in the configuration file\nget_saved_application_path\nget_mapdl_path\nAcquires Ansys MAPDL Path:\nget_dyna_path\nAcquires Ansys LS-Dyna Path from a cached file or user input\nget_ansys_path\nDeprecated, use get_mapdl_path instead\nget_mechanical_path\nAcquires Ansys Mechanical Path\nversion_from_path\nExtract the product version from a path.\nget_latest_ansys_installation\nReturn a tuple with the latest ansys installation version and its path\nlinux_default_dirs\nPLUGINS\nLOG\nPRODUCT_TYPE\nSUPPORTED_VERSIONS_TYPE\nLINUX_DEFAULT_DIRS\nCONFIG_FILE_NAME\nSUPPORTED_ANSYS_VERSIONS\nPRODUCT_EXE_INFO\nSETTINGS_DIR\nCONFIG_FILE\nSummary\nget_available_ansys_installations\nfind_mechanical\nfind_mapdl\nfind_dyna\nfind_ansys\nis_valid_executable_path\nchange_default_mapdl_path\nchange_default_dyna_path\nchange_default_mechanical_path\nchange_default_ansys_path\nsave_mechanical_path\nsave_dyna_path\nsave_mapdl_path\nsave_ansys_path\nclear_configuration\nget_saved_application_path\nget_mapdl_path\nget_dyna_path\nget_ansys_path\nget_mechanical_path\nversion_from_path\nget_latest_ansys_installation\nlinux_default_dirs\nPLUGINS\nLOG\nPRODUCT_TYPE\nSUPPORTED_VERSIONS_TYPE\nLINUX_DEFAULT_DIRS\nCONFIG_FILE_NAME\nSUPPORTED_ANSYS_VERSIONS\nPRODUCT_EXE_INFO\nSETTINGS_DIR\nCONFIG_FILE"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#module-detail",
+        "title": "The path.py module > Module detail",
+        "section": "Module detail",
+        "text": "Return a dictionary of available Ansys unified installation versions with their base paths.\nReturn all Ansys unified installations paths in Windows.\nOn Windows, It uses the environment variable AWP_ROOTXXX.\nThe student versions are returned at the end of the dict and\nwith negative value for the version.\nReturn all installed Ansys paths in Linux.\nSearch for the Mechanical path in the standard installation location.\nFull path to the executable file for the latest Mechanical version.\nVersion in the float format. For example, 23.1 for 2023 R1.\nIf no version has be found, version is set to “”\nOn Windows:\nOn Linux:\nSearches for Ansys MAPDL path within the standard install location\nand returns the path of the latest version.\nVersion of Ansys MAPDL to search for.\nIf using int, it should follow the convention XXY, where\nXX is the major version,\nand Y is the minor.\nIf using float, it should follow the convention XX.Y, where\nXX is the major version,\nand Y is the minor.\nIf None, use latest available version on the machine.\nFull path to ANSYS executable.\nVersion float.  For example, 21.1 corresponds to 2021R1.\nWithin Windows\nWithin Linux\nSearches for Ansys LS-Dyna path within the standard install location\nand returns the path of the latest version.\nVersion of Ansys LS-Dyna to search for.\nIf using int, it should follow the convention XXY, where\nXX is the major version,\nand Y is the minor.\nIf using float, it should follow the convention XX.Y, where\nXX is the major version,\nand Y is the minor.\nIf None, use latest available version on the machine.\nFull path to Ansys LS-Dyna executable.\nVersion float.  For example, 21.1 corresponds to 2021R1.\nWithin Windows\nWithin Linux\nObsolete method, use find_mapdl.\nChange your default Ansys MAPDL path.\nAnsys MAPDL executable path.  Must be a full path.\nChange default Ansys MAPDL location on Linux\nChange default Ansys location on Windows\nChange your default Ansys LS-Dyna path.\npath to LS-Dyna executable. Must be a full path. This need not contain the name of the executable,\nbecause the name of the LS-Dyna executable depends on the precision.\nChange default Ansys LS-Dyna location on Linux\nChange default Ansys LS-Dyna location on Windows\nChange your default Mechanical path.\nFull path for the Mechanical executable file to use.\nOn Windows:\nOn Linux:\nDeprecated, use change_default_mapdl_path instead\nFind the Mechanical path or query user.\nPath for the Mechanical executable file (AnsysWBU.exe).\nThe default is None, in which case an attempt is made to\nobtain the path from the following sources in this order:\nThe default Mechanical paths (for example,\nC:/Program Files/Ansys Inc/vXXX/aiso/bin/AnsysWBU.exe)\nThe configuration file\nUser input\nIf a path is supplied, this method performs some checks. If the\nchecks are successful, it writes this path to the configuration\nfile.\nPath for the Mechanical executable file.\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\nYou can change the default for the exe_loc parameter either by modifying the\nconfig.txt file or by running this code:\nFind Ansys LD-Dyna’s path or query user.\nIf no exe_loc argument is supplied, this function attempt\nto obtain the Ansys LS-Dyna executable from (and in order):\nThe default ansys paths (i.e. 'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/LSDYNAXXX')\nThe configuration file\nUser input\nIf exe_loc is supplied, this function does some checks.\nIf successful, it will write that exe_loc into the config file.\nPath of the LS-Dyna executable (‘lsdynaXXX’), by default None.\nPath of the LS-Dyna executable.\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\nYou can change the default exe_loc either by modifying the mentioned\nconfig.txt file or by executing:\nFind Ansys MAPDL’s path or query user.\nIf no exe_loc argument is supplied, this function attempt\nto obtain the Ansys MAPDL executable from (and in order):\nThe default ansys paths (i.e. 'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/ansysXXX')\nThe configuration file\nUser input\nIf exe_loc is supplied, this function does some checks.\nIf successful, it will write that exe_loc into the config file.\nPath of the MAPDL executable (‘ansysXXX’), by default None.\nPath of the MAPDL executable.\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\nYou can change the default exe_loc either by modifying the mentioned\nconfig.txt file or by executing:\nDeprecated, use save_mapdl_path instead\nClear the entry of the specified product in the configuration file\nAcquires Ansys MAPDL Path:\nFirst, it looks in the configuration file, used by save_mapdl_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\nAllow user input to find Ansys MAPDL path.  The default is True.\nVersion of Ansys MAPDL to search for. For example version=22.2.\nIf None, use latest.\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\nAcquires Ansys LS-Dyna Path from a cached file or user input\nFirst, it looks in the configuration file, used by save_dyna_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\nAllow user input to find Ansys LS-Dyna path.  The default is True.\nVersion of Ansys LS-Dyna to search for. For example version=22.2.\nIf None, use latest.\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\nDeprecated, use get_mapdl_path instead\nAcquires Ansys Mechanical Path\nFirst, it looks in the configuration file, used by save_mechanical_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\nAllow user input to find Ansys Mechanical path.  The default is True.\nVersion of Ansys Mechanical to search for. For example version=22.2.\nIf None, use latest.\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\nExtract the product version from a path.\nPath to the executable file.\nInteger version number (for example, 231).\nReturn a tuple with the latest ansys installation version and its path\nIf there is a student version and a regular installation for the latest release, the regular one is returned\nTuple with the latest version and path of the installation\nModule detail\npython:dict\npython:str\nAWP_ROOTXXX\npython:str\npython:float\npython:str\n23.1\npython:int\npython:float\noptional\nint\nXXY\nXX\nY\nfloat\nXX.Y\nXX\nY\nNone\npython:str\npython:float\npython:int\npython:float\noptional\nint\nXXY\nXX\nY\nfloat\nXX.Y\nXX\nY\nNone\npython:str\npython:float\npython:str\npython:str\npython:str\npython:str\noptional\nAnsysWBU.exe\nNone\nC:/Program Files/Ansys Inc/vXXX/aiso/bin/AnsysWBU.exe\npython:str\nconfig.txt\nansys.tools.path.SETTINGS_DIR\nexe_loc\nconfig.txt\nexe_loc\n'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/LSDYNAXXX'\nexe_loc\nexe_loc\npython:str\noptional\nNone\npython:str\nconfig.txt\nansys.tools.path.SETTINGS_DIR\nexe_loc\nconfig.txt\nexe_loc\n'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/ansysXXX'\nexe_loc\nexe_loc\npython:str\noptional\nNone\npython:str\nconfig.txt\nansys.tools.path.SETTINGS_DIR\nexe_loc\nconfig.txt\noptional\nTrue\npython:float\noptional\nversion=22.2\nNone\noptional\nTrue\npython:float\noptional\nversion=22.2\nNone\noptional\nTrue\npython:float\noptional\nversion=22.2\nNone\npython:str\npython:int\nTuple\npython:int\npython:str"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_available_ansys_installations",
+        "title": "The path.py module > Module detail > get_available_ansys_installations",
+        "section": "Module detail > get_available_ansys_installations",
+        "text": "path.get_available_ansys_installations(supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS) -> Dict[int, str]\n\nReturn a dictionary of available Ansys unified installation versions with their base paths.\n\nReturns\n\npython:dict[int: python:str]\n\nReturn all Ansys unified installations paths in Windows.\n\nNotes\n\nOn Windows, It uses the environment variable AWP_ROOTXXX.\n\nThe student versions are returned at the end of the dict and\nwith negative value for the version.\n\nExamples\n\n>>> from ansys.tools.path import get_available_ansys_installations\n>>> get_available_ansys_installations()\n{222: 'C:\\Program Files\\ANSYS Inc\\v222',\n 212: 'C:\\Program Files\\ANSYS Inc\\v212',\n -222: 'C:\\Program Files\\ANSYS Inc\\ANSYS Student\\v222'}\n\nReturn all installed Ansys paths in Linux.\n\n>>> get_available_ansys_installations()\n{194: '/usr/ansys_inc/v194',\n 202: '/usr/ansys_inc/v202',\n 211: '/usr/ansys_inc/v211'}\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.find_mechanical",
+        "title": "The path.py module > Module detail > find_mechanical",
+        "section": "Module detail > find_mechanical",
+        "text": "path.find_mechanical(version: float | None = None, supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS) -> Tuple[str, float] | Tuple[Literal[''], Literal['']]\n\nSearch for the Mechanical path in the standard installation location.\n\nReturns\n\nmechanical_path\n\npython:str\n\nFull path to the executable file for the latest Mechanical version.\n\nversion\n\npython:float | python:str\n\nVersion in the float format. For example, 23.1 for 2023 R1.\nIf no version has be found, version is set to “”\n\nExamples\n\nOn Windows:\n\n>>> from ansys.tools.path import find_mechanical\n>>> find_mechanical()\n('C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1)\n\nOn Linux:\n\n>>> find_mechanical()\n('/usr/ansys_inc/v231/aisol/.workbench', 23.1)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.find_mapdl",
+        "title": "The path.py module > Module detail > find_mapdl",
+        "section": "Module detail > find_mapdl",
+        "text": "path.find_mapdl(version: int | float | None = None, supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS) -> Tuple[str, float] | Tuple[Literal[''], Literal['']]\n\nSearches for Ansys MAPDL path within the standard install location\nand returns the path of the latest version.\n\nParameters\n\nversion\n\npython:int, python:float, optional\n\nVersion of Ansys MAPDL to search for.\nIf using int, it should follow the convention XXY, where\nXX is the major version,\nand Y is the minor.\nIf using float, it should follow the convention XX.Y, where\nXX is the major version,\nand Y is the minor.\nIf None, use latest available version on the machine.\n\nReturns\n\nansys_path\n\npython:str\n\nFull path to ANSYS executable.\n\nversion\n\npython:float\n\nVersion float.  For example, 21.1 corresponds to 2021R1.\n\nExamples\n\nWithin Windows\n\n>>> from ansys.tools.path import find_mapdl\n>>> find_mapdl()\n'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1\n\nWithin Linux\n\n>>> find_mapdl()\n(/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.find_dyna",
+        "title": "The path.py module > Module detail > find_dyna",
+        "section": "Module detail > find_dyna",
+        "text": "path.find_dyna(version: int | float | None = None, supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS) -> Tuple[str, float] | Tuple[Literal[''], Literal['']]\n\nSearches for Ansys LS-Dyna path within the standard install location\nand returns the path of the latest version.\n\nParameters\n\nversion\n\npython:int, python:float, optional\n\nVersion of Ansys LS-Dyna to search for.\nIf using int, it should follow the convention XXY, where\nXX is the major version,\nand Y is the minor.\nIf using float, it should follow the convention XX.Y, where\nXX is the major version,\nand Y is the minor.\nIf None, use latest available version on the machine.\n\nReturns\n\nansys_path\n\npython:str\n\nFull path to Ansys LS-Dyna executable.\n\nversion\n\npython:float\n\nVersion float.  For example, 21.1 corresponds to 2021R1.\n\nExamples\n\nWithin Windows\n\n>>> from ansys.tools.path import find_dyna\n>>> find_dyna()\n'C:/Program Files/ANSYS Inc/v232/ANSYS/bin/winx64/LSDYNA232.exe', 23.2\n\nWithin Linux\n\n>>> find_dyna()\n(/usr/ansys_inc/v232/ansys/bin/lsdyna232, 23.2)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.find_ansys",
+        "title": "The path.py module > Module detail > find_ansys",
+        "section": "Module detail > find_ansys",
+        "text": "path.find_ansys(version: float | None = None, supported_versions: SUPPORTED_VERSIONS_TYPE = SUPPORTED_ANSYS_VERSIONS) -> Tuple[str, float] | Tuple[Literal[''], Literal['']]\n\nObsolete method, use find_mapdl.\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.is_valid_executable_path",
+        "title": "The path.py module > Module detail > is_valid_executable_path",
+        "section": "Module detail > is_valid_executable_path",
+        "text": "path.is_valid_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.change_default_mapdl_path",
+        "title": "The path.py module > Module detail > change_default_mapdl_path",
+        "section": "Module detail > change_default_mapdl_path",
+        "text": "path.change_default_mapdl_path(exe_loc: str) -> None\n\nChange your default Ansys MAPDL path.\n\nParameters\n\nexe_loc\n\npython:str\n\nAnsys MAPDL executable path.  Must be a full path.\n\nExamples\n\nChange default Ansys MAPDL location on Linux\n\n>>> from ansys.tools.path import change_default_mapdl_path, get_mapdl_path\n>>> change_default_mapdl_path('/ansys_inc/v201/ansys/bin/ansys201')\n>>> get_mapdl_path()\n'/ansys_inc/v201/ansys/bin/ansys201'\n\nChange default Ansys location on Windows\n\n>>> mapdl_path = 'C:/Program Files/ANSYS Inc/v193/ansys/bin/winx64/ANSYS193.exe'\n>>> change_default_mapdl_path(mapdl_path)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.change_default_dyna_path",
+        "title": "The path.py module > Module detail > change_default_dyna_path",
+        "section": "Module detail > change_default_dyna_path",
+        "text": "path.change_default_dyna_path(exe_loc: str) -> None\n\nChange your default Ansys LS-Dyna path.\n\nParameters\n\nexe_loc\n\npython:str\n\npath to LS-Dyna executable. Must be a full path. This need not contain the name of the executable,\nbecause the name of the LS-Dyna executable depends on the precision.\n\nExamples\n\nChange default Ansys LS-Dyna location on Linux\n\n>>> from ansys.tools.path import change_default_dyna_path, get_dyna_path\n>>> change_default_dyna_path('/ansys_inc/v232/ansys/bin/lsdyna232')\n>>> get_dyna_path()\n'/ansys_inc/v232/ansys/bin/lsdyna232'\n\nChange default Ansys LS-Dyna location on Windows\n\n>>> dyna_path = 'C:/Program Files/ANSYS Inc/v232/ansys/bin/winx64/LSDYNA232.exe'\n>>> change_default_dyna_path(dyna_path)\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.change_default_mechanical_path",
+        "title": "The path.py module > Module detail > change_default_mechanical_path",
+        "section": "Module detail > change_default_mechanical_path",
+        "text": "path.change_default_mechanical_path(exe_loc: str) -> None\n\nChange your default Mechanical path.\n\nParameters\n\nexe_loc\n\npython:str\n\nFull path for the Mechanical executable file to use.\n\nExamples\n\nOn Windows:\n\n>>> from ansys.tools.path import change_default_mechanical_path, get_mechanical_path\n>>> change_default_mechanical_path('C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/AnsysWBU.exe')\n>>> get_mechanical_path()\n'C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/AnsysWBU.exe'\n\nOn Linux:\n\n>>> from ansys.tools.path import change_default_mechanical_path, get_mechanical_path\n>>> change_default_mechanical_path('/ansys_inc/v231/aisol/.workbench')\n>>> get_mechanical_path()\n'/ansys_inc/v231/aisol/.workbench'\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.change_default_ansys_path",
+        "title": "The path.py module > Module detail > change_default_ansys_path",
+        "section": "Module detail > change_default_ansys_path",
+        "text": "path.change_default_ansys_path(exe_loc: str) -> None\n\nDeprecated, use change_default_mapdl_path instead\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.save_mechanical_path",
+        "title": "The path.py module > Module detail > save_mechanical_path",
+        "section": "Module detail > save_mechanical_path",
+        "text": "path.save_mechanical_path(exe_loc: str | None = None, allow_prompt: bool = True) -> str\n\nFind the Mechanical path or query user.\n\nParameters\n\nexe_loc\n\npython:str, optional\n\nPath for the Mechanical executable file (AnsysWBU.exe).\nThe default is None, in which case an attempt is made to\nobtain the path from the following sources in this order:\n\nThe default Mechanical paths (for example,\nC:/Program Files/Ansys Inc/vXXX/aiso/bin/AnsysWBU.exe)\n\nThe configuration file\n\nUser input\n\nIf a path is supplied, this method performs some checks. If the\nchecks are successful, it writes this path to the configuration\nfile.\n\nReturns\n\npython:str\n\nPath for the Mechanical executable file.\n\nNotes\n\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\n\n>>> from ansys.tools.path import SETTINGS_DIR\n>>> import os\n>>> print(os.path.join(SETTINGS_DIR, \"config.txt\"))\nC:/Users/[username]]/AppData/Local/Ansys/ansys_tools_path/config.txt\n\nYou can change the default for the exe_loc parameter either by modifying the\nconfig.txt file or by running this code:\n\n>>> from ansys.tools.path import save_mechanical_path\n>>> save_mechanical_path(\"/new/path/to/executable\")\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.save_dyna_path",
+        "title": "The path.py module > Module detail > save_dyna_path",
+        "section": "Module detail > save_dyna_path",
+        "text": "path.save_dyna_path(exe_loc: str | None = None, allow_prompt: bool = True) -> str\n\nFind Ansys LD-Dyna’s path or query user.\n\nIf no exe_loc argument is supplied, this function attempt\nto obtain the Ansys LS-Dyna executable from (and in order):\n\nThe default ansys paths (i.e. 'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/LSDYNAXXX')\n\nThe configuration file\n\nUser input\n\nIf exe_loc is supplied, this function does some checks.\nIf successful, it will write that exe_loc into the config file.\n\nParameters\n\nexe_loc\n\npython:str, optional\n\nPath of the LS-Dyna executable (‘lsdynaXXX’), by default None.\n\nReturns\n\npython:str\n\nPath of the LS-Dyna executable.\n\nNotes\n\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\n\n>>> from ansys.tools.path import SETTINGS_DIR\n>>> import os\n>>> print(os.path.join(SETTINGS_DIR, \"config.txt\"))\nC:/Users/[username]/AppData/Local/Ansys/ansys_tools_path/config.txt\n\nExamples\n\nYou can change the default exe_loc either by modifying the mentioned\nconfig.txt file or by executing:\n\n>>> from ansys.tools.path import save_dyna_path\n>>> save_dyna_path('/new/path/to/executable')\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.save_mapdl_path",
+        "title": "The path.py module > Module detail > save_mapdl_path",
+        "section": "Module detail > save_mapdl_path",
+        "text": "path.save_mapdl_path(exe_loc: str | None = None, allow_prompt: bool = True) -> str\n\nFind Ansys MAPDL’s path or query user.\n\nIf no exe_loc argument is supplied, this function attempt\nto obtain the Ansys MAPDL executable from (and in order):\n\nThe default ansys paths (i.e. 'C:/Program Files/Ansys Inc/vXXX/ansys/bin/winx64/ansysXXX')\n\nThe configuration file\n\nUser input\n\nIf exe_loc is supplied, this function does some checks.\nIf successful, it will write that exe_loc into the config file.\n\nParameters\n\nexe_loc\n\npython:str, optional\n\nPath of the MAPDL executable (‘ansysXXX’), by default None.\n\nReturns\n\npython:str\n\nPath of the MAPDL executable.\n\nNotes\n\nThe location of the configuration file config.txt can be found in\nansys.tools.path.SETTINGS_DIR. For example:\n\n>>> from ansys.tools.path import SETTINGS_DIR\n>>> import os\n>>> print(os.path.join(SETTINGS_DIR, \"config.txt\"))\nC:/Users/[username]/AppData/Local/Ansys/ansys_tools_path/config.txt\n\nExamples\n\nYou can change the default exe_loc either by modifying the mentioned\nconfig.txt file or by executing:\n\n>>> from ansys.tools.path import save_mapdl_path\n>>> save_mapdl_path('/new/path/to/executable')\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.save_ansys_path",
+        "title": "The path.py module > Module detail > save_ansys_path",
+        "section": "Module detail > save_ansys_path",
+        "text": "path.save_ansys_path(exe_loc: str | None = None, allow_prompt: bool = True) -> str\n\nDeprecated, use save_mapdl_path instead\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.clear_configuration",
+        "title": "The path.py module > Module detail > clear_configuration",
+        "section": "Module detail > clear_configuration",
+        "text": "path.clear_configuration(product: PRODUCT_TYPE | Literal['all']) -> None\n\nClear the entry of the specified product in the configuration file\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_saved_application_path",
+        "title": "The path.py module > Module detail > get_saved_application_path",
+        "section": "Module detail > get_saved_application_path",
+        "text": "path.get_saved_application_path(application: str) -> str | None\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_mapdl_path",
+        "title": "The path.py module > Module detail > get_mapdl_path",
+        "section": "Module detail > get_mapdl_path",
+        "text": "path.get_mapdl_path(allow_input: bool = True, version: float | None = None, find: bool = True) -> str | None\n\nAcquires Ansys MAPDL Path:\n\nFirst, it looks in the configuration file, used by save_mapdl_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\n\nParameters\n\nallow_input\n\nbool, optional\n\nAllow user input to find Ansys MAPDL path.  The default is True.\n\nversion\n\npython:float, optional\n\nVersion of Ansys MAPDL to search for. For example version=22.2.\nIf None, use latest.\n\nfind: bool, optional\n\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_dyna_path",
+        "title": "The path.py module > Module detail > get_dyna_path",
+        "section": "Module detail > get_dyna_path",
+        "text": "path.get_dyna_path(allow_input: bool = True, version: float | None = None, find: bool = True) -> str | None\n\nAcquires Ansys LS-Dyna Path from a cached file or user input\n\nFirst, it looks in the configuration file, used by save_dyna_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\n\nParameters\n\nallow_input\n\nbool, optional\n\nAllow user input to find Ansys LS-Dyna path.  The default is True.\n\nversion\n\npython:float, optional\n\nVersion of Ansys LS-Dyna to search for. For example version=22.2.\nIf None, use latest.\n\nfind: bool, optional\n\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_ansys_path",
+        "title": "The path.py module > Module detail > get_ansys_path",
+        "section": "Module detail > get_ansys_path",
+        "text": "path.get_ansys_path(allow_input: bool = True, version: float | None = None) -> str | None\n\nDeprecated, use get_mapdl_path instead\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_mechanical_path",
+        "title": "The path.py module > Module detail > get_mechanical_path",
+        "section": "Module detail > get_mechanical_path",
+        "text": "path.get_mechanical_path(allow_input: bool = True, version: float | None = None, find: bool = True) -> str | None\n\nAcquires Ansys Mechanical Path\n\nFirst, it looks in the configuration file, used by save_mechanical_path\nThen, it tries to find it based on conventions for where it usually is.\nLastly, it takes user input\n\nParameters\n\nallow_input\n\nbool, optional\n\nAllow user input to find Ansys Mechanical path.  The default is True.\n\nversion\n\npython:float, optional\n\nVersion of Ansys Mechanical to search for. For example version=22.2.\nIf None, use latest.\n\nfind: bool, optional\n\nAllow ansys-tools-path to search for Ansys Mechanical in typical installation locations\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.version_from_path",
+        "title": "The path.py module > Module detail > version_from_path",
+        "section": "Module detail > version_from_path",
+        "text": "path.version_from_path(product: PRODUCT_TYPE, path: str) -> int\n\nExtract the product version from a path.\n\nParameters\n\npath\n\npython:str\n\nPath to the executable file.\n\nReturns\n\npython:int\n\nInteger version number (for example, 231).\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.get_latest_ansys_installation",
+        "title": "The path.py module > Module detail > get_latest_ansys_installation",
+        "section": "Module detail > get_latest_ansys_installation",
+        "text": "path.get_latest_ansys_installation() -> Tuple[int, str]\n\nReturn a tuple with the latest ansys installation version and its path\n\nIf there is a student version and a regular installation for the latest release, the regular one is returned\n\nReturns\n\nTuple[python:int, python:str]\n\nTuple with the latest version and path of the installation\n\n!! processed by numpydoc !!"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.PLUGINS",
+        "title": "The path.py module > Module detail > PLUGINS",
+        "section": "Module detail > PLUGINS",
+        "text": "path.PLUGINS: Dict[str, ansys.tools.path.applications.ApplicationPlugin]\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.LOG",
+        "title": "The path.py module > Module detail > LOG",
+        "section": "Module detail > LOG",
+        "text": "path.LOG\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.PRODUCT_TYPE",
+        "title": "The path.py module > Module detail > PRODUCT_TYPE",
+        "section": "Module detail > PRODUCT_TYPE",
+        "text": "path.PRODUCT_TYPE\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.SUPPORTED_VERSIONS_TYPE",
+        "title": "The path.py module > Module detail > SUPPORTED_VERSIONS_TYPE",
+        "section": "Module detail > SUPPORTED_VERSIONS_TYPE",
+        "text": "path.SUPPORTED_VERSIONS_TYPE\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.LINUX_DEFAULT_DIRS",
+        "title": "The path.py module > Module detail > LINUX_DEFAULT_DIRS",
+        "section": "Module detail > LINUX_DEFAULT_DIRS",
+        "text": "path.LINUX_DEFAULT_DIRS\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.CONFIG_FILE_NAME",
+        "title": "The path.py module > Module detail > CONFIG_FILE_NAME",
+        "section": "Module detail > CONFIG_FILE_NAME",
+        "text": "path.CONFIG_FILE_NAME = 'config.txt'\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.SUPPORTED_ANSYS_VERSIONS",
+        "title": "The path.py module > Module detail > SUPPORTED_ANSYS_VERSIONS",
+        "section": "Module detail > SUPPORTED_ANSYS_VERSIONS",
+        "text": "path.SUPPORTED_ANSYS_VERSIONS: SUPPORTED_VERSIONS_TYPE\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.PRODUCT_EXE_INFO",
+        "title": "The path.py module > Module detail > PRODUCT_EXE_INFO",
+        "section": "Module detail > PRODUCT_EXE_INFO",
+        "text": "path.PRODUCT_EXE_INFO\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.SETTINGS_DIR",
+        "title": "The path.py module > Module detail > SETTINGS_DIR",
+        "section": "Module detail > SETTINGS_DIR",
+        "text": "path.SETTINGS_DIR\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.CONFIG_FILE",
+        "title": "The path.py module > Module detail > CONFIG_FILE",
+        "section": "Module detail > CONFIG_FILE",
+        "text": "path.CONFIG_FILE\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/path/index",
+        "href": "api/ansys/tools/path/path/index.html#path.linux_default_dirs",
+        "title": "The path.py module > Module detail > linux_default_dirs",
+        "section": "Module detail > linux_default_dirs",
+        "text": "path.linux_default_dirs = [['/', 'usr', 'ansys_inc'], ['/', 'ansys_inc'], ['/', 'install', 'ansys_inc']]\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#applicationplugin",
+        "title": "ApplicationPlugin",
+        "section": "ApplicationPlugin",
+        "text": "ApplicationPlugin\nApplicationPlugin"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#ansys.tools.path.applications.ApplicationPlugin",
+        "title": "ApplicationPlugin > ApplicationPlugin > ApplicationPlugin",
+        "section": "ApplicationPlugin > ApplicationPlugin",
+        "text": "class ansys.tools.path.applications.ApplicationPlugin\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#overview",
+        "title": "ApplicationPlugin > Overview",
+        "section": "Overview",
+        "text": "is_valid_executable_path\nOverview\nis_valid_executable_path"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#import-detail",
+        "title": "ApplicationPlugin > Import detail",
+        "section": "Import detail",
+        "text": "Import detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#method-detail",
+        "title": "ApplicationPlugin > Method detail",
+        "section": "Method detail",
+        "text": "Method detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/ApplicationPlugin",
+        "href": "api/ansys/tools/path/applications/ApplicationPlugin.html#ApplicationPlugin.is_valid_executable_path",
+        "title": "ApplicationPlugin > Method detail > is_valid_executable_path",
+        "section": "Method detail > is_valid_executable_path",
+        "text": "ApplicationPlugin.is_valid_executable_path() -> bool\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mechanical/index",
+        "href": "api/ansys/tools/path/applications/mechanical/index.html#the-mechanicalpy-module",
+        "title": "The mechanical.py module",
+        "section": "The mechanical.py module",
+        "text": "The mechanical.py module\nmechanical.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mechanical/index",
+        "href": "api/ansys/tools/path/applications/mechanical/index.html#summary",
+        "title": "The mechanical.py module > Summary",
+        "section": "Summary",
+        "text": "is_valid_executable_path\nSummary\nis_valid_executable_path"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mechanical/index",
+        "href": "api/ansys/tools/path/applications/mechanical/index.html#description",
+        "title": "The mechanical.py module > Description",
+        "section": "Description",
+        "text": "Mechanical-specific logic for ansys-tools-path.\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mechanical/index",
+        "href": "api/ansys/tools/path/applications/mechanical/index.html#module-detail",
+        "title": "The mechanical.py module > Module detail",
+        "section": "Module detail",
+        "text": "Module detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mechanical/index",
+        "href": "api/ansys/tools/path/applications/mechanical/index.html#mechanical.is_valid_executable_path",
+        "title": "The mechanical.py module > Module detail > is_valid_executable_path",
+        "section": "Module detail > is_valid_executable_path",
+        "text": "mechanical.is_valid_executable_path(exe_loc: str) -> bool\n\n"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mapdl/index",
+        "href": "api/ansys/tools/path/applications/mapdl/index.html#the-mapdlpy-module",
+        "title": "The mapdl.py module",
+        "section": "The mapdl.py module",
+        "text": "The mapdl.py module\nmapdl.py"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mapdl/index",
+        "href": "api/ansys/tools/path/applications/mapdl/index.html#summary",
+        "title": "The mapdl.py module > Summary",
+        "section": "Summary",
+        "text": "is_valid_executable_path\nSummary\nis_valid_executable_path"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mapdl/index",
+        "href": "api/ansys/tools/path/applications/mapdl/index.html#description",
+        "title": "The mapdl.py module > Description",
+        "section": "Description",
+        "text": "MAPDL-specific logic for ansys-tools-path.\nDescription"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mapdl/index",
+        "href": "api/ansys/tools/path/applications/mapdl/index.html#module-detail",
+        "title": "The mapdl.py module > Module detail",
+        "section": "Module detail",
+        "text": "Module detail"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/mapdl/index",
+        "href": "api/ansys/tools/path/applications/mapdl/index.html#mapdl.is_valid_executable_path",
+        "title": "The mapdl.py module > Module detail > is_valid_executable_path",
+        "section": "Module detail > is_valid_executable_path",
+        "text": "mapdl.is_valid_executable_path(exe_loc: str) -> bool\n\n"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#ansys-tools-path-a-tool-to-locate-ansys-products",
+        "title": "ansys-tools-path: A tool to locate Ansys products",
+        "section": "ansys-tools-path: A tool to locate Ansys products",
+        "text": "ansys-tools-path: A tool to locate Ansys products\nansys-tools-path"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#how-to-install",
+        "title": "ansys-tools-path: A tool to locate Ansys products > How to install",
+        "section": "How to install",
+        "text": "In order to install ansys-tools-path, make sure you\nhave the latest version of pip. To do so, run:\nThen, you can simply execute:\nHow to install\nansys-tools-path"
+    },
+    {
+        "objectID": "index",
+        "href": "index.html#how-to-use",
+        "title": "ansys-tools-path: A tool to locate Ansys products > How to use",
+        "section": "How to use",
+        "text": "You can use any of the functions available in the\nto identify the path of the local Ansys installation.\nFor example you can use find_ansys\nto locate the path of the latest Ansys installation available:\nHow to use\nfind_ansys"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/index",
+        "href": "api/ansys/tools/path/applications/index.html#the-applications-package",
+        "title": "The applications package",
+        "section": "The applications package",
+        "text": "The applications package\napplications"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/index",
+        "href": "api/ansys/tools/path/applications/index.html#summary",
+        "title": "The applications package > Summary",
+        "section": "Summary",
+        "text": "dyna\ndyna-specific logic for ansys-tools-path.\nmapdl\nMAPDL-specific logic for ansys-tools-path.\nmechanical\nMechanical-specific logic for ansys-tools-path.\nApplicationPlugin\nSummary\ndyna\nmapdl\nmechanical\nApplicationPlugin"
+    },
+    {
+        "objectID": "api/ansys/tools/path/applications/index",
+        "href": "api/ansys/tools/path/applications/index.html#description",
+        "title": "The applications package > Description",
+        "section": "Description",
+        "text": "Application plugin for ansys-tools-path.\nThis defines the interface of a plugin, which is implemented using a module.\nDescription"
+    }
+]
