@@ -204,12 +204,12 @@ def _get_available_base_unified(
     On Windows:
 
     >>> _get_available_base_unified()
-    >>> {231: 'C:\\Program Files\\ANSYS Inc\\v231'}
+    >>> {231: 'C:\\Program Files\\ANSYS Inc\\v251'}
 
     On Linux:
 
     >>> _get_available_base_unified()
-    >>> {231: '/usr/ansys_inc/v231'}
+    >>> {231: '/usr/ansys_inc/v251'}
     """
     base_path = None
     if is_windows():  # pragma: no cover
@@ -257,7 +257,7 @@ def get_available_ansys_installations(
     >>> get_available_ansys_installations()
     {194: '/usr/ansys_inc/v194',
      202: '/usr/ansys_inc/v202',
-     211: '/usr/ansys_inc/v211'}
+     211: '/usr/ansys_inc/v251'}
     """
     return _get_available_base_unified(supported_versions)
 
@@ -316,12 +316,12 @@ def find_mechanical(
 
     >>> from ansys.tools.path import find_mechanical
     >>> find_mechanical()
-    ('C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe', 23.1)
+    ('C:/Program Files/ANSYS Inc/v251/aisol/bin/winx64/AnsysWBU.exe', 23.1)
 
     On Linux:
 
     >>> find_mechanical()
-    ('/usr/ansys_inc/v231/aisol/.workbench', 23.1)
+    ('/usr/ansys_inc/v251/aisol/.workbench', 23.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
@@ -366,12 +366,12 @@ def find_mapdl(
 
     >>> from ansys.tools.path import find_mapdl
     >>> find_mapdl()
-    'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1
+    'C:/Program Files/ANSYS Inc/v251/ANSYS/bin/winx64/ansys211.exe', 21.1
 
     Within Linux
 
     >>> find_mapdl()
-    (/usr/ansys_inc/v211/ansys/bin/ansys211, 21.1)
+    (/usr/ansys_inc/v251/ansys/bin/ansys211, 21.1)
     """
     ans_path, version = _get_unified_install_base_for_version(version, supported_versions)
     if not ans_path or not version:
@@ -476,7 +476,7 @@ def _is_common_executable_path(product: PRODUCT_TYPE, exe_loc: str) -> bool:
         path = os.path.normpath(exe_loc)
         path = path.split(os.sep)
         # Look for all v(\d\d\d) to catch the last one
-        # in case the user has placed the installation folder inside a folder called for example (/ansys/v211)
+        # in case the user has placed the installation folder inside a folder called for example (/ansys/v251)
         v_version = re.findall(r"v(\d\d\d)", exe_loc)
         ansys_version = re.findall(r"ansys(\d\d\d)", exe_loc, re.IGNORECASE)
         return (
@@ -591,16 +591,16 @@ def change_default_mechanical_path(exe_loc: str) -> None:
     On Windows:
 
     >>> from ansys.tools.path import change_default_mechanical_path, get_mechanical_path
-    >>> change_default_mechanical_path('C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/AnsysWBU.exe')
+    >>> change_default_mechanical_path('C:/Program Files/ANSYS Inc/v251/aisol/bin/win64/AnsysWBU.exe')
     >>> get_mechanical_path()
-    'C:/Program Files/ANSYS Inc/v231/aisol/bin/win64/AnsysWBU.exe'
+    'C:/Program Files/ANSYS Inc/v251/aisol/bin/win64/AnsysWBU.exe'
 
     On Linux:
 
     >>> from ansys.tools.path import change_default_mechanical_path, get_mechanical_path
-    >>> change_default_mechanical_path('/ansys_inc/v231/aisol/.workbench')
+    >>> change_default_mechanical_path('/ansys_inc/v251/aisol/.workbench')
     >>> get_mechanical_path()
-    '/ansys_inc/v231/aisol/.workbench'
+    '/ansys_inc/v251/aisol/.workbench'
 
     """
     _change_default_path("mechanical", exe_loc)
@@ -1094,16 +1094,7 @@ def _version_from_path(path: str, product_name: str, path_version_regex: str) ->
     Parameters
     ----------
     path: str
-        The path to the Ansys executable. For example:
-
-        Mechanical:
-        - Windows: ``C:/Program Files/ANSYS Inc/v231/aisol/bin/winx64/AnsysWBU.exe``
-        - Linux: ``/usr/ansys_inc/v231/aisol/.workbench``
-
-        MAPDL:
-        - Windows: ``C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe``
-        - Linux: ``/usr/ansys_inc/v211/ansys/bin/mapdl``
-
+        The path to the Ansys executable.
     product_name: str
         The name of the product. For example:
 
@@ -1111,7 +1102,7 @@ def _version_from_path(path: str, product_name: str, path_version_regex: str) ->
         mechanical = "Ansys Mechanical"
 
     path_version_regex: str
-        The regex used to find Ansys versions in the executable path. For example:
+        The regex used to find the Ansys version in the executable path. For example:
 
         mapdl = r"v(\d\d\d).ansys"
         mechanical = r'v(\d\d\d)'
@@ -1124,7 +1115,7 @@ def _version_from_path(path: str, product_name: str, path_version_regex: str) ->
     error_message = f"Unable to extract {product_name} version from {path}."
     if path:
         # expect v<ver>/ansys
-        # replace \\ with / to account for possible windows path
+        # replace \\ with / to account for possible Windows path
         matches = re.findall(rf"{path_version_regex}", path.replace("\\", "/"), re.IGNORECASE)
         if not matches:
             raise RuntimeError(error_message)
@@ -1139,7 +1130,18 @@ def version_from_path(product: PRODUCT_TYPE, path: str) -> int:
     Parameters
     ----------
     path : str
-        Path to the executable file.
+        The path to the Ansys executable. For example:
+
+        Mechanical:
+        - Windows: ``C:/Program Files/ANSYS Inc/v251/aisol/bin/winx64/AnsysWBU.exe``
+        - Linux: ``/usr/ansys_inc/v251/aisol/.workbench``
+
+        MAPDL:
+        - Windows: ``C:/Program Files/ANSYS Inc/v202/ansys/bin/winx64/ANSYS202.exe``
+        - Linux: ``/usr/ansys_inc/v251/ansys/bin/mapdl``
+
+    product: PRODUCT_TYPE
+        The product. For example: mapdl, mechanical, or dyna.
 
     Returns
     -------
