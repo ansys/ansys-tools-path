@@ -10,7 +10,7 @@ on:
       - main
 
 env:
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.12'
   PACKAGE_NAME: 'ansys-tools-path'
   PACKAGE_NAMESPACE: 'ansys.tools.path'
   DOCUMENTATION_CNAME: 'path.tools.docs.pyansys.com'
