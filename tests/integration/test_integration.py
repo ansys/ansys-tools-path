@@ -59,15 +59,15 @@ def test_save_mapdl_path():
         with open(CONFIG_FILE, "r") as config_file:
             old_config = config_file.read()
 
-    path, _ = find_mapdl(version=222)
+    path, _ = find_mapdl(version=251)
 
     assert save_mapdl_path(path, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
-        assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v222/ansys/bin/ansys222"}
+        assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v251/ansys/bin/ansys251"}
 
     assert save_mapdl_path(None, allow_prompt=False)
     with open(CONFIG_FILE, "r") as config_file:
-        assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v222/ansys/bin/ansys222"}
+        assert json.loads(config_file.read()) == {"mapdl": "/ansys_inc/v251/ansys/bin/ansys251"}
     clear_configuration("all")
     if old_config is not None:
         with open(CONFIG_FILE, "w") as config_file:
