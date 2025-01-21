@@ -37,5 +37,5 @@ to locate the path of the latest Ansys installation available:
 
    >>> from ansys.tools.path import find_ansys
    >>> find_ansys()
-   'C:/Program Files/ANSYS Inc/v211/ANSYS/bin/winx64/ansys211.exe', 21.1
+   'C:/Program Files/ANSYS Inc/v251/ANSYS/bin/winx64/ansys251.exe', 25.1
 
