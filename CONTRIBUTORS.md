@@ -6,8 +6,12 @@
 
 ## Individual Contributors
 
-* [Roberto Pastor Muela](https://github.com/RobPasMue)
+* [Camille](https://github.com/clatapie)
+* [Dipin](https://github.com/dipinknair)
 * [Jamil Hajjar](https://github.com/Gryfenfer97)
-* [Roberto Pastor](https://github.com/RobPasMue)
+* [Kathy Pippert](https://github.com/PipKat)
+* [Kerry McAdams](https://github.com/klmcadams)
 * [Mohamed Koubaa](https://github.com/koubaa)
-* [Dipin Nair](https://github.com/dipinknair)
+* [Nicolas Malsang](https://github.com/nmalsang)
+* [Raphael Luciano](https://github.com/raph-luc)
+* [Roberto Pastor Muela](https://github.com/RobPasMue)
