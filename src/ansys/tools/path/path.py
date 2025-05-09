@@ -1173,8 +1173,8 @@ def get_latest_ansys_installation() -> Tuple[int, str]:
     Tuple[int, str]
         Tuple with the latest version and path of the installation
 
-    Raise
-    -----
+    Raises
+    ------
     ValueError
         No Ansys installation found
     """
