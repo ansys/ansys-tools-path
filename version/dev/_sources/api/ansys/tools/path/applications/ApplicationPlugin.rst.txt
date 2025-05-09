@@ -1,0 +1,55 @@
+
+
+
+
+
+
+:class:`ApplicationPlugin`
+==========================
+
+
+.. py:class:: ansys.tools.path.applications.ApplicationPlugin
+
+
+.. py:currentmodule:: ApplicationPlugin
+
+Overview
+--------
+
+.. tab-set::
+
+
+
+   .. tab-item:: Methods
+
+      .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+          * - :py:attr:`~is_valid_executable_path`
+            - 
+
+
+
+
+
+
+
+
+Import detail
+-------------
+
+.. code-block:: python
+
+    from ansys.tools.path.applications import ApplicationPlugin
+
+
+
+Method detail
+-------------
+
+.. py:method:: is_valid_executable_path() -> bool
+
+
+
+
