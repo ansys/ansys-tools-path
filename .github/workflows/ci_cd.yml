@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [smoke-tests]
     container:
-      image: ghcr.io/ansys/mapdl:v25.1-ubuntu
+      image: ghcr.io/ansys/pymapdl/mapdl:v22.2-ubuntu
       options: "-u=0:0 --entrypoint /bin/bash"
       credentials:
         username: ${{ secrets.GH_USERNAME }}
