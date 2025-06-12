@@ -17,7 +17,10 @@ Further information about contributing to ansys-tools-path can be found in
 [PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/
 
 ## [Unreleased]()
+
 ### What's Changed
+Support the version 26R1 of the Ansys unified install.
+
 
 ## [v0.7.1]() - 20 December 2024
 
