@@ -19,6 +19,10 @@ Further information about contributing to ansys-tools-path can be found in
 ## [Unreleased]()
 
 ### What's Changed
+
+## [v0.7.2]() - 13 June 2025
+
+### What's Changed
 Support the version 26R1 of the Ansys unified install.
 
 
