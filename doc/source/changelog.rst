@@ -10,8 +10,8 @@ This document contains the release notes for the project.
 .. towncrier release notes start
 
 
-`0.7.3 <https://github.com/ansys/pymechanical/releases/tag/v0.7.3>`_ - June 13, 2025
-====================================================================================
+`0.7.3 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.7.3>`_ - June 13, 2025
+========================================================================================
 
 .. tab-set::
 
@@ -26,8 +26,8 @@ This document contains the release notes for the project.
           - `#304 <https://github.com/ansys/ansys-tools-path/pull/304>`_
 
 
-`0.7.2 <https://github.com/ansys/pymechanical/releases/tag/v0.7.3>`_ - June 13, 2025
-====================================================================================
+`0.7.2 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.7.3>`_ - June 13, 2025
+========================================================================================
 
 .. tab-set::
 
@@ -42,8 +42,8 @@ This document contains the release notes for the project.
           - `#301 <https://github.com/ansys/ansys-tools-path/pull/301>`_
 
 
-`0.7.1 <https://github.com/ansys/pymechanical/releases/tag/v0.7.1>`_ - December 20, 2024
-========================================================================================
+`0.7.1 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.7.1>`_ - December 20, 2024
+============================================================================================
 
 .. tab-set::
 
@@ -67,8 +67,8 @@ This document contains the release notes for the project.
           - `#261 <https://github.com/ansys/ansys-tools-path/pull/261>`_
 
 
-`0.7.0 <https://github.com/ansys/pymechanical/releases/tag/v0.7.0>`_ - November 13, 2024
-========================================================================================
+`0.7.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.7.0>`_ - November 13, 2024
+============================================================================================
 
 .. tab-set::
 
@@ -83,8 +83,8 @@ This document contains the release notes for the project.
           - `#247 <https://github.com/ansys/ansys-tools-path/pull/247>`_
 
 
-`0.6.0 <https://github.com/ansys/pymechanical/releases/tag/v0.6.0>`_ - May 31, 2024
-===================================================================================
+`0.6.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.6.0>`_ - May 31, 2024
+=======================================================================================
 
 .. tab-set::
 
@@ -99,8 +99,8 @@ This document contains the release notes for the project.
           - `#193 <https://github.com/ansys/ansys-tools-path/pull/193>`_
 
 
-`0.5.0 <https://github.com/ansys/pymechanical/releases/tag/v0.5.0>`_ - April 2, 2024
-====================================================================================
+`0.5.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.5.0>`_ - April 2, 2024
+========================================================================================
 
 .. tab-set::
 
@@ -115,8 +115,8 @@ This document contains the release notes for the project.
           - `#164 <https://github.com/ansys/ansys-tools-path/pull/164>`_
 
 
-`0.4.0 <https://github.com/ansys/pymechanical/releases/tag/v0.4.0>`_ - November 17, 2023
-========================================================================================
+`0.4.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.4.0>`_ - November 17, 2023
+============================================================================================
 
 .. tab-set::
 
