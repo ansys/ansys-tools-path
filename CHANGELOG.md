@@ -19,6 +19,12 @@ Further information about contributing to ansys-tools-path can be found in
 ## [v0.7.1]() - 20 December 2024
 
 ### What's Changed
+Support the version 26R1 of the Ansys unified install.
+
+
+## [v0.7.1]() - 20 December 2024
+
+### What's Changed
 Update docs with autoapi [#252](https://github.com/ansys/ansys-tools-path/pull/252)
 Update error handling for path [#261](https://github.com/ansys/ansys-tools-path/pull/261)
 

@@ -18,6 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
@@ -28,16 +29,16 @@ dependencies = [
 
 
 [project.optional-dependencies]
-tests = ["pytest==8.3.4", "pytest-cov==6.0.0", "pyfakefs==5.7.3"]
+tests = ["pytest==8.4.0", "pytest-cov==6.1.1", "pyfakefs==5.8.0"]
 
 doc = [
-    "Sphinx==8.1.3",
-    "ansys-sphinx-theme[autoapi]==1.2.3",
+    "Sphinx==8.2.3",
+    "ansys-sphinx-theme[autoapi]==1.5.2",
     "numpydoc==1.8.0",
     "sphinx-copybutton==0.5.2",
 ]
 
-build = ["build==1.2.2.post1", "twine==6.0.1"]
+build = ["build==1.2.2.post1", "twine==6.1.0"]
 
 [tool.flit.module]
 name = "ansys.tools.path"

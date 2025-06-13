@@ -1,4 +1,4 @@
-# Copyright (C) 2023 - 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 """
-tools to find/cache installed Ansys products.
+Tools to find/cache installed Ansys products.
 
 WARNING: This is not concurrent-safe (multiple python processes might race on this data.)
 """
