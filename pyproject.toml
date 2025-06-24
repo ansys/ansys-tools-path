@@ -29,7 +29,7 @@ dependencies = [
 
 
 [project.optional-dependencies]
-tests = ["pytest==8.4.0", "pytest-cov==6.2.1", "pyfakefs==5.9.0"]
+tests = ["pytest==8.4.1", "pytest-cov==6.2.1", "pyfakefs==5.9.0"]
 
 doc = [
     "Sphinx==8.2.3",
