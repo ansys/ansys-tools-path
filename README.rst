@@ -1,5 +1,8 @@
-ansys-tools-path
-================
+[DEPRECATED] ansys-tools-path
+=============================
+This library is deprecated and will no longer be maintained. Please consider using alternatives. For more information check 
+`this issue <https://github.com/ansys/pyansys-tools-report/issues/339>`_.
+
 
 |pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
 
