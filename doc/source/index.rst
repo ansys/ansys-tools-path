@@ -19,7 +19,7 @@
 .. warning::
 
    This library is deprecated and will no longer be maintained. Please consider using alternatives.
-   For more information, check the `deprecation issue <https://github.com/ansys/pyansys-tools-report/issues/339>`_.
+   For more information, check the `deprecation issue <https://github.com/ansys/ansys-tools-path/issues/341>`_.
 
 How to install
 ==============
