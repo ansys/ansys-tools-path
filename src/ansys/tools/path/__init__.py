@@ -29,15 +29,16 @@ WARNING: This is not concurrent-safe (multiple python processes might race on th
 import warnings
 
 warnings.warn(
-    "The 'ansys-tools-path' package is deprecated and its functionality has been moved to "
-    "'ansys-tools-common'. Please update your imports accordingly.",
+    "This library is deprecated and will no longer be maintained. "
+    "Functionality from this library has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
     DeprecationWarning,
 )
-
 import importlib.metadata as importlib_metadata
 
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
-
+from ansys.tools.common import path
 from ansys.tools.common.path.path import (
     LOG,
     SETTINGS_DIR,
