@@ -60,9 +60,6 @@ from ansys.tools.common.path.path import (
     save_mechanical_path,
     version_from_path,
 )
-
-
-
 from ansys.tools.common.path.path import change_default_ansys_path  # deprecated
 from ansys.tools.common.path.path import find_ansys  # deprecated
 from ansys.tools.common.path.path import get_ansys_path  # deprecated
@@ -94,4 +91,3 @@ __all__ = [
     "get_ansys_path",
     "save_ansys_path",
 ]
-
