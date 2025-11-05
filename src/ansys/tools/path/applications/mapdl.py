@@ -1,7 +1,3 @@
-
-Original file line number	Diff line number	Diff line change
-@@ -1,33 +0,0 @@
-
 # Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
