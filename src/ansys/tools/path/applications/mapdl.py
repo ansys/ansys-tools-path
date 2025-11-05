@@ -1,9 +1,9 @@
 
 Original file line number	Diff line number	Diff line change
 @@ -1,33 +0,0 @@
+
 # Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
-#
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,10 @@ Original file line number	Diff line number	Diff line change
 
 """MAPDL-specific logic for ansys-tools-path."""
 
+import warnings
+
 from ansys.tools.common.path.applications.dyna import *  # noqa
 
-import warnings
 warnings.warn(
     "This module is deprecated and will no longer be maintained. "
     "Functionality from this module has been migrated to ``ansys-tools-common``. "

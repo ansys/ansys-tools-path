@@ -25,9 +25,10 @@ Application plugin for ansys-tools-path.
 This defines the interface of a plugin, which is implemented using a module.
 """
 
+import warnings
+
 from ansys.tools.common.path.applications import *  # noqa
 
-import warnings
 warnings.warn(
     "This module is deprecated and will no longer be maintained. "
     "Functionality from this module has been migrated to ``ansys-tools-common``. "
