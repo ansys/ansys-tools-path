@@ -38,7 +38,6 @@ warnings.warn(
 import importlib.metadata as importlib_metadata
 
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
-from ansys.tools.common import path
 from ansys.tools.common.path.path import (
     LOG,
     SETTINGS_DIR,
