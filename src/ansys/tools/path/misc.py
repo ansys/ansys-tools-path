@@ -44,6 +44,7 @@ def is_float(input_string: str) -> bool:
 
 def is_windows() -> bool:
     """Check if the host machine is on Windows.
+
     Returns
     -------
     ``True`` if the host machine is on Windows, ``False`` otherwise.
@@ -53,6 +54,7 @@ def is_windows() -> bool:
 
 def is_linux() -> bool:
     """Check if the host machine is Linux.
+
     Returns
     -------
     ``True`` if the host machine is Linux, ``False`` otherwise.
