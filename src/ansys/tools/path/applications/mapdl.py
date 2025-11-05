@@ -23,7 +23,7 @@
 
 import warnings
 
-from ansys.tools.common.path.applications.dyna import *  # noqa
+from ansys.tools.common.path.applications.mapdl import *  # noqa
 
 warnings.warn(
     "This module is deprecated and will no longer be maintained. "
