@@ -1,0 +1,77 @@
+
+
+
+
+
+
+The ``mechanical.py`` module
+============================
+
+.. py:module:: ansys.tools.path.applications.mechanical
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+.. py:currentmodule:: mechanical
+.. tab-set::
+
+
+
+
+
+
+
+    .. tab-item:: Functions
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~is_valid_executable_path`
+            - 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+Mechanical-specific logic for ansys-tools-path.
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+
+
+Module detail
+-------------
+
+.. py:function:: is_valid_executable_path(exe_loc: str) -> bool
+
+
+

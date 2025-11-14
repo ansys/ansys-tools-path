@@ -1,0 +1,46 @@
+
+
+
+
+
+
+The ``mechanical.py`` module
+============================
+
+.. py:module:: ansys.tools.path.applications.mechanical
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+Mechanical-specific logic for ansys-tools-path.
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+

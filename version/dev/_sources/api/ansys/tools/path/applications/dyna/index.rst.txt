@@ -1,0 +1,46 @@
+
+
+
+
+
+
+The ``dyna.py`` module
+======================
+
+.. py:module:: ansys.tools.path.applications.dyna
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+dyna-specific logic for ansys-tools-path.
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+

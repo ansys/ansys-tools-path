@@ -1,0 +1,46 @@
+
+
+
+
+
+
+The ``mapdl.py`` module
+=======================
+
+.. py:module:: ansys.tools.path.applications.mapdl
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+MAPDL-specific logic for ansys-tools-path.
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+
