@@ -22,7 +22,14 @@
 
 """dyna-specific logic for ansys-tools-path."""
 
+import warnings
 
-def is_valid_executable_path(exe_loc: str) -> bool:
-    # dyna paths can be anything
-    return True
+from ansys.tools.common.path.applications.dyna import *  # noqa
+
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)

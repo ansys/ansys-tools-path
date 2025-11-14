@@ -22,7 +22,15 @@
 
 """Miscellaneous functions used by ansys-tools-path."""
 
-import os
+import warnings
+
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)
 
 
 def is_float(input_string: str) -> bool:

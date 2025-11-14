@@ -22,22 +22,14 @@
 
 """Mechanical-specific logic for ansys-tools-path."""
 
-import os
-import re
+import warnings
 
-from ansys.tools.path.misc import is_windows
+from ansys.tools.common.path.applications.mechanical import *  # noqa
 
-
-def is_valid_executable_path(exe_loc: str) -> bool:
-    if is_windows():  # pragma: no cover
-        return (
-            os.path.isfile(exe_loc)
-            and re.search(
-                "AnsysWBU.exe", os.path.basename(os.path.normpath(exe_loc)), re.IGNORECASE
-            )
-            is not None
-        )
-    return (
-        os.path.isfile(exe_loc)
-        and re.search(".workbench", os.path.basename(os.path.normpath(exe_loc))) is not None
-    )
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)

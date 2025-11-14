@@ -22,13 +22,17 @@
 
 """
 Application plugin for ansys-tools-path.
-
 This defines the interface of a plugin, which is implemented using a module.
 """
 
-# TODO - consider using pluggy?
+import warnings
 
+from ansys.tools.common.path.applications import *  # noqa
 
-class ApplicationPlugin:
-    def is_valid_executable_path(exe_loc: str) -> bool:
-        raise Exception("This is just a base class.")
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)

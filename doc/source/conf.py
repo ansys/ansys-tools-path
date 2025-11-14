@@ -72,6 +72,8 @@ intersphinx_mapping = {
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
 
+suppress_warnings = ["autoapi.python_import_resolution"]
+
 # Consider enabling numpydoc validation. See:
 # https://numpydoc.readthedocs.io/en/latest/validation.html#
 numpydoc_validate = True

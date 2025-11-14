@@ -20,39 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Convenience CLI to save path for ansys application in configuration."""
+import warnings
 
-import click
+from ansys.tools.common.path.save import *  # noqa
 
-from ansys.tools.path.path import _save_path
-
-
-@click.command()
-@click.help_option("--help", "-h")
-@click.argument("location")
-@click.option(
-    "--name",
-    default=None,
-    type=str,
-    help='Application name. For example, "mapdl", "mechanical", or "dyna"',
+warnings.warn(
+    "This library is deprecated and will no longer be maintained. "
+    "Functionality from this library has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
 )
-@click.option(
-    "--allow-prompt",
-    is_flag=True,
-    default=False,
-    help="Allow prompt. Used in case a path is not given or the given path is not valid",
-)
-def cli(
-    name: str,
-    location: str,
-    allow_prompt: bool,
-):
-    """CLI tool to store the path of a solver.
-
-    USAGE:
-
-    The following example demonstrates the main use of this tool:
-
-        $ save-ansys-path --name dyna /path/to/dyna
-    """
-    _save_path(name, location, allow_prompt)

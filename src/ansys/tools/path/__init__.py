@@ -26,12 +26,19 @@ Tools to find/cache installed Ansys products.
 WARNING: This is not concurrent-safe (multiple python processes might race on this data.)
 """
 
+import warnings
+
+warnings.warn(
+    "This library is deprecated and will no longer be maintained. "
+    "Functionality from this library has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)
 import importlib.metadata as importlib_metadata
 
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
-
-
-from ansys.tools.path.path import (
+from ansys.tools.common.path.path import (
     LOG,
     SETTINGS_DIR,
     SUPPORTED_ANSYS_VERSIONS,
@@ -53,10 +60,10 @@ from ansys.tools.path.path import (
     save_mechanical_path,
     version_from_path,
 )
-from ansys.tools.path.path import change_default_ansys_path  # deprecated
-from ansys.tools.path.path import find_ansys  # deprecated
-from ansys.tools.path.path import get_ansys_path  # deprecated
-from ansys.tools.path.path import save_ansys_path  # deprecated
+from ansys.tools.common.path.path import change_default_ansys_path  # deprecated
+from ansys.tools.common.path.path import find_ansys  # deprecated
+from ansys.tools.common.path.path import get_ansys_path  # deprecated
+from ansys.tools.common.path.path import save_ansys_path  # deprecated
 
 __all__ = [
     "LOG",

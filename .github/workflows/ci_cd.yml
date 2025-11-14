@@ -85,11 +85,6 @@ jobs:
         run: |
           python -m pytest -vx --cov=${{ env.PACKAGE_NAMESPACE }} --cov-report=term --cov-report=xml:.cov/coverage.xml --cov-report=html:.cov/html
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          files: .cov/coverage.xml
-
   docs-style:
     name: Documentation style check
     runs-on: ubuntu-latest
@@ -108,7 +103,6 @@ jobs:
         uses: ansys/actions/doc-build@v10
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          dependencies: "build-essential zip pandoc texlive-latex-extra latexmk texlive-pstricks"
 
   package:
     name: Package library

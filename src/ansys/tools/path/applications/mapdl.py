@@ -1,7 +1,6 @@
 # Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
-#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -22,12 +21,14 @@
 
 """MAPDL-specific logic for ansys-tools-path."""
 
-import os
-import re
+import warnings
 
+from ansys.tools.common.path.applications.mapdl import *  # noqa
 
-def is_valid_executable_path(exe_loc: str) -> bool:
-    return (
-        os.path.isfile(exe_loc)
-        and re.search(r"ansys\d\d\d", os.path.basename(os.path.normpath(exe_loc))) is not None
-    )
+warnings.warn(
+    "This module is deprecated and will no longer be maintained. "
+    "Functionality from this module has been migrated to ``ansys-tools-common``. "
+    "Please consider migrating to ``ansys-tools-common``. "
+    "For more information check https://github.com/ansys/ansys-tools-path/issues/341",
+    DeprecationWarning,
+)

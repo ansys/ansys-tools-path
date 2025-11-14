@@ -16,6 +16,10 @@
 =====================================================
 ``ansys-tools-path``: A tool to locate Ansys products
 =====================================================
+.. warning::
+
+   This library is deprecated and will no longer be maintained. Please consider using alternatives.
+   For more information, check the `deprecation issue <https://github.com/ansys/ansys-tools-path/issues/341>`_.
 
 How to install
 ==============

@@ -23,8 +23,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "platformdirs>=3.6.0",
-    "click>=8.1.3",        # for CLI interface
+    "ansys-tools-common"
 ]
 
 
