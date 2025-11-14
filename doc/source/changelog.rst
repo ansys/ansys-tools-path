@@ -9,6 +9,74 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.8.0>`_ - November 14, 2025
+============================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Add changelog actions
+          - `#303 <https://github.com/ansys/ansys-tools-path/pull/303>`_
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Bump pyfakefs from 5.8.0 to 5.9.0
+          - `#307 <https://github.com/ansys/ansys-tools-path/pull/307>`_
+
+        * - Bump pytest from 8.4.0 to 8.4.1
+          - `#308 <https://github.com/ansys/ansys-tools-path/pull/308>`_
+
+        * - Bump pyfakefs from 5.9.0 to 5.9.1
+          - `#311 <https://github.com/ansys/ansys-tools-path/pull/311>`_
+
+        * - Bump numpydoc from 1.8.0 to 1.9.0
+          - `#312 <https://github.com/ansys/ansys-tools-path/pull/312>`_
+
+        * - Bump ansys-sphinx-theme[autoapi] from 1.5.2 to 1.5.3
+          - `#314 <https://github.com/ansys/ansys-tools-path/pull/314>`_
+
+        * - Bump build from 1.2.2.post1 to 1.3.0
+          - `#319 <https://github.com/ansys/ansys-tools-path/pull/319>`_
+
+        * - Bump actions/checkout from 4 to 5
+          - `#320 <https://github.com/ansys/ansys-tools-path/pull/320>`_
+
+        * - Bump pyfakefs from 5.9.1 to 5.9.2
+          - `#321 <https://github.com/ansys/ansys-tools-path/pull/321>`_
+
+        * - Bump peter-evans/create-or-update-comment from 4 to 5
+          - `#335 <https://github.com/ansys/ansys-tools-path/pull/335>`_
+
+        * - Bump pyfakefs from 5.9.2 to 5.10.2
+          - `#343 <https://github.com/ansys/ansys-tools-path/pull/343>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update mapdl docker image
+          - `#315 <https://github.com/ansys/ansys-tools-path/pull/315>`_
+
+        * - Update missing or outdated files
+          - `#340 <https://github.com/ansys/ansys-tools-path/pull/340>`_
+
+        * - Deprecate library
+          - `#342 <https://github.com/ansys/ansys-tools-path/pull/342>`_
+
 
 `0.7.3 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.7.3>`_ - June 13, 2025
 ========================================================================================
