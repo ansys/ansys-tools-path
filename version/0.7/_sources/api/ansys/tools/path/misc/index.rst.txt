@@ -1,0 +1,160 @@
+
+
+
+
+
+
+The ``misc.py`` module
+======================
+
+.. py:module:: ansys.tools.path.misc
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+.. py:currentmodule:: misc
+.. tab-set::
+
+
+
+
+
+
+
+    .. tab-item:: Functions
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~is_float`
+            - Returns true when a string can be converted to a float
+
+
+          * - :py:obj:`~is_windows`
+            - Check if the host machine is on Windows.
+
+
+          * - :py:obj:`~is_linux`
+            - Check if the host machine is Linux.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+Miscellaneous functions used by ansys-tools-path.
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+
+
+Module detail
+-------------
+
+.. py:function:: is_float(input_string: str) -> bool
+
+   
+   Returns true when a string can be converted to a float
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: is_windows() -> bool
+
+   
+   Check if the host machine is on Windows.
+
+
+
+
+
+   :Returns:
+
+       ``True`` :obj:`if` :obj:`the` :obj:`host` :obj:`machine` :obj:`is` :obj:`on` :obj:`Windows`, ``False`` otherwise.
+           ..
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: is_linux() -> bool
+
+   
+   Check if the host machine is Linux.
+
+
+
+
+
+   :Returns:
+
+       ``True`` :obj:`if` :obj:`the` :obj:`host` :obj:`machine` :obj:`is` :obj:`Linux`, ``False`` otherwise.
+           ..
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
+

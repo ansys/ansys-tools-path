@@ -1,0 +1,103 @@
+
+
+
+
+
+
+The ``applications`` package
+================================
+
+.. py:module:: ansys.tools.path.applications
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+.. py:currentmodule:: applications
+.. tab-set::
+
+
+    .. tab-item:: Submodules
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~ansys.tools.path.applications.dyna`
+            - dyna-specific logic for ansys-tools-path.
+
+
+          * - :py:obj:`~ansys.tools.path.applications.mapdl`
+            - MAPDL-specific logic for ansys-tools-path.
+
+
+          * - :py:obj:`~ansys.tools.path.applications.mechanical`
+            - Mechanical-specific logic for ansys-tools-path.
+
+
+
+
+
+
+
+
+
+
+
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :hidden:
+
+    <span class="nf nf-fa-file"></span> dyna</api/ansys/tools/path/applications/dyna/index>
+    <span class="nf nf-fa-file"></span> mapdl</api/ansys/tools/path/applications/mapdl/index>
+    <span class="nf nf-fa-file"></span> mechanical</api/ansys/tools/path/applications/mechanical/index>
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+
+Application plugin for ansys-tools-path.
+This defines the interface of a plugin, which is implemented using a module.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+

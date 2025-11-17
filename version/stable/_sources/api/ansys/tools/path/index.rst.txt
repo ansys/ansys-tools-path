@@ -1,0 +1,121 @@
+
+
+
+
+
+
+The ``ansys.tools.path`` library
+================================
+
+.. py:module:: ansys.tools.path
+
+
+Summary
+-------
+
+
+
+
+
+
+
+
+.. py:currentmodule:: path
+.. tab-set::
+
+    .. tab-item:: Subpackages
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~ansys.tools.path.applications`
+            - Application plugin for ansys-tools-path.
+
+
+
+    .. tab-item:: Submodules
+
+        .. list-table::
+          :header-rows: 0
+          :widths: auto
+
+
+          * - :py:obj:`~ansys.tools.path.misc`
+            - Miscellaneous functions used by ansys-tools-path.
+
+
+          * - :py:obj:`~ansys.tools.path.path`
+            - 
+
+
+          * - :py:obj:`~ansys.tools.path.save`
+            - 
+
+
+
+
+
+
+
+
+
+
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :hidden:
+
+    <span class="nf nf-md-package"></span> applications</api/ansys/tools/path/applications/index>
+
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :hidden:
+
+    <span class="nf nf-fa-file"></span> misc</api/ansys/tools/path/misc/index>
+    <span class="nf nf-fa-file"></span> path</api/ansys/tools/path/path/index>
+    <span class="nf nf-fa-file"></span> save</api/ansys/tools/path/save/index>
+
+
+
+
+
+
+
+
+
+
+
+Description
+-----------
+
+
+Tools to find/cache installed Ansys products.
+
+WARNING: This is not concurrent-safe (multiple python processes might race on this data.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+
+
+
