@@ -9,6 +9,22 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.8.1 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.8.1>`_ - November 17, 2025
+============================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.8.0
+          - `#346 <https://github.com/ansys/ansys-tools-path/pull/346>`_
+
+
 `0.8.0 <https://github.com/ansys/ansys-tools-path/releases/tag/v0.8.0>`_ - November 14, 2025
 ============================================================================================
 
