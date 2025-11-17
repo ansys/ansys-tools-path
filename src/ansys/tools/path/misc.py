@@ -22,6 +22,7 @@
 
 """Miscellaneous functions used by ansys-tools-path."""
 
+import os
 import warnings
 
 warnings.warn(
